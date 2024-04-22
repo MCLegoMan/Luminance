@@ -36,7 +36,8 @@ dependencies {
 
 	include(modImplementation "com.github.MCLegoMan:releasetypeutils:${project.releasetypeutils}")
 
-	modImplementation "maven.modrinth:iris:${project.iris}"
+	//modImplementation "maven.modrinth:iris:${project.iris}"
+	modImplementation fileTree(dir: 'libs', include: '*.jar')
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
 	//modImplementation "com.github.Nettakrim:Souper-Secret-Settings:${project.souper_secret_settings}"
 
