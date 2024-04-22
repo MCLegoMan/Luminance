@@ -1,0 +1,128 @@
+plugins {
+	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id "com.github.breadmoirai.github-release" version "2.4.1"
+	id "com.modrinth.minotaur" version "2.+"
+	id 'maven-publish'
+}
+group = project.maven_group
+version = project.mod_version + project.mc_version
+base {
+	archivesName = project.archives_base_name
+}
+runClient.doFirst {
+	args += ['--username', "Luminance${new Random().nextInt(1000)}"]
+}
+repositories {
+	maven { url 'https://jitpack.io' }
+	maven { url 'https://maven.terraformersmc.com/releases/' }
+	mavenCentral()
+}
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft}"
+	mappings "net.fabricmc:yarn:${project.mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
+
+	include(modImplementation "com.github.MCLegoMan:releasetypeutils:${project.releasetypeutils}")
+
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
+	//modImplementation "com.github.Nettakrim:Souper-Secret-Settings:${project.souper_secret_settings}"
+
+	// Development Environment Only
+	modImplementation "com.ptsmods:devlogin:3.4.1"
+}
+processResources {
+	inputs.property "version", project.mod_version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.mod_version
+	}
+}
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+	}
+}
+githubRelease {
+	token rootProject.file(".env").text.readLines().get(1).replace("GITHUB=", "").replace("\"", "")
+	owner "MCLegoMan"
+	repo "Luminance"
+	tagName "${project.github_tag}"
+	targetCommitish "${project.github_branch}"
+	releaseName "${project.title}"
+	generateReleaseNotes false
+	body rootProject.file("CHANGELOG.md").text
+	draft false
+	if (project.version_type == "release") prerelease false
+	else prerelease true
+	releaseAssets tasks.remapJar
+	allowUploadToExisting.set false
+	overwrite false
+	dryRun false
+	apiEndpoint "https://api.github.com"
+	client
+}
+modrinth {
+	token = rootProject.file(".env").text.readLines().get(0).replace("MODRINTH=", "").replace("\"", "")
+	projectId = "${project.modrinth_id}"
+	versionName = "${project.title}"
+	versionNumber = "${project.mod_version}${project.mc_version}"
+	versionType = "${project.version_type}"
+	uploadFile = tasks.remapJar
+	gameVersions = List.of(project.mc_versions.split(", "))
+	loaders = ["fabric", "quilt"]
+	changelog = rootProject.file("CHANGELOG.md").text
+	dependencies {
+		required.project "fabric-api"
+		required.project "qsl"
+	}
+}
+tasks.register("uploadVersion") {
+	group = 'luminance'
+	description = 'Upload project to both GitHub and Modrinth.'
+	dependsOn(tasks.githubRelease)
+	dependsOn(tasks.modrinth)
+}
+tasks.register("quickPlaySingleplayer") {
+	group = 'luminance'
+	description = 'Uses Quick Play to join singleplayer world `New World` on launch.'
+	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World']))
+}
+tasks.register("quickPlayMultiplayer") {
+	group = 'luminance'
+	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch.'
+	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565']))
+}
+tasks.register("runClientLoggedIn") {
+	group = 'luminance'
+	description = 'Uses DevLogin to login to your Minecraft Account'
+	dependsOn(tasks.runClient.args(['--msa']))
+}
+tasks.register("quickPlaySingleplayerLoggedIn") {
+	group = 'luminance'
+	description = 'Uses Quick Play to join singleplayer world `New World` on launch and uses DevLogin to login to your Minecraft Account.'
+	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World', '--msa']))
+}
+tasks.register("quickPlayMultiplayerLoggedIn") {
+	group = 'luminance'
+	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch and uses DevLogin to login to your Minecraft Account.'
+	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565', '--msa']))
+}
