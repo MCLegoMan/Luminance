@@ -25,6 +25,7 @@ public class ConfigScreen extends Screen {
 	private final GridWidget grid;
 	private boolean refresh;
 	private boolean shouldClose;
+	private boolean saveConfig;
 	public ConfigScreen(Screen parent, boolean refresh) {
 		super(Text.literal(""));
 		this.grid = new GridWidget();
@@ -53,7 +54,7 @@ public class ConfigScreen extends Screen {
 				ClientData.minecraft.setScreen(new ConfigScreen(parentScreen, false));
 			}
 			if (this.shouldClose) {
-				ConfigHelper.saveConfig();
+				if (this.saveConfig) ConfigHelper.saveConfig();
 				ClientData.minecraft.setScreen(parentScreen);
 			}
 		} catch (Exception error) {
@@ -72,6 +73,7 @@ public class ConfigScreen extends Screen {
 			@Override
 			protected void applyValue() {
 				ConfigHelper.setConfig("alpha_level", (int) ((value) * 100));
+				saveConfig = true;
 			}
 		}, 2).setTooltip(Tooltip.of(Translation.getConfigTranslation(Data.version.getID(), "alpha", true)));
 		return grid;
