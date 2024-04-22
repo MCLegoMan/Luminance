@@ -16,6 +16,17 @@ repositories {
 	maven { url 'https://jitpack.io' }
 	maven { url 'https://maven.terraformersmc.com/releases/' }
 	mavenCentral()
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
 }
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft}"
@@ -25,6 +36,7 @@ dependencies {
 
 	include(modImplementation "com.github.MCLegoMan:releasetypeutils:${project.releasetypeutils}")
 
+	modImplementation "maven.modrinth:iris:${project.iris}"
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
 	//modImplementation "com.github.Nettakrim:Souper-Secret-Settings:${project.souper_secret_settings}"
 

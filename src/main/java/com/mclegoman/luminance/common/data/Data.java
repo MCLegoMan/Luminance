@@ -13,7 +13,7 @@ import net.fabricmc.loader.api.ModContainer;
 import org.apache.commons.lang3.StringUtils;
 
 public class Data {
-	public static final Version version = Version.create("Luminance", "luminance", 1, 0, 0, Helper.ReleaseType.ALPHA, 1);
+	public static final Version version = Version.create("Luminance", "luminance", 1, 0, 0, Helper.ReleaseType.ALPHA, 1, "EBTw0O1c");
 	public static boolean isModInstalled(String MOD_ID) {
 		return FabricLoader.getInstance().isModLoaded(MOD_ID);
 	}
