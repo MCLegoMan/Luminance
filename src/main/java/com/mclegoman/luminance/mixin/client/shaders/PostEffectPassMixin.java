@@ -22,6 +22,6 @@ public abstract class PostEffectPassMixin {
 	@Shadow @Final private JsonEffectShaderProgram program;
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/JsonEffectShaderProgram;enable()V"))
 	private void perspective$updateUniforms(float time, CallbackInfo ci) {
-		ShaderRenderEvents.BeforeRender.registry.forEach((runnable -> runnable.run(program)));
+		ShaderRenderEvents.BeforeRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
 }

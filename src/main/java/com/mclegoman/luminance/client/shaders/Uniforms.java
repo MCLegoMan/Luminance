@@ -27,7 +27,7 @@ public class Uniforms {
 		if (!updatingAlpha() && updatingAlpha) {
 			updatingAlpha = false;
 			if ((int)ConfigHelper.getConfig("alpha_level") != prevAlpha) ConfigHelper.setConfig("alpha_level", prevAlpha);
-			ConfigHelper.saveConfig();
+			ConfigHelper.saveConfig(true);
 		}
 		SmoothUniforms.tick();
 	}
@@ -36,6 +36,7 @@ public class Uniforms {
 			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "viewDistance", Uniforms::getViewDistance);
 			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "fov", Uniforms::getFov);
 			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "fps", Uniforms::getFps);
+			// Time Uniform should be updated to be customizable.
 			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "time", Uniforms::getTime);
 			ShaderRenderEvents.ShaderUniform.registerFloats("lu", "eyePosition", Uniforms::getEyePosition);
 			ShaderRenderEvents.ShaderUniform.registerFloats("lu", "position", Uniforms::getPosition);

@@ -19,7 +19,7 @@ import org.joml.Vector3f;
 public class UniformHelper {
 	public static float time = 3455800.0F;
 	public static void init() {
-		ShaderRenderEvents.BeforeRender.register(new ShaderRenderEvents.ShaderRunnable() {
+		ShaderRenderEvents.BeforeRender.register(Data.version.getID(), new ShaderRenderEvents.ShaderRunnable() {
 			public void run(JsonEffectShaderProgram program) {
 				ShaderRenderEvents.ShaderUniform.registryFloat.forEach((uniform, callable) -> {
 					try {

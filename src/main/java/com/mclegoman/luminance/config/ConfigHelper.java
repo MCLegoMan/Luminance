@@ -18,13 +18,14 @@ public class ConfigHelper {
 	public static void init() {
 		try {
 			Config.init();
+			if (fixConfig()) saveConfig(false);
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to initialize config!: {}", error));
 		}
 	}
-	public static void saveConfig() {
+	public static void saveConfig(boolean shouldFix) {
 		try {
-			fixConfig();
+			if (shouldFix) fixConfig();
 			Config.save();
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.WARN, "Failed to save config!");

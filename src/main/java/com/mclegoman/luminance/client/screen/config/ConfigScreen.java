@@ -55,7 +55,7 @@ public class ConfigScreen extends Screen {
 				ClientData.minecraft.setScreen(new ConfigScreen(parentScreen, false));
 			}
 			if (this.shouldClose) {
-				if (this.saveConfig) ConfigHelper.saveConfig();
+				if (this.saveConfig) ConfigHelper.saveConfig(true);
 				ClientData.minecraft.setScreen(parentScreen);
 			}
 		} catch (Exception error) {
