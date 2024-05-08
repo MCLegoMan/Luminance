@@ -12,8 +12,8 @@ import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.Accessors;
 import com.mclegoman.luminance.common.data.Data;
+import com.mclegoman.luminance.common.util.LogType;
 import com.mclegoman.luminance.config.ConfigHelper;
-import com.mclegoman.releasetypeutils.common.version.Helper;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
@@ -67,7 +67,7 @@ public class Uniforms {
 			SmoothUniforms.init();
 			UniformHelper.init();
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to initialize uniforms: {}", error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to initialize uniforms: {}", error));
 		}
 	}
 	public static float getViewDistance() {

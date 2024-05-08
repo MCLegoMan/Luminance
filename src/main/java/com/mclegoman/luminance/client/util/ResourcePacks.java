@@ -9,7 +9,7 @@ package com.mclegoman.luminance.client.util;
 
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.releasetypeutils.common.version.Helper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.ModContainer;
@@ -37,10 +37,10 @@ public class ResourcePacks {
 	}
 	public static void register(Identifier id, ModContainer container, Text text, ResourcePackActivationType activationType) {
 		try {
-			Data.version.sendToLog(Helper.LogType.INFO, Translation.getString("Registering resource pack: {}", id.getPath()));
+			Data.version.sendToLog(LogType.INFO, Translation.getString("Registering resource pack: {}", id.getPath()));
 			ResourceManagerHelper.registerBuiltinResourcePack(id, container, text, activationType);
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to register resource pack: {}", error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to register resource pack: {}", error));
 		}
 	}
 }

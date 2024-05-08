@@ -12,6 +12,7 @@ import com.mclegoman.luminance.client.logo.LuminanceLogo;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.config.ConfigHelper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -45,7 +46,7 @@ public class ConfigScreen extends Screen {
 			grid.forEachChild(this::addDrawableChild);
 			initTabNavigation();
 		} catch (Exception error) {
-			Data.version.getLogger().warn("{} Failed to initialize config screen: {}", Data.version.getID(), error);
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to initialize config screen: {}", error));
 		}
 	}
 	public void tick() {
@@ -58,7 +59,7 @@ public class ConfigScreen extends Screen {
 				ClientData.minecraft.setScreen(parentScreen);
 			}
 		} catch (Exception error) {
-			Data.version.getLogger().warn("{} Failed to tick luminance$config screen: {}", Data.version.getID(), error);
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to tick luminance$config screen: {}", error));
 		}
 	}
 	private GridWidget createConfig() {

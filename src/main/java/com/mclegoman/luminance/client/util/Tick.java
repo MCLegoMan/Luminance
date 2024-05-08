@@ -11,7 +11,7 @@ import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.shaders.Uniforms;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.releasetypeutils.common.version.Helper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 public class Tick {
@@ -21,7 +21,7 @@ public class Tick {
 				if (ClientData.minecraft.isFinishedLoading()) Uniforms.tick();
 			});
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to initialize tick: {}", error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to initialize tick: {}", error));
 		}
 	}
 }

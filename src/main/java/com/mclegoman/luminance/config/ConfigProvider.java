@@ -10,7 +10,8 @@ package com.mclegoman.luminance.config;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
-import com.mclegoman.releasetypeutils.common.version.Version;
+import com.mclegoman.luminance.common.util.LogType;
+import com.mclegoman.luminance.common.util.Version;
 import net.darktree.simplelibs.config.SimpleConfig;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -56,7 +57,7 @@ public class ConfigProvider implements SimpleConfig.DefaultConfig {
 			writer.write(contents);
 			writer.close();
 		} catch (Exception error) {
-			Data.version.getLogger().warn("{} Failed to save {} config: {}", data.getLoggerPrefix(), id, error);
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to save {} config: {}", id, error));
 		}
 	}
 }

@@ -14,21 +14,21 @@ import com.mclegoman.luminance.client.util.ResourcePacks;
 import com.mclegoman.luminance.client.util.Tick;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.config.ConfigHelper;
-import com.mclegoman.releasetypeutils.common.version.Helper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.api.ClientModInitializer;
 
 public class LuminanceClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		try {
-			Data.version.sendToLog(Helper.LogType.INFO, Translation.getString("Initializing {}", Data.version.getName()));
+			Data.version.sendToLog(LogType.INFO, Translation.getString("Initializing {}", Data.version.getName()));
 			ConfigHelper.init();
 			Keybindings.init();
 			ResourcePacks.init();
 			Tick.init();
 			Uniforms.init();
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to run onInitializeClient: {}", error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to run onInitializeClient: {}", error));
 		}
 	}
 }

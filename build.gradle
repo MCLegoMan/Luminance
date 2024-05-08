@@ -34,10 +34,11 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
 
-	include(modImplementation "com.github.MCLegoMan:releasetypeutils:${project.releasetypeutils}")
+	//include(modImplementation "com.github.MCLegoMan:releasetypeutils:${project.releasetypeutils}")
 
-	//modImplementation "maven.modrinth:iris:${project.iris}"
+	// Place Iris and Sodium jars in ./libs!
 	modImplementation fileTree(dir: 'libs', include: '*.jar')
+
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
 	//modImplementation "com.github.Nettakrim:Souper-Secret-Settings:${project.souper_secret_settings}"
 

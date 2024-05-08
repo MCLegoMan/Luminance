@@ -9,7 +9,7 @@ package com.mclegoman.luminance.config;
 
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.releasetypeutils.common.version.Helper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.util.math.MathHelper;
 
 public class ConfigHelper {
@@ -19,7 +19,7 @@ public class ConfigHelper {
 		try {
 			Config.init();
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.WARN, Translation.getString("Failed to initialize config!: {}", error));
+			Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to initialize config!: {}", error));
 		}
 	}
 	public static void saveConfig() {
@@ -27,13 +27,13 @@ public class ConfigHelper {
 			fixConfig();
 			Config.save();
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.WARN, "Failed to save config!");
+			Data.version.sendToLog(LogType.WARN, "Failed to save config!");
 		}
 	}
 	public static boolean fixConfig() {
 		boolean hasFixedConfig = false;
 		if ((int) getConfig("alpha_level") < 0 || (int) getConfig("alpha_level") > 100) {
-			Data.version.sendToLog(Helper.LogType.WARN, "Config: alpha_level was invalid and have been reset to prevent any unexpected issues. (" + getConfig("alpha_level") + ")");
+			Data.version.sendToLog(LogType.WARN, "Config: alpha_level was invalid and have been reset to prevent any unexpected issues. (" + getConfig("alpha_level") + ")");
 			hasFixedConfig = setConfig("alpha_level", 100);
 		}
 		return hasFixedConfig;
@@ -43,7 +43,7 @@ public class ConfigHelper {
 		try {
 			configChanged = setConfig("alpha_level", 100);
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.WARN, "Failed to reset config!");
+			Data.version.sendToLog(LogType.WARN, "Failed to reset config!");
 		}
 		return configChanged;
 	}
@@ -59,10 +59,10 @@ public class ConfigHelper {
 					Config.configVersion = (int) value;
 					configChanged = true;
 				}
-				default -> Data.version.sendToLog(Helper.LogType.WARN, Translation.getString("Failed to set {} config value!: Invalid Key", id));
+				default -> Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to set {} config value!: Invalid Key", id));
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.WARN, Translation.getString("Failed to set {} config value!: {}", id, error));
+			Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to set {} config value!: {}", id, error));
 		}
 		return configChanged;
 	}
@@ -75,7 +75,7 @@ public class ConfigHelper {
 				return Config.configVersion;
 			}
 			default -> {
-				Data.version.sendToLog(Helper.LogType.WARN, Translation.getString("Failed to get {} config value!: Invalid Key", id));
+				Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to get {} config value!: Invalid Key", id));
 				return new Object();
 			}
 		}

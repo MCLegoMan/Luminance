@@ -10,7 +10,7 @@ package com.mclegoman.luminance.config;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
-import com.mclegoman.releasetypeutils.common.version.Helper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.darktree.simplelibs.config.SimpleConfig;
 
 public class Config {
@@ -26,7 +26,7 @@ public class Config {
 			config = SimpleConfig.of(id).provider(configProvider).request();
 			assign();
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.WARN, Translation.getString("Failed to initialize {} config: {}", id, error));
+			Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to initialize {} config: {}", id, error));
 		}
 	}
 	protected static void create() {
@@ -38,7 +38,7 @@ public class Config {
 		configVersion = config.getOrDefault("config_version", ConfigHelper.defaultConfigVersion);
 	}
 	protected static void save() {
-		Data.version.sendToLog(Helper.LogType.INFO,"Writing config to file.");
+		Data.version.sendToLog(LogType.INFO,"Writing config to file.");
 		configProvider.setConfig("alpha_level", alphaLevel);
 		configProvider.setConfig("config_version", ConfigHelper.defaultConfigVersion);
 		configProvider.saveConfig(Data.version, id);

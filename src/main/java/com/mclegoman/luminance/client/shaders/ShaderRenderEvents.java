@@ -10,7 +10,7 @@ package com.mclegoman.luminance.client.shaders;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
-import com.mclegoman.releasetypeutils.common.version.Helper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.gl.JsonEffectShaderProgram;
 import org.joml.Vector3f;
 
@@ -27,7 +27,7 @@ public class ShaderRenderEvents {
 			try {
 				add(runnable);
 			} catch (Exception error) {
-				Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to register BeforeRender shader event: {}", error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to register BeforeRender shader event: {}", error));
 			}
 		}
 		private static void add(ShaderRunnable runnable) {
@@ -43,7 +43,7 @@ public class ShaderRenderEvents {
 			try {
 				addFloat(couple, callable);
 			} catch (Exception error) {
-				Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to register shader uniform: {}_{}: {}", couple.getFirst(), couple.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to register shader uniform: {}_{}: {}", couple.getFirst(), couple.getSecond(), error));
 			}
 		}
 		public static void registerFloats(String modId, String uniform, Callable<float[]> callable) {
@@ -51,7 +51,7 @@ public class ShaderRenderEvents {
 			try {
 				addFloatArray(couple, callable);
 			} catch (Exception error) {
-				Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to register shader uniform: {}_{}: {}", couple.getFirst(), couple.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to register shader uniform: {}_{}: {}", couple.getFirst(), couple.getSecond(), error));
 			}
 		}
 		public static void registerVector3f(String modId, String uniform, Callable<Vector3f> callable) {
@@ -59,7 +59,7 @@ public class ShaderRenderEvents {
 			try {
 				addVector3f(couple, callable);
 			} catch (Exception error) {
-				Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to register shader uniform: {}_{}: {}", couple.getFirst(), couple.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to register shader uniform: {}_{}: {}", couple.getFirst(), couple.getSecond(), error));
 			}
 		}
 		private static void addFloat(Couple<String, String> shader, Callable<Float> callable) {

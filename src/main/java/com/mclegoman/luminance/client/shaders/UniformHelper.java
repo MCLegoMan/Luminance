@@ -10,7 +10,7 @@ package com.mclegoman.luminance.client.shaders;
 import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.releasetypeutils.common.version.Helper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.gl.JsonEffectShaderProgram;
 import net.minecraft.client.gl.Uniform;
 import net.minecraft.util.math.MathHelper;
@@ -25,21 +25,21 @@ public class UniformHelper {
 					try {
 						set(program, uniform.first(), uniform.second(), callable.call());
 					} catch (Exception error) {
-						Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to set shader uniforms: {}", error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniforms: {}", error));
 					}
 				});
 				ShaderRenderEvents.ShaderUniform.registryFloatArray.forEach((uniform, callable) -> {
 					try {
 						set(program, uniform.first(), uniform.second(), callable.call());
 					} catch (Exception error) {
-						Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to set shader uniforms: {}", error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniforms: {}", error));
 					}
 				});
 				ShaderRenderEvents.ShaderUniform.registryVector3f.forEach((uniform, callable) -> {
 					try {
 						set(program, uniform.first(), uniform.second(), callable.call());
 					} catch (Exception error) {
-						Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to set shader uniforms: {}", error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniforms: {}", error));
 					}
 				});
 			}
@@ -71,14 +71,14 @@ public class UniformHelper {
 		try {
 			getUniform(program, prefix, uniformName).set(values);
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
 	public static void set(JsonEffectShaderProgram program, String prefix, String uniformName, Vector3f values) {
 		try {
 			getUniform(program, prefix, uniformName).set(values);
 		} catch (Exception error) {
-			Data.version.sendToLog(Helper.LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
 }

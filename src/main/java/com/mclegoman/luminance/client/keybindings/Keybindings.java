@@ -9,7 +9,7 @@ package com.mclegoman.luminance.client.keybindings;
 
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.releasetypeutils.common.version.Helper;
+import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.option.KeyBinding;
 import org.lwjgl.glfw.GLFW;
 
@@ -22,6 +22,6 @@ public class Keybindings {
 		};
 	}
 	public static void init() {
-		Data.version.sendToLog(Helper.LogType.INFO, Translation.getString("Initializing keybindings!"));
+		Data.version.sendToLog(LogType.INFO, Translation.getString("Initializing keybindings!"));
 	}
 }
