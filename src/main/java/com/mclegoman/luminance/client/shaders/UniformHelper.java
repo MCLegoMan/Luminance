@@ -17,7 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import org.joml.Vector3f;
 
 public class UniformHelper {
-	public static float time = 3455800.0F;
+	public static float time = 0.0F;
 	public static void init() {
 		ShaderRenderEvents.BeforeRender.register(Data.version.getID(), new ShaderRenderEvents.ShaderRunnable() {
 			public void run(JsonEffectShaderProgram program) {
@@ -46,6 +46,9 @@ public class UniformHelper {
 		});
 	}
 	public static void updateTime() {
+		// Ideally, lu_time/lu_timeSmooth should be customizable from post/x.json, and if omitted, it would default to every 20 ticks (matching vanilla).
+		// This would require Luminance to add a time variable for each pass, how big of a performance hit would this be?
+
 		// This will get reset every 48 hours to prevent shader stuttering/freezing on some shaders.
 		// This may still stutter/freeze on weaker systems.
 		// This was tested using i5-11400@2.60GHz/8GB Allocated(of 32GB RAM)/RTX3050(31.0.15.5212).

@@ -9,6 +9,13 @@ version = project.mod_version + project.mc_version
 base {
 	archivesName = project.archives_base_name
 }
+loom {
+	mods {
+		"luminance" {
+			sourceSet("main")
+		}
+	}
+}
 runClient.doFirst {
 	args += ['--username', "Luminance${new Random().nextInt(1000)}"]
 }
@@ -34,20 +41,16 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
 
-	//include(modImplementation "com.github.MCLegoMan:releasetypeutils:${project.releasetypeutils}")
-
 	// Place Iris and Sodium jars in ./libs!
 	modImplementation fileTree(dir: 'libs', include: '*.jar')
 
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
-	//modImplementation "com.github.Nettakrim:Souper-Secret-Settings:${project.souper_secret_settings}"
-
 	// Development Environment Only
 	modImplementation "com.ptsmods:devlogin:3.4.1"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
+	//modImplementation "com.github.Nettakrim:Souper-Secret-Settings:${project.souper_secret_settings}"
 }
 processResources {
 	inputs.property "version", project.mod_version
-
 	filesMatching("fabric.mod.json") {
 		expand "version": project.mod_version
 	}
