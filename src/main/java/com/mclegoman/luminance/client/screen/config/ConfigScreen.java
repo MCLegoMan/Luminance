@@ -78,7 +78,7 @@ public class ConfigScreen extends Screen {
 	public void tick() {
 		try {
 			if (this.refresh) {
-				ClientData.minecraft.setScreen(new ConfigScreen(parentScreen, false, this.saveConfig));
+				ClientData.minecraft.setScreen(new ConfigScreen(parentScreen, false, this.saveConfig, this.splashText, this.isPride));
 			}
 			if (this.shouldClose) {
 				if (this.saveConfig) ConfigHelper.saveConfig(true);
