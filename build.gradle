@@ -5,9 +5,9 @@ plugins {
 	id 'maven-publish'
 }
 group = project.maven_group
-version = project.mod_version + project.mc_version
+version = "${project.mod_version}+${project.mc_version.replace("/", "-")}"
 base {
-	archivesName = project.archives_base_name
+	archivesName = project.mod_name.toLowerCase()
 }
 loom {
 	mods {
@@ -86,7 +86,7 @@ githubRelease {
 	targetCommitish "${project.github_branch}"
 	releaseName "${project.title}"
 	generateReleaseNotes false
-	body rootProject.file("CHANGELOG.md").text
+	body String.valueOf(((project.version_type == "release") ? rootProject.file("changelog/header_release.md").text : rootProject.file("changelog/header_development.md").text) + "\n## ${project.mod_name} ${project.mod_version} for ${project.mc_version}\n\n" + rootProject.file("changelog/body.md").text + "\n\n" + ((project.version_type == "release") ? rootProject.file("changelog/footer_release.md").text : rootProject.file("changelog/footer_development.md").text))
 	draft false
 	if (project.version_type == "release") prerelease false
 	else prerelease true
@@ -106,40 +106,40 @@ modrinth {
 	uploadFile = tasks.remapJar
 	gameVersions = List.of(project.mc_versions.split(", "))
 	loaders = ["fabric", "quilt"]
-	changelog = rootProject.file("CHANGELOG.md").text
+	changelog = String.valueOf(((project.version_type == "release") ? rootProject.file("changelog/header_release.md").text : rootProject.file("changelog/header_development.md").text) + "\n## ${project.mod_name} ${project.mod_version} for ${project.mc_version}\n\n" + rootProject.file("changelog/body.md").text + "\n\n" + ((project.version_type == "release") ? rootProject.file("changelog/footer_release.md").text : rootProject.file("changelog/footer_development.md").text))
 	dependencies {
 		required.project "fabric-api"
 		required.project "qsl"
 	}
 }
 tasks.register("uploadVersion") {
-	group = 'luminance'
+	group = project.mod_name.toLowerCase()
 	description = 'Upload project to both GitHub and Modrinth.'
 	dependsOn(tasks.githubRelease)
 	dependsOn(tasks.modrinth)
 }
 tasks.register("quickPlaySingleplayer") {
-	group = 'luminance'
+	group = project.mod_name.toLowerCase()
 	description = 'Uses Quick Play to join singleplayer world `New World` on launch.'
 	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World']))
 }
 tasks.register("quickPlayMultiplayer") {
-	group = 'luminance'
+	group = project.mod_name.toLowerCase()
 	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch.'
 	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565']))
 }
 tasks.register("runClientLoggedIn") {
-	group = 'luminance'
+	group = project.mod_name.toLowerCase()
 	description = 'Uses DevLogin to login to your Minecraft Account'
 	dependsOn(tasks.runClient.args(['--msa']))
 }
 tasks.register("quickPlaySingleplayerLoggedIn") {
-	group = 'luminance'
+	group = project.mod_name.toLowerCase()
 	description = 'Uses Quick Play to join singleplayer world `New World` on launch and uses DevLogin to login to your Minecraft Account.'
 	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World', '--msa']))
 }
 tasks.register("quickPlayMultiplayerLoggedIn") {
-	group = 'luminance'
+	group = project.mod_name.toLowerCase()
 	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch and uses DevLogin to login to your Minecraft Account.'
 	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565', '--msa']))
 }
