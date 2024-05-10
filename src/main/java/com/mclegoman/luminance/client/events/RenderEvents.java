@@ -7,11 +7,8 @@
 
 package com.mclegoman.luminance.client.events;
 
-import com.mclegoman.luminance.annotation.NotRecommended;
 import com.mclegoman.luminance.client.shaders.Shader;
-import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
-import com.mclegoman.luminance.common.util.LogType;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
@@ -225,7 +222,6 @@ public class RenderEvents {
 			return false;
 		}
 		// These functions could probably be improved.
-		// Should we remove modifyShader?
 		public static Couple<String, Shader> getShader(Couple<String, String> id, String shader) {
 			List<Couple<String, Shader>> shaders = get(id);
 			if (shaders != null) {
@@ -234,21 +230,6 @@ public class RenderEvents {
 				}
 			}
 			return null;
-		}
-		// If you want to update the shader, you can use getShader(new Couple<>("", ""), "").getSecond().setShaderId(new Identifier(""));
-		@NotRecommended(key = "This method is not recommended for use. Please use RenderEvents.getShader(new Couple<>(\"\", \"\"), \"\").getSecond().setShaderId(new Identifier(\"\")); instead.")
-		public static boolean modifyShader(Couple<String, String> id, String shader, Shader data) {
-			Data.version.sendToLog(LogType.WARN, "This method is not recommended for use. Please use RenderEvents.getShader(new Couple<>(\"\", \"\"), \"\").getSecond().setShaderId(new Identifier(\"\")); instead.");
-			List<Couple<String, Shader>> shaders = get(id);
-			if (shaders != null) {
-				for (Couple<String, Shader> shader1 : shaders) {
-					if (shader1.getFirst().equals(shader)) {
-						shaders.set(shaders.indexOf(shader1), new Couple<>(shader, data));
-						return true;
-					}
-				}
-			}
-			return false;
 		}
 		public static boolean removeShader(Couple<String, String> id, String shader) {
 			List<Couple<String, Shader>> shaders = get(id);
