@@ -12,11 +12,9 @@ import net.minecraft.text.Text;
 public class MessageOverlay {
 	public static Text message;
 	public static float remaining;
-
 	public static void tick() {
 		if (remaining > 0) remaining -= 1;
 	}
-
 	public static void setOverlay(Text text) {
 		message = text;
 		remaining = 40;
