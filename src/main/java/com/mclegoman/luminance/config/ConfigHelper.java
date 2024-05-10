@@ -13,7 +13,7 @@ import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.util.math.MathHelper;
 
 public class ConfigHelper {
-	protected static final int defaultConfigVersion = 1;
+	protected static final int defaultConfigVersion = 2;
 	protected static final int defaultAlphaLevel = 100;
 	protected static final boolean defaultShowAlphaLevelOverlay = false;
 	public static void init() {
