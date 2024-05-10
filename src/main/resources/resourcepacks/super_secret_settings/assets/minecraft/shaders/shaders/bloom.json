@@ -1,10 +1,16 @@
 {
   "namespace": "minecraft",
-  "shader": "bloom",
-  "disable_screen_mode": true,
+  "name": "bloom",
+  "enabled": true,
   "translatable": true,
-  "disable_soup": false,
-  "entity_links": [],
-  "custom": {},
-  "enabled": true
+  "disable_game_rendertype": true,
+  "custom": {
+    "perspective": {
+      "entity_links": []
+    },
+    "souper_secret_settings": {
+      "disable_soup": false,
+      "entity_links": []
+    }
+  }
 }

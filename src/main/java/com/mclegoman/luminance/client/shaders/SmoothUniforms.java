@@ -7,7 +7,7 @@
 
 package com.mclegoman.luminance.client.shaders;
 
-import com.mclegoman.luminance.client.events.RenderEvents;
+import com.mclegoman.luminance.client.events.Events;
 import net.minecraft.entity.effect.StatusEffects;
 
 public class SmoothUniforms extends Uniforms {
@@ -137,35 +137,35 @@ public class SmoothUniforms extends Uniforms {
 		alpha = (prevAlpha + getAlpha()) * 0.5F;
 	}
 	public static void init() {
-		RenderEvents.ShaderUniform.registerFloat("lu", "viewDistanceSmooth", () -> Shaders.getSmooth(prevViewDistance, viewDistance));
-		RenderEvents.ShaderUniform.registerFloat("lu", "fovSmooth", () -> Shaders.getSmooth(prevFov, fov));
-		RenderEvents.ShaderUniform.registerFloat("lu", "timeSmooth", SmoothUniforms::getSmoothTime);
-		RenderEvents.ShaderUniform.registerFloats("lu", "eyePositionSmooth", () -> Shaders.getSmooth(prevEyePosition, eyePosition));
-		RenderEvents.ShaderUniform.registerFloats("lu", "positionSmooth", () -> Shaders.getSmooth(prevPosition, position));
-		RenderEvents.ShaderUniform.registerFloat("lu", "pitchSmooth", () -> Shaders.getSmooth(prevPitch, pitch));
-		RenderEvents.ShaderUniform.registerFloat("lu", "yawSmooth", () -> Shaders.getSmooth(prevYaw, yaw));
-		RenderEvents.ShaderUniform.registerFloat("lu", "currentHealthSmooth", () -> Shaders.getSmooth(prevCurrentHealth, currentHealth));
-		RenderEvents.ShaderUniform.registerFloat("lu", "maxHealthSmooth", () -> Shaders.getSmooth(prevMaxHealth, maxHealth));
-		RenderEvents.ShaderUniform.registerFloat("lu", "currentAbsorptionSmooth", () -> Shaders.getSmooth(prevCurrentAbsorption, currentAbsorption));
-		RenderEvents.ShaderUniform.registerFloat("lu", "maxAbsorptionSmooth", () -> Shaders.getSmooth(prevMaxAbsorption, maxAbsorption));
-		RenderEvents.ShaderUniform.registerFloat("lu", "currentHurtTimeSmooth", () -> Shaders.getSmooth(prevCurrentHurtTime, currentHurtTime));
-		RenderEvents.ShaderUniform.registerFloat("lu", "maxHurtTimeSmooth", () -> Shaders.getSmooth(prevMaxHurtTime, maxHurtTime));
-		RenderEvents.ShaderUniform.registerFloat("lu", "currentAirSmooth", () -> Shaders.getSmooth(prevCurrentAir, currentAir));
-		RenderEvents.ShaderUniform.registerFloat("lu", "maxAirSmooth", () -> Shaders.getSmooth(prevMaxAir, maxAir));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isSprintingSmooth", () -> Shaders.getSmooth(prevIsSprinting, isSprinting));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isSwimmingSmooth", () -> Shaders.getSmooth(prevIsSwimming, isSwimming));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isSneakingSmooth", () -> Shaders.getSmooth(prevIsSneaking, isSneaking));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isCrawlingSmooth", () -> Shaders.getSmooth(prevIsCrawling, isCrawling));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isInvisibleSmooth", () -> Shaders.getSmooth(prevIsInvisible, isInvisible));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isWitheredSmooth", () -> Shaders.getSmooth(prevIsWithered, isWithered));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isPoisonedSmooth", () -> Shaders.getSmooth(prevIsPoisoned, isPoisoned));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isBurningSmooth", () -> Shaders.getSmooth(prevIsBurning, isBurning));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isOnGroundSmooth", () -> Shaders.getSmooth(prevIsOnGround, isOnGround));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isOnLadderSmooth", () -> Shaders.getSmooth(prevIsOnLadder, isOnLadder));
-		RenderEvents.ShaderUniform.registerFloat("lu", "isRidingSmooth", () -> Shaders.getSmooth(prevIsRiding, isRiding));
-		RenderEvents.ShaderUniform.registerFloat("lu", "hasPassengersSmooth", () -> Shaders.getSmooth(prevHasPassengers, hasPassengers));
-		RenderEvents.ShaderUniform.registerFloat("lu", "biomeTemperatureSmooth", () -> Shaders.getSmooth(prevBiomeTemperature, biomeTemperature));
-		RenderEvents.ShaderUniform.registerFloat("lu", "alphaSmooth", () -> Shaders.getSmooth(prevAlpha, alpha));
+		Events.ShaderUniform.registerFloat("lu", "viewDistanceSmooth", () -> Shaders.getSmooth(prevViewDistance, viewDistance));
+		Events.ShaderUniform.registerFloat("lu", "fovSmooth", () -> Shaders.getSmooth(prevFov, fov));
+		Events.ShaderUniform.registerFloat("lu", "timeSmooth", SmoothUniforms::getSmoothTime);
+		Events.ShaderUniform.registerFloats("lu", "eyePositionSmooth", () -> Shaders.getSmooth(prevEyePosition, eyePosition));
+		Events.ShaderUniform.registerFloats("lu", "positionSmooth", () -> Shaders.getSmooth(prevPosition, position));
+		Events.ShaderUniform.registerFloat("lu", "pitchSmooth", () -> Shaders.getSmooth(prevPitch, pitch));
+		Events.ShaderUniform.registerFloat("lu", "yawSmooth", () -> Shaders.getSmooth(prevYaw, yaw));
+		Events.ShaderUniform.registerFloat("lu", "currentHealthSmooth", () -> Shaders.getSmooth(prevCurrentHealth, currentHealth));
+		Events.ShaderUniform.registerFloat("lu", "maxHealthSmooth", () -> Shaders.getSmooth(prevMaxHealth, maxHealth));
+		Events.ShaderUniform.registerFloat("lu", "currentAbsorptionSmooth", () -> Shaders.getSmooth(prevCurrentAbsorption, currentAbsorption));
+		Events.ShaderUniform.registerFloat("lu", "maxAbsorptionSmooth", () -> Shaders.getSmooth(prevMaxAbsorption, maxAbsorption));
+		Events.ShaderUniform.registerFloat("lu", "currentHurtTimeSmooth", () -> Shaders.getSmooth(prevCurrentHurtTime, currentHurtTime));
+		Events.ShaderUniform.registerFloat("lu", "maxHurtTimeSmooth", () -> Shaders.getSmooth(prevMaxHurtTime, maxHurtTime));
+		Events.ShaderUniform.registerFloat("lu", "currentAirSmooth", () -> Shaders.getSmooth(prevCurrentAir, currentAir));
+		Events.ShaderUniform.registerFloat("lu", "maxAirSmooth", () -> Shaders.getSmooth(prevMaxAir, maxAir));
+		Events.ShaderUniform.registerFloat("lu", "isSprintingSmooth", () -> Shaders.getSmooth(prevIsSprinting, isSprinting));
+		Events.ShaderUniform.registerFloat("lu", "isSwimmingSmooth", () -> Shaders.getSmooth(prevIsSwimming, isSwimming));
+		Events.ShaderUniform.registerFloat("lu", "isSneakingSmooth", () -> Shaders.getSmooth(prevIsSneaking, isSneaking));
+		Events.ShaderUniform.registerFloat("lu", "isCrawlingSmooth", () -> Shaders.getSmooth(prevIsCrawling, isCrawling));
+		Events.ShaderUniform.registerFloat("lu", "isInvisibleSmooth", () -> Shaders.getSmooth(prevIsInvisible, isInvisible));
+		Events.ShaderUniform.registerFloat("lu", "isWitheredSmooth", () -> Shaders.getSmooth(prevIsWithered, isWithered));
+		Events.ShaderUniform.registerFloat("lu", "isPoisonedSmooth", () -> Shaders.getSmooth(prevIsPoisoned, isPoisoned));
+		Events.ShaderUniform.registerFloat("lu", "isBurningSmooth", () -> Shaders.getSmooth(prevIsBurning, isBurning));
+		Events.ShaderUniform.registerFloat("lu", "isOnGroundSmooth", () -> Shaders.getSmooth(prevIsOnGround, isOnGround));
+		Events.ShaderUniform.registerFloat("lu", "isOnLadderSmooth", () -> Shaders.getSmooth(prevIsOnLadder, isOnLadder));
+		Events.ShaderUniform.registerFloat("lu", "isRidingSmooth", () -> Shaders.getSmooth(prevIsRiding, isRiding));
+		Events.ShaderUniform.registerFloat("lu", "hasPassengersSmooth", () -> Shaders.getSmooth(prevHasPassengers, hasPassengers));
+		Events.ShaderUniform.registerFloat("lu", "biomeTemperatureSmooth", () -> Shaders.getSmooth(prevBiomeTemperature, biomeTemperature));
+		Events.ShaderUniform.registerFloat("lu", "alphaSmooth", () -> Shaders.getSmooth(prevAlpha, alpha));
 	}
 	public static float getSmoothTime() {
 		if (getTime() <= 1.0F) return getTime();

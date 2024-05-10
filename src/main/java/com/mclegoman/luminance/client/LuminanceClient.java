@@ -25,8 +25,8 @@ public class LuminanceClient implements ClientModInitializer {
 			ConfigHelper.init();
 			Keybindings.init();
 			ResourcePacks.init();
-			Tick.init();
 			Shaders.init();
+			Tick.init();
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to run onInitializeClient: {}", error));
 		}

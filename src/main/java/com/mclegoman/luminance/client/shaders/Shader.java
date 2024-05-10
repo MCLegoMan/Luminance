@@ -17,14 +17,21 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
+import java.util.List;
+
 public class Shader {
 	// TODO: Add Depth and Shader Framebuffers.
 	private PostEffectProcessor postProcessor;
 	private Identifier shaderId;
 	private RenderType renderType;
-	public Shader(Identifier id, RenderType renderType) {
+	private List<Object> shaderData;
+	public Shader(Identifier id, RenderType renderType, List<Object> shaderData) {
 		setShaderId(id);
 		setRenderType(renderType);
+		setShaderData(shaderData);
+	}
+	public Shader(Identifier id, RenderType renderType) {
+		this(id, renderType, null);
 	}
 	public PostEffectProcessor getPostProcessor() {
 		return postProcessor;
@@ -52,6 +59,12 @@ public class Shader {
 	}
 	public void setRenderType(RenderType renderType) {
 		this.renderType = renderType;
+	}
+	public List<Object> getShaderData() {
+		return this.shaderData;
+	}
+	public void setShaderData(List<Object> shaderData) {
+		this.shaderData = shaderData;
 	}
 	public enum RenderType {
 		// Depth Shaders should only be able to use WORLD, as you can't have depth outside of the world.

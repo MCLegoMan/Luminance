@@ -11,7 +11,6 @@ import com.mclegoman.luminance.common.util.Couple;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.StringIdentifiable;
 import org.apache.commons.lang3.StringUtils;
 
 public class Translation {
@@ -99,5 +98,11 @@ public class Translation {
 	}
 	public static MutableText getErrorTranslation(String namespace) {
 		return getConfigTranslation(namespace, "error", new Formatting[]{Formatting.RED, Formatting.BOLD});
+	}
+	public static MutableText getShaderTranslation(String namespace, String name, boolean canBeTranslated, Formatting[] formattings) {
+		return getText(canBeTranslated ? "name." + namespace + "." + name : namespace + ":" + name, canBeTranslated, formattings);
+	}
+	public static MutableText getShaderTranslation(String namespace, String name, boolean canBeTranslated) {
+		return getText(canBeTranslated ? "shader." + namespace + "." + name : namespace + ":" + name, canBeTranslated);
 	}
 }
