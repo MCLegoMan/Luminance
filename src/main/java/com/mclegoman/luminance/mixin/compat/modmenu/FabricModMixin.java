@@ -25,9 +25,9 @@ public abstract class FabricModMixin {
 	@Shadow(remap = false) @Final protected ModMetadata metadata;
 	@Inject(method = "getIcon", at = @At("RETURN"), remap = false, cancellable = true)
 	private void luminance$getIcon(FabricIconHandler iconHandler, int i, CallbackInfoReturnable<NativeImageBackedTexture> cir) {
-		String iconPath = CompatHelper.getOverrideModMenuIcon(this.metadata.getId());
-		if (iconPath != null) {
-			cir.setReturnValue(iconHandler.createIcon(Data.getModContainer(this.metadata.getId()), iconPath));
+		if (CompatHelper.shouldOverrideModMenuIcon(metadata.getId())) {
+			String iconPath = CompatHelper.getOverrideModMenuIcon(this.metadata.getId());
+			if (iconPath != null) cir.setReturnValue(iconHandler.createIcon(Data.getModContainer(this.metadata.getId()), iconPath));
 		}
 	}
 }
