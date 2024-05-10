@@ -29,13 +29,19 @@ public class ConfigScreen extends Screen {
 	private boolean refresh;
 	private boolean shouldClose;
 	private boolean saveConfig;
-	public ConfigScreen(Screen parent, boolean refresh) {
+	public ConfigScreen(Screen parent, boolean refresh, boolean saveConfig) {
 		super(Text.literal(""));
 		this.grid = new GridWidget();
 		this.parentScreen = parent;
 		this.refresh = refresh;
+		this.saveConfig = saveConfig;
 	}
-
+	public ConfigScreen(Screen parent, boolean refresh) {
+		this(parent, refresh, false);
+	}
+	public ConfigScreen(Screen parent) {
+		this(parent, false, false);
+	}
 	public void init() {
 		try {
 			grid.getMainPositioner().alignHorizontalCenter().margin(0);
@@ -54,7 +60,7 @@ public class ConfigScreen extends Screen {
 	public void tick() {
 		try {
 			if (this.refresh) {
-				ClientData.minecraft.setScreen(new ConfigScreen(parentScreen, false));
+				ClientData.minecraft.setScreen(new ConfigScreen(parentScreen, false, this.saveConfig));
 			}
 			if (this.shouldClose) {
 				if (this.saveConfig) ConfigHelper.saveConfig(true);
@@ -90,7 +96,10 @@ public class ConfigScreen extends Screen {
 		grid.getMainPositioner().alignHorizontalCenter().margin(2);
 		GridWidget.Adder GRID_ADDER = grid.createAdder(2);
 		GRID_ADDER.add(ButtonWidget.builder(Translation.getConfigTranslation(Data.version.getID(), "reset"), (button) -> {
-			if (com.mclegoman.luminance.config.ConfigHelper.resetConfig()) this.refresh = true;
+			if (com.mclegoman.luminance.config.ConfigHelper.resetConfig()) {
+				this.saveConfig = true;
+				this.refresh = true;
+			}
 		}).build());
 		GRID_ADDER.add(ButtonWidget.builder(Translation.getConfigTranslation(Data.version.getID(), "back"), (button) -> this.shouldClose = true).build());
 		return grid;

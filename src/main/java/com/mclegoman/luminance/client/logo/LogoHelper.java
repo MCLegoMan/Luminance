@@ -19,8 +19,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 
 public class LogoHelper {
-	public static void renderDevelopmentOverlay(DrawContext context, int x, int y, int width, int height, boolean shouldRender) {
-		if (shouldRender) context.drawTexture(new Identifier(Data.version.getID(), "textures/gui/logo/development.png"), (x + (width / 2)) - ((int) (width * 0.625) / 2), (int) (y + ((height * 0.6875) - 14)), 0.0F, 0.0F, (int) (width * 0.625), height / 4, (int) (width * 0.625), height / 4);
+	public static void renderDevelopmentOverlay(DrawContext context, int x, int y, int width, int height, boolean shouldRender, int xOffset, int yOffset) {
+		if (shouldRender) context.drawTexture(new Identifier(Data.version.getID(), "textures/gui/logo/development.png"), x + xOffset, y + yOffset, 0.0F, 0.0F, (int) (width * 0.75F), height / 4, (int) (width * 0.75F), height / 4);
 	}
 	public static void createSplashText(DrawContext context, int width, int x, int y, TextRenderer textRenderer, Couple<String, Boolean> splashText, float rotation) {
 		if (splashText != null && !ClientData.minecraft.options.getHideSplashTexts().getValue()) {

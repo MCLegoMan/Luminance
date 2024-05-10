@@ -22,7 +22,7 @@ public class LuminanceLogo {
 	}
 	public static void renderLogo(DrawContext context, int x, int y, int width, int height) {
 		context.drawTexture(getLogo().getTexture(), x, y, 0.0F, 0.0F, width, (int) (height * 0.6875), width, height);
-		LogoHelper.renderDevelopmentOverlay(context, x, y, width, height, Data.version.isDevelopmentBuild());
+		LogoHelper.renderDevelopmentOverlay(context, (int) ((x + (width / 2)) - ((width * 0.75F) / 2)), (int) (y + (height - (height * 0.45F))), width, height, Data.version.isDevelopmentBuild(), 0, 0);
 	}
 	public Logo Logo(Identifier id) {
 		return new Logo(id, "");
