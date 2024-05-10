@@ -25,7 +25,7 @@ Luminance is a library mod that is primarily designed to help other mods with sh
 - Java 21 or later.
   - Built with the Microsoft build of OpenJDK 21.0.2.
 
-### How to add Luminance to your mod:  
+## How to add Luminance to your mod:  
 1. Add the following lines to the repository section of your build.gradle:  
 ```
 exclusiveContent {
