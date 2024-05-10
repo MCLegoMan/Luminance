@@ -77,8 +77,11 @@
     - `disable_screen_mode` has been renamed to `disable_game_rendertype`.  
     - `entity_links` is now contained within the `perspective` `custom` object.  
 - Added ModMenu Icon Override.  
-  - You can override the icon ModMenu displays for your mod by using the following code:  
+  - You can override the icon ModMenu displays for your mod by using the following code on mod initialization:  
     - `CompatHelper.addOverrideModMenuIcon(new Couple<>("modId", "type"), "assets/modId/alt_icon.png", () -> {return true;});`  
+- Added ModMenu Luminance Badge.  
+  - You can add the Luminance ModMenu Badge to your mod by using the following code on mod initialization.  
+    - `CompatHelperaddLuminanceModMenuBadge("modId");`  
 ### Config Version 2  
 - Added `show_alpha_level_overlay` boolean config option.  
   - When set to true, changing the alpha level using the keybinding will display the percentage on screen.
