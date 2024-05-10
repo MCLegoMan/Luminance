@@ -31,7 +31,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
 		return switch (mixinClassName) {
 			case "com.mclegoman.luminance.mixin.client.shaders.ShaderNamespaceFix" ->
-					!(Data.isModInstalled("architectury") || Data.isModInstalled("satin") || (Data.isModInstalled("perspective") && !Data.isModInstalledVersionOrHigher("perspective", "1.3.0-alpha.7", true, "+")));
+					!(Data.isModInstalled("architectury") || Data.isModInstalled("satin") || (Data.isModInstalled("souper_secret_settings") && !Data.isModInstalledVersionOrHigher("souper_secret_settings", "v1.0.9", true)) || (Data.isModInstalled("perspective") && !Data.isModInstalledVersionOrHigher("perspective", "1.3.0-alpha.7", true, "+")));
 			case "com.mclegoman.luminance.mixin.client.shaders.ShaderTextureNamespaceFix" ->
 					!((Data.isModInstalled("souper_secret_settings") && !Data.isModInstalledVersionOrHigher("souper_secret_settings", "v1.0.9", true)) || (Data.isModInstalled("perspective") && !Data.isModInstalledVersionOrHigher("perspective", "1.3.0-alpha.7", true, "+")));
 			case "com.mclegoman.luminance.mixin.compat.modmenu.FabricModMixin", "com.mclegoman.luminance.mixin.compat.modmenu.ModsScreenMixin" ->
