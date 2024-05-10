@@ -12,8 +12,9 @@ import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.logo.LuminanceLogo;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.config.ConfigHelper;
+import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.LogType;
+import com.mclegoman.luminance.config.ConfigHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -29,24 +30,41 @@ public class ConfigScreen extends Screen {
 	private boolean refresh;
 	private boolean shouldClose;
 	private boolean saveConfig;
-	public ConfigScreen(Screen parent, boolean refresh, boolean saveConfig) {
+	private boolean shouldRenderSplashText;
+	private Couple<String, Boolean> splashText;
+	private boolean isPride;
+	public ConfigScreen(Screen parent, boolean refresh, boolean saveConfig, Couple<String, Boolean> splashText, boolean isPride) {
 		super(Text.literal(""));
 		this.grid = new GridWidget();
 		this.parentScreen = parent;
 		this.refresh = refresh;
 		this.saveConfig = saveConfig;
+		if (splashText != null) {
+			this.splashText = splashText;
+			this.shouldRenderSplashText = true;
+		}
+		this.isPride = isPride;
 	}
-	public ConfigScreen(Screen parent, boolean refresh) {
-		this(parent, refresh, false);
+	public ConfigScreen(Screen parent, boolean refresh, Couple<String, Boolean> splashText, boolean isPride) {
+		this(parent, refresh, false, splashText, isPride);
 	}
-	public ConfigScreen(Screen parent) {
-		this(parent, false, false);
+	public ConfigScreen(Screen parent, Couple<String, Boolean> splashText, boolean isPride) {
+		this(parent, false, false, splashText, isPride);
+	}
+	public ConfigScreen(Screen parent, boolean refresh, boolean saveConfig, boolean isPride) {
+		this(parent, refresh, saveConfig, null, isPride);
+	}
+	public ConfigScreen(Screen parent, boolean refresh, boolean isPride) {
+		this(parent, refresh, false, null, isPride);
+	}
+	public ConfigScreen(Screen parent, boolean isPride) {
+		this(parent, false, false, null, isPride);
 	}
 	public void init() {
 		try {
 			grid.getMainPositioner().alignHorizontalCenter().margin(0);
 			GridWidget.Adder gridAdder = grid.createAdder(1);
-			gridAdder.add(new LuminanceLogo.Widget());
+			gridAdder.add(new LuminanceLogo.Widget(shouldRenderSplashText, splashText, isPride));
 			gridAdder.add(createConfig());
 			gridAdder.add(new EmptyWidget(4, 4));
 			gridAdder.add(createFooter());

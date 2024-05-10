@@ -11,6 +11,7 @@ import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.screen.config.ConfigScreen;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
+import com.mclegoman.luminance.common.util.DateHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.option.KeyBinding;
 import org.lwjgl.glfw.GLFW;
@@ -30,7 +31,7 @@ public class Keybindings {
 	}
 	public static void tick() {
 		if (openConfig.wasPressed()) {
-			ClientData.minecraft.setScreen(new ConfigScreen(ClientData.minecraft.currentScreen, false));
+			ClientData.minecraft.setScreen(new ConfigScreen(ClientData.minecraft.currentScreen, false, DateHelper.isPride()));
 		}
 	}
 }
