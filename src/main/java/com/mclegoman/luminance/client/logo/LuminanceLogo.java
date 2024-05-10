@@ -8,29 +8,37 @@
 package com.mclegoman.luminance.client.logo;
 
 import com.mclegoman.luminance.common.data.Data;
+import com.mclegoman.luminance.common.util.DateHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.StringIdentifiable;
 
 public class LuminanceLogo {
 	public static Logo getLogo() {
-		return new Logo(new Identifier(Data.version.getID(), Data.version.getID()));
+		return new Logo(new Identifier(Data.version.getID(), Data.version.getID()), DateHelper.isPride() ? "pride" : "normal");
 	}
 	public static void renderLogo(DrawContext context, int x, int y, int width, int height) {
 		context.drawTexture(getLogo().getTexture(), x, y, 0.0F, 0.0F, width, (int) (height * 0.6875), width, height);
 		LogoHelper.renderDevelopmentOverlay(context, x, y, width, height, Data.version.isDevelopmentBuild());
 	}
-	public record Logo(Identifier id) {
+	public Logo Logo(Identifier id) {
+		return new Logo(id, "");
+	}
+	public record Logo(Identifier id, String type) {
 		public String getNamespace() {
 			return this.id.getNamespace();
 		}
 		public String getName() {
 			return this.id.getPath();
 		}
+		public String getType() {
+			return this.type;
+		}
 		public Identifier getTexture() {
-			return new Identifier(getNamespace(), "textures/gui/logo/" + getName() + ".png");
+			return new Identifier(getNamespace(), "textures/gui/logo/" + this.type + (this.type.endsWith("/") || this.type.equals("") ? "" : "/") + getName() + ".png");
 		}
 	}
 	public static class Widget extends ClickableWidget {

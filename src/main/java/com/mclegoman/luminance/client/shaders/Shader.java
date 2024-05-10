@@ -54,6 +54,7 @@ public class Shader {
 		this.renderType = renderType;
 	}
 	public enum RenderType {
+		// Depth Shaders should only be able to use WORLD, as you can't have depth outside of the world.
 		WORLD,
 		GAME
 	}
