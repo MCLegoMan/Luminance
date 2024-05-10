@@ -296,8 +296,8 @@ public class Events {
 			List<Couple<String, Shader>> shaders = get(id);
 			if (exists(id)) {
 				if (shaders == null) shaders = new ArrayList<>();
-				for (Couple<String, Shader> shader : shaders) {
-					if (shader.getFirst().equals(shaderData.getFirst())) {
+				for (Couple<String, Shader> data : shaders) {
+					if (data.getFirst().equalsIgnoreCase(shaderData.getFirst())) {
 						return false;
 					}
 				}
@@ -307,12 +307,14 @@ public class Events {
 			}
 			return false;
 		}
-		// These functions could probably be improved.
 		public static Couple<String, Shader> getShader(Couple<String, String> id, String shader) {
 			List<Couple<String, Shader>> shaders = get(id);
-			if (shaders != null) {
-				for (Couple<String, Shader> shader1 : shaders) {
-					if (shader1.getFirst().equals(shader)) return shader1;
+			if (exists(id)) {
+				if (shaders == null) shaders = new ArrayList<>();
+				for (Couple<String, Shader> data : shaders) {
+					if (data.getFirst().equalsIgnoreCase(shader)) {
+						return data;
+					}
 				}
 			}
 			return null;
@@ -320,12 +322,9 @@ public class Events {
 		public static boolean removeShader(Couple<String, String> id, String shader) {
 			List<Couple<String, Shader>> shaders = get(id);
 			if (shaders != null) {
-				for (Couple<String, Shader> shader1 : shaders) {
-					if (shader1.getFirst().equals(shader)) {
-						shaders.remove(shader1);
-						modify(id, shaders);
-						return true;
-					}
+				if (shaders.removeIf(shaderData -> shaderData.getFirst().equalsIgnoreCase(shader))) {
+					modify(id, shaders);
+					return true;
 				}
 			}
 			return false;

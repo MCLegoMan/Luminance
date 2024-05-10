@@ -16,6 +16,7 @@
 		"client.shaders.GameRendererMixin",
 		"client.shaders.ShaderNamespaceFix",
 		"client.shaders.ShaderTextureFix",
-		"client.shaders.WorldRendererMixin"
+		"client.shaders.WorldRendererMixin",
+		"compat.modmenu.FabricModMixin"
 	]
 }

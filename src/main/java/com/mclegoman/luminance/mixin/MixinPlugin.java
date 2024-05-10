@@ -30,6 +30,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
 		if (mixinClassName.equals("com.mclegoman.luminance.mixin.client.shaders.ShaderNamespaceFix")) return !(Data.isModInstalled("architectury") || Data.isModInstalled("satin"));
+		else if (mixinClassName.equals("com.mclegoman.luminance.mixin.compat.modmenu.FabricModMixin")) return Data.isModInstalled("modmenu");
 		else return true;
 	}
 

@@ -72,10 +72,13 @@
   }
 }
 ```
-- If you're updating a perspective shader, you will need to update the following:  
-  - `shader` has been renamed to `name`.  
-  - `disable_screen_mode` has been renamed to `disable_game_rendertype`.  
-  - `entity_links` is now contained within the `perspective` `custom` object.  
+  - If you're updating a perspective shader, you will need to update the following:  
+    - `shader` has been renamed to `name`.  
+    - `disable_screen_mode` has been renamed to `disable_game_rendertype`.  
+    - `entity_links` is now contained within the `perspective` `custom` object.  
+- Added ModMenu Icon Override.  
+  - You can override the icon ModMenu displays for your mod by using the following code:  
+    - `CompatHelper.addOverrideModMenuIcon("modId", "assets/modId/alt_icon.png");`  
 ### Config Version 2  
 - Added `show_alpha_level_overlay` boolean config option.  
   - When set to true, changing the alpha level using the keybinding will display the percentage on screen.
