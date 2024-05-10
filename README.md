@@ -8,6 +8,14 @@ Luminance is a library mod that is primarily designed to help other mods with sh
   - Luminance comes with a bunch of these by default, but you can add your own too!
 - **Adds shaders that have been used in previous minecraft versions.**
   - _Requires [Perspective](https://modrinth.com/mod/mclegoman-perspective) or [Souper Secret Settings](https://modrinth.com/mod/souper-secret-settings)._
+- **Fixes Shader Namespace Bugs.**  
+  - Minecraft doesn't use namespaces for shaders and shader textures, Luminance fixes that.  
+- **Compatibility**  
+  - Luminance takes care of rendering shaders, so you don't have to!  
+  - You can check if Iris Shaders are enabled using Luminance.  
+    - This means you don't have to have Iris added to your development environment!  
+  - You can replace your ModMenu icon using Luminance!  
+    - Make your mod icon change depending on the time of year, or via a config option, anything's possible!  
 
 ## Dependencies
 - [Fabric API](https://modrinth.com/mod/fabric-api) or [Quilted Fabric API (QFAPI)](https://modrinth.com/mod/qsl)
@@ -16,6 +24,33 @@ Luminance is a library mod that is primarily designed to help other mods with sh
     - `fabric-lifecycle-events-v1`
 - Java 21 or later.
   - Built with the Microsoft build of OpenJDK 21.0.2.
+
+### How to add Luminance to your mod:  
+1. Add the following lines to the repository section of your build.gradle:  
+```
+exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
+```
+2. Add the following line to the dependencies section of your build.gradle:  
+```
+include(modImplementation "maven.modrinth:luminance:${project.luminance}")
+```
+3. Add the following line to your gradle.properties:  
+   1. Replace 1.0.0-alpha.3.+1.20.5 with the latest version of Luminance!  
+      1. This can be found on the version page on Modrinth.  
+```
+luminance = 1.0.0-alpha.3+1.20.5
+```
+4. Reload gradle and you're ready to use Luminance!  
 
 ## Also check out
 [Perspective](https://modrinth.com/mod/mclegoman-perspective) by MCLegoMan  
