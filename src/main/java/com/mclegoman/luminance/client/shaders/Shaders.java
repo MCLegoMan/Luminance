@@ -123,7 +123,7 @@ public class Shaders {
 		return shaderMap;
 	}
 	public static Shader get(List<Object> shaderData, Shader.RenderType renderType) {
-		return new Shader(getPostShader((String) get(shaderData, ShaderRegistry.ID)), renderType, shaderData);
+		return new Shader(renderType, shaderData);
 	}
 	public static List<Object> getFallbackShader() {
 		List<Object> shaderMap = new ArrayList<>();

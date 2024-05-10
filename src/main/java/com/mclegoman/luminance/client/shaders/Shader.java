@@ -25,12 +25,12 @@ public class Shader {
 	private Identifier shaderId;
 	private RenderType renderType;
 	private List<Object> shaderData;
-	public Shader(Identifier id, RenderType renderType, List<Object> shaderData) {
+	public Shader(RenderType renderType, List<Object> shaderData) {
 		setRenderType(renderType);
 		setShaderData(shaderData);
 	}
-	public Shader(Identifier id, RenderType renderType) {
-		this(id, renderType, null);
+	public Shader(RenderType renderType) {
+		this(renderType, null);
 	}
 	public PostEffectProcessor getPostProcessor() {
 		return postProcessor;
