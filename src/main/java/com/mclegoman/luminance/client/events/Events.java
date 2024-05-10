@@ -323,6 +323,7 @@ public class Events {
 				for (Couple<String, Shader> shader1 : shaders) {
 					if (shader1.getFirst().equals(shader)) {
 						shaders.remove(shader1);
+						modify(id, shaders);
 						return true;
 					}
 				}
