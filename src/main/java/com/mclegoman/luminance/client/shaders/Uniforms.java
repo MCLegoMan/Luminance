@@ -26,13 +26,9 @@ public class Uniforms {
 	private static int prevAlpha = (int)ConfigHelper.getConfig("alpha_level");
 	public static void tick() {
 		Shaders.updateTime();
-		prevAlpha = (int)ConfigHelper.getConfig("alpha_level");
 		if (!updatingAlpha() && updatingAlpha) {
 			updatingAlpha = false;
-			if ((int)ConfigHelper.getConfig("alpha_level") != prevAlpha) {
-				ConfigHelper.setConfig("alpha_level", prevAlpha);
-				ConfigHelper.saveConfig(true);
-			}
+			if ((int)ConfigHelper.getConfig("alpha_level") != prevAlpha) ConfigHelper.saveConfig(true);
 		}
 		SmoothUniforms.tick();
 	}
