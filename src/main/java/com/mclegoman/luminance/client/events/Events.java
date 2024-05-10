@@ -8,13 +8,14 @@
 package com.mclegoman.luminance.client.events;
 
 import com.mclegoman.luminance.client.shaders.Shader;
+import com.mclegoman.luminance.client.shaders.Shaders;
+import com.mclegoman.luminance.client.translation.Translation;
+import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
+import com.mclegoman.luminance.common.util.LogType;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 public class Events {
@@ -293,8 +294,8 @@ public class Events {
 			registry.remove(id);
 		}
 		public static boolean addShader(Couple<String, String> id, Couple<String, Shader> shaderData) {
-			List<Couple<String, Shader>> shaders = get(id);
 			if (exists(id)) {
+				List<Couple<String, Shader>> shaders = get(id);
 				if (shaders == null) shaders = new ArrayList<>();
 				for (Couple<String, Shader> data : shaders) {
 					if (data.getFirst().equalsIgnoreCase(shaderData.getFirst())) {
@@ -308,8 +309,8 @@ public class Events {
 			return false;
 		}
 		public static Couple<String, Shader> getShader(Couple<String, String> id, String shader) {
-			List<Couple<String, Shader>> shaders = get(id);
 			if (exists(id)) {
+				List<Couple<String, Shader>> shaders = get(id);
 				if (shaders == null) shaders = new ArrayList<>();
 				for (Couple<String, Shader> data : shaders) {
 					if (data.getFirst().equalsIgnoreCase(shader)) {
@@ -318,6 +319,37 @@ public class Events {
 				}
 			}
 			return null;
+		}
+		public static void setShader(Couple<String, String> id, String shader, int index, Shader.RenderType renderType, boolean enabled) {
+			try {
+				if (!Events.ShaderRender.exists(id)) Events.ShaderRender.register(id, new ArrayList<>());
+				if (enabled) {
+					if (!existsShader(id, shader)) {
+						addShader(id, new Couple<>(shader, new Shader(renderType, Shaders.get(index))));
+					} else {
+						Couple<String, Shader> data = getShader(id, shader);
+						if (data != null) {
+							data.getSecond().setRenderType(renderType);
+							data.getSecond().setShaderData(Shaders.get(index));
+						}
+					}
+					modify(id, get(id));
+				} else {
+					removeShader(id, shader);
+				}
+			} catch (Exception error) {
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", id, index, error));
+			}
+		}
+		public static boolean existsShader(Couple<String, String> id, String shader) {
+			if (exists(id)) {
+				List<Couple<String, Shader>> shaders = get(id);
+				if (shaders != null) {
+					for (Couple<String, Shader> data : shaders) {
+						if (data.getFirst().equalsIgnoreCase(shader)) return true;
+					}
+				}
+			} return false;
 		}
 		public static boolean removeShader(Couple<String, String> id, String shader) {
 			List<Couple<String, Shader>> shaders = get(id);
