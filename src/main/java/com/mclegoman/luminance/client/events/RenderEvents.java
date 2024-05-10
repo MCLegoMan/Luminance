@@ -224,6 +224,8 @@ public class RenderEvents {
 			}
 			return false;
 		}
+		// These functions could probably be improved.
+		// Should we remove modifyShader?
 		public static Couple<String, Shader> getShader(Couple<String, String> id, String shader) {
 			List<Couple<String, Shader>> shaders = get(id);
 			if (shaders != null) {
@@ -234,8 +236,6 @@ public class RenderEvents {
 			return null;
 		}
 		// If you want to update the shader, you can use getShader(new Couple<>("", ""), "").getSecond().setShaderId(new Identifier(""));
-		// These functions could probably be improved.
-		// Should we remove modifyShader?
 		@NotRecommended(key = "This method is not recommended for use. Please use RenderEvents.getShader(new Couple<>(\"\", \"\"), \"\").getSecond().setShaderId(new Identifier(\"\")); instead.")
 		public static boolean modifyShader(Couple<String, String> id, String shader, Shader data) {
 			Data.version.sendToLog(LogType.WARN, "This method is not recommended for use. Please use RenderEvents.getShader(new Couple<>(\"\", \"\"), \"\").getSecond().setShaderId(new Identifier(\"\")); instead.");
