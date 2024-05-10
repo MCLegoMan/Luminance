@@ -7,12 +7,15 @@
 
 package com.mclegoman.luminance.client.events;
 
+import com.mclegoman.luminance.annotation.NotRecommended;
 import com.mclegoman.luminance.client.shaders.Shader;
+import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
+import com.mclegoman.luminance.common.util.LogType;
 import org.joml.Vector3f;
 
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -232,7 +235,10 @@ public class RenderEvents {
 		}
 		// If you want to update the shader, you can use getShader(new Couple<>("", ""), "").getSecond().setShaderId(new Identifier(""));
 		// These functions could probably be improved.
+		// Should we remove modifyShader?
+		@NotRecommended(key = "This method is not recommended for use. Please use RenderEvents.getShader(new Couple<>(\"\", \"\"), \"\").getSecond().setShaderId(new Identifier(\"\")); instead.")
 		public static boolean modifyShader(Couple<String, String> id, String shader, Shader data) {
+			Data.version.sendToLog(LogType.WARN, "This method is not recommended for use. Please use RenderEvents.getShader(new Couple<>(\"\", \"\"), \"\").getSecond().setShaderId(new Identifier(\"\")); instead.");
 			List<Couple<String, Shader>> shaders = get(id);
 			if (shaders != null) {
 				for (Couple<String, Shader> shader1 : shaders) {
