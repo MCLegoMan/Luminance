@@ -48,22 +48,26 @@
   - Shaders registered here will be added to ShaderDataloader.registry.  
   - The layout is based on Perspective's shader dataloader, but shaders made with this layout will **NOT** get registered by Perspective (yet, it'll be updated to use this layout instead in a future update!)
   - Dataloader Example  
-    - This example will register the `minecraft:box_blur` shader, will always render in the WORLD rendertype, and can be translated.  
+    - This example will register the `perspective:silhouette` shader, will always render in the WORLD rendertype, and can be translated.  
     - The custom field can contain objects that can be read by third party mods - e.g. perspective.  
 ```
 {
-  "namespace": "minecraft",
-  "name": "box_blur",
+  "namespace": "perspective",
+  "name": "silhouette",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,
   "custom": {
     "perspective": {
-      "entity_links": []
+      "entity_links": [
+        "entity.minecraft.warden"
+      ]
     },
     "souper_secret_settings": {
       "disable_soup": false,
-      "entity_links": []
+      "entity_links": [
+        "entity.minecraft.warden"
+      ]
     }
   }
 }
