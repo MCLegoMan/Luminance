@@ -21,6 +21,7 @@ public class Tick {
 			ClientTickEvents.END_CLIENT_TICK.register((client) -> {
 				if (ClientData.minecraft.isFinishedLoading()) {
 					Keybindings.tick();
+					MessageOverlay.tick();
 					Uniforms.tick();
 				}
 			});
