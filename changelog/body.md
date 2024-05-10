@@ -1,3 +1,6 @@
 ## Changelog  
-- You can now modify and remove dynamic shader uniforms, and BeforeRender runnables.
-  - Note, this version will break compatibility with mods that used BeforeRender runnables, as it now requires an id.
+### Features  
+- Added Message Overlay.  
+### Config Version 2  
+- Added `show_alpha_level_overlay` boolean config option.  
+  - When set to true, changing the alpha level using the keybinding will display the percentage on screen.
