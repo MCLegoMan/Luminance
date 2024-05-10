@@ -41,13 +41,13 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
 
+	// Compatibility
 	// Place Iris and Sodium jars in ./libs!
 	modImplementation fileTree(dir: 'libs', include: '*.jar')
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
 
 	// Development Environment Only
 	modImplementation "com.ptsmods:devlogin:3.4.1"
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
-	//modImplementation "com.github.Nettakrim:Souper-Secret-Settings:${project.souper_secret_settings}"
 }
 processResources {
 	inputs.property "version", project.mod_version
@@ -81,10 +81,10 @@ publishing {
 githubRelease {
 	token rootProject.file(".env").text.readLines().get(1).replace("GITHUB=", "").replace("\"", "")
 	owner "MCLegoMan"
-	repo "Luminance"
-	tagName "${project.github_tag}"
-	targetCommitish "${project.github_branch}"
-	releaseName "${project.title}"
+	repo "${project.mod_name}"
+	tagName "${project.mod_version}-${project.mc_version.replace("/", "-")}"
+	targetCommitish "${(project.version_type == "release" ? "release" : "development")}-${project.mc_version.replace("/", "-")}"
+	releaseName "[${project.mc_version}] ${project.mod_name} ${project.mod_version}"
 	generateReleaseNotes false
 	body String.valueOf(((project.version_type == "release") ? rootProject.file("changelog/header_release.md").text : rootProject.file("changelog/header_development.md").text) + "\n## ${project.mod_name} ${project.mod_version} for ${project.mc_version}\n\n" + rootProject.file("changelog/body.md").text + "\n\n" + ((project.version_type == "release") ? rootProject.file("changelog/footer_release.md").text : rootProject.file("changelog/footer_development.md").text))
 	draft false
@@ -100,7 +100,7 @@ githubRelease {
 modrinth {
 	token = rootProject.file(".env").text.readLines().get(0).replace("MODRINTH=", "").replace("\"", "")
 	projectId = "${project.modrinth_id}"
-	versionName = "${project.title}"
+	versionName = "[${project.mc_version}] ${project.mod_name} ${project.mod_version}"
 	versionNumber = "${project.mod_version}${project.mc_version}"
 	versionType = "${project.version_type}"
 	uploadFile = tasks.remapJar
