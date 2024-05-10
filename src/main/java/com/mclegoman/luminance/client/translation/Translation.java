@@ -99,10 +99,16 @@ public class Translation {
 	public static MutableText getErrorTranslation(String namespace) {
 		return getConfigTranslation(namespace, "error", new Formatting[]{Formatting.RED, Formatting.BOLD});
 	}
+	public static MutableText getShaderTranslation(String namespace, String name, boolean canBeTranslated, boolean shouldShowNamespace, Formatting[] formattings) {
+		return getText(canBeTranslated ? "name." + namespace + "." + name : (shouldShowNamespace ? namespace + ":" : "") + name, canBeTranslated, formattings);
+	}
+	public static MutableText getShaderTranslation(String namespace, String name, boolean canBeTranslated, boolean shouldShowNamespace) {
+		return getText(canBeTranslated ? "shader." + namespace + "." + name : (shouldShowNamespace ? namespace + ":" : "") + name, canBeTranslated);
+	}
 	public static MutableText getShaderTranslation(String namespace, String name, boolean canBeTranslated, Formatting[] formattings) {
-		return getText(canBeTranslated ? "name." + namespace + "." + name : namespace + ":" + name, canBeTranslated, formattings);
+		return getShaderTranslation(namespace, name, canBeTranslated, true, formattings);
 	}
 	public static MutableText getShaderTranslation(String namespace, String name, boolean canBeTranslated) {
-		return getText(canBeTranslated ? "shader." + namespace + "." + name : namespace + ":" + name, canBeTranslated);
+		return getShaderTranslation(namespace, name, canBeTranslated, true);
 	}
 }
