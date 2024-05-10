@@ -38,12 +38,5 @@ public class Keybindings {
 		if (openConfig.wasPressed()) {
 			ClientData.minecraft.setScreen(new ConfigScreen(ClientData.minecraft.currentScreen, false));
 		}
-		if (adjustAlpha.wasPressed()) {
-			if (!GameRenderEvents.ShaderRender.exists(new Couple<>(Data.version.getID(), "main"))) GameRenderEvents.ShaderRender.add(new Couple<>(Data.version.getID(), "main"), new Shader(new Identifier("minecraft", "shaders/post/creeper.json"), Shader.RenderType.GAME));
-			else {
-				if (Objects.requireNonNull(GameRenderEvents.ShaderRender.get(new Couple<>(Data.version.getID(), "main"))).getRenderType().equals(Shader.RenderType.GAME)) Objects.requireNonNull(GameRenderEvents.ShaderRender.get(new Couple<>(Data.version.getID(), "main"))).setRenderType(Shader.RenderType.WORLD);
-				else if (Objects.requireNonNull(GameRenderEvents.ShaderRender.get(new Couple<>(Data.version.getID(), "main"))).getRenderType().equals(Shader.RenderType.WORLD)) Objects.requireNonNull(GameRenderEvents.ShaderRender.get(new Couple<>(Data.version.getID(), "main"))).setRenderType(Shader.RenderType.GAME);
-			}
-		}
 	}
 }
