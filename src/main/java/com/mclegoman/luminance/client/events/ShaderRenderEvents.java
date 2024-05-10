@@ -23,8 +23,8 @@ public class ShaderRenderEvents {
 		public static void add(Couple<String, String> id, ShaderRunnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static void get(Couple<String, String> id) {
-			registry.get(id);
+		public static ShaderRunnable get(Couple<String, String> id) {
+			return registry.get(id);
 		}
 		public static void modify(Couple<String, String> id, ShaderRunnable runnable) {
 			registry.replace(id, runnable);
@@ -41,8 +41,8 @@ public class ShaderRenderEvents {
 		public static void add(Couple<String, String> id, ShaderRunnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static void get(Couple<String, String> id) {
-			registry.get(id);
+		public static ShaderRunnable get(Couple<String, String> id) {
+			return registry.get(id);
 		}
 		public static void modify(Couple<String, String> id, ShaderRunnable runnable) {
 			registry.replace(id, runnable);

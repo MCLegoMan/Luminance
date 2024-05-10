@@ -22,8 +22,8 @@ public class GameRenderEvents {
 		public static void add(Couple<String, String> id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static void get(Couple<String, String> id) {
-			registry.get(id);
+		public static Runnable get(Couple<String, String> id) {
+			return registry.get(id);
 		}
 		public static void modify(Couple<String, String> id, Runnable runnable) {
 			registry.replace(id, runnable);
@@ -40,8 +40,8 @@ public class GameRenderEvents {
 		public static void add(Couple<String, String> id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static void get(Couple<String, String> id) {
-			registry.get(id);
+		public static Runnable get(Couple<String, String> id) {
+			return registry.get(id);
 		}
 		public static void modify(Couple<String, String> id, Runnable runnable) {
 			registry.replace(id, runnable);
@@ -58,8 +58,8 @@ public class GameRenderEvents {
 		public static void add(Couple<String, String> id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static void get(Couple<String, String> id) {
-			registry.get(id);
+		public static Runnable get(Couple<String, String> id) {
+			return registry.get(id);
 		}
 		public static void modify(Couple<String, String> id, Runnable runnable) {
 			registry.replace(id, runnable);
@@ -76,8 +76,8 @@ public class GameRenderEvents {
 		public static void add(Couple<String, String> id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static void get(Couple<String, String> id) {
-			registry.get(id);
+		public static Runnable get(Couple<String, String> id) {
+			return registry.get(id);
 		}
 		public static void modify(Couple<String, String> id, Runnable runnable) {
 			registry.replace(id, runnable);
