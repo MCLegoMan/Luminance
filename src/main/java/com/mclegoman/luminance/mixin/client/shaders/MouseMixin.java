@@ -33,7 +33,7 @@ public abstract class MouseMixin {
 			int scrollAmount = (int) this.eventDeltaVerticalWheel;
 			this.eventDeltaVerticalWheel -= scrollAmount;
 			if (scrollAmount != 0) {
-				if (Uniforms.updatingAlpha()) Uniforms.adjustAlpha(scrollAmount);
+				Uniforms.adjustAlpha(scrollAmount);
 				ci.cancel();
 			}
 		}
@@ -42,7 +42,7 @@ public abstract class MouseMixin {
 	private void luminance$onMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
 		if (Uniforms.updatingAlpha()) {
 			if (button == 2) {
-				if (Uniforms.updatingAlpha()) Uniforms.resetAlpha();
+				Uniforms.resetAlpha();
 				ci.cancel();
 			}
 		}
