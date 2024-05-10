@@ -7,16 +7,15 @@
 		"client.hud.InGameHudMixin",
 		"client.shaders.GameRendererAccessor",
 		"client.shaders.MouseMixin",
-		"client.shaders.PostEffectPassMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"mixins": [
+		"client.shaders.PostEffectPassMixin",
 		"client.shaders.GameRendererMixin",
 		"client.shaders.ShaderNamespaceFix",
 		"client.shaders.ShaderTextureFix",
 		"client.shaders.WorldRendererMixin",
-		"compat.modmenu.FabricModMixin"
-	]
+		"compat.modmenu.FabricModMixin",
+		"compat.modmenu.ModsScreenMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

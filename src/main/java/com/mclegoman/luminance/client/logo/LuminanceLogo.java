@@ -7,9 +7,7 @@
 
 package com.mclegoman.luminance.client.logo;
 
-import com.mclegoman.luminance.client.util.CompatHelper;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.DateHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -18,9 +16,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class LuminanceLogo {
-	public static void init() {
-		CompatHelper.addOverrideModMenuIcon(new Couple<>(Data.version.getID(), "pride"), "assets/" + Data.version.getID() + "/icon_pride.png", DateHelper::isPride);
-	}
 	public static Logo getLogo() {
 		return new Logo(new Identifier(Data.version.getID(), Data.version.getID()), DateHelper.isPride() ? "pride" : "normal");
 	}

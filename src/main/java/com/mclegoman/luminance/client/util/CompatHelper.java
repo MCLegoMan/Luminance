@@ -9,16 +9,23 @@ package com.mclegoman.luminance.client.util;
 
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
+import com.mclegoman.luminance.common.util.DateHelper;
 import net.irisshaders.iris.api.v0.IrisApi;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CompatHelper {
 	public static Map<Couple<String, String>, Couple<String, Callable<Boolean>>> overriddenModMenuIcons = new HashMap<>();
+	public static List<String> luminanceModMenuBadge = new ArrayList<>();
+	public static void init() {
+		addOverrideModMenuIcon(new Couple<>(Data.version.getID(), "pride"), "assets/" + Data.version.getID() + "/icon_pride.png", DateHelper::isPride);
+		addLuminanceModMenuBadge(Data.version.getID());
+	}
 	public static boolean isIrisShadersEnabled() {
 		return Data.isModInstalled("iris") && IrisApi.getInstance().isShaderPackInUse();
 	}
@@ -53,5 +60,14 @@ public class CompatHelper {
 			}
 		});
 		return modMenuIcon.get();
+	}
+	public static void addLuminanceModMenuBadge(String modId) {
+		if (!getLuminanceModMenuBadge(modId)) luminanceModMenuBadge.add(modId);
+	}
+	public static boolean getLuminanceModMenuBadge(String modId) {
+		return luminanceModMenuBadge.contains(modId);
+	}
+	public static void removeLuminanceModMenuBadge(String modId) {
+		luminanceModMenuBadge.remove(modId);
 	}
 }

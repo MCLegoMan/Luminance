@@ -42,6 +42,14 @@
     "java": ">=21"
   },
   "custom": {
+    "modmenu": {
+      "badges": [
+        "library"
+      ],
+      "links": {
+        "mclegoman.donate": "https://buymeacoffee.com/mclegoman"
+      }
+    },
     "catalogue": {
       "configFactory": "com.mclegoman.luminance.compat.CatalogueCompat"
     }

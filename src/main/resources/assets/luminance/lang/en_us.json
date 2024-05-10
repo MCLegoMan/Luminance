@@ -24,5 +24,7 @@
 	"gui.luminance.config.back": "Back",
 
 	"gui.luminance.variable.onff.true": "ON",
-	"gui.luminance.variable.onff.false": "OFF"
+	"gui.luminance.variable.onff.false": "OFF",
+
+	"mclegoman.donate": "Donate"
 }
