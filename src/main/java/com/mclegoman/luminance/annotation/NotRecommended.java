@@ -11,5 +11,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface NotRecommended {
-	String value() default "This method is not recommended for use.";
+	String key() default "This method is not recommended for use.";
 }
