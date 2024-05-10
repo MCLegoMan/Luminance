@@ -76,7 +76,11 @@ public class ConfigScreen extends Screen {
 				ConfigHelper.setConfig("alpha_level", (int) ((value) * 100));
 				saveConfig = true;
 			}
-		}, 2).setTooltip(Tooltip.of(Translation.getConfigTranslation(Data.version.getID(), "alpha", true)));
+		}, 1).setTooltip(Tooltip.of(Translation.getConfigTranslation(Data.version.getID(), "alpha", true)));
+		gridAdder.add(ButtonWidget.builder(Translation.getConfigTranslation(Data.version.getID(), "alpha.show_overlay", new Object[]{Translation.getVariableTranslation(Data.version.getID(), "onff", (boolean) ConfigHelper.getConfig("show_alpha_level_overlay"))}), (button) -> {
+			ConfigHelper.setConfig("show_alpha_level_overlay", !(boolean) ConfigHelper.getConfig("show_alpha_level_overlay"));
+			this.refresh = true;
+		}).build(), 1);
 		return grid;
 	}
 	private GridWidget createFooter() {

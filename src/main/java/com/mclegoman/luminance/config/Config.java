@@ -18,6 +18,7 @@ public class Config {
 	protected static SimpleConfig config;
 	protected static ConfigProvider configProvider;
 	protected static int alphaLevel;
+	protected static boolean showAlphaLevelOverlay;
 	protected static int configVersion;
 	protected static void init() {
 		try {
@@ -31,15 +32,18 @@ public class Config {
 	}
 	protected static void create() {
 		configProvider.add(new Couple<>("alpha_level", ConfigHelper.defaultAlphaLevel));
+		configProvider.add(new Couple<>("show_alpha_level_overlay", ConfigHelper.defaultShowAlphaLevelOverlay));
 		configProvider.add(new Couple<>("config_version", ConfigHelper.defaultConfigVersion));
 	}
 	protected static void assign() {
 		alphaLevel = config.getOrDefault("alpha_level", ConfigHelper.defaultAlphaLevel);
+		showAlphaLevelOverlay = config.getOrDefault("show_alpha_level_overlay", ConfigHelper.defaultShowAlphaLevelOverlay);
 		configVersion = config.getOrDefault("config_version", ConfigHelper.defaultConfigVersion);
 	}
 	protected static void save() {
 		Data.version.sendToLog(LogType.INFO,"Writing config to file.");
 		configProvider.setConfig("alpha_level", alphaLevel);
+		configProvider.setConfig("show_alpha_level_overlay", showAlphaLevelOverlay);
 		configProvider.setConfig("config_version", ConfigHelper.defaultConfigVersion);
 		configProvider.saveConfig(Data.version, id);
 	}

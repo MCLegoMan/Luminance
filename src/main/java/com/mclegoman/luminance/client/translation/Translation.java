@@ -11,6 +11,7 @@ import com.mclegoman.luminance.common.util.Couple;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.StringIdentifiable;
 import org.apache.commons.lang3.StringUtils;
 
 public class Translation {
@@ -92,6 +93,9 @@ public class Translation {
 	}
 	public static String getKeybindingTranslation(String namespace, String key) {
 		return getString("gui.{}.keybindings.keybinding.{}", namespace, key);
+	}
+	public static MutableText getVariableTranslation(String namespace, String type, boolean toggle) {
+		return toggle ? getTranslation(namespace, "variable." + type + ".true") : getTranslation(namespace, "variable." + type + ".false");
 	}
 	public static MutableText getErrorTranslation(String namespace) {
 		return getConfigTranslation(namespace, "error", new Formatting[]{Formatting.RED, Formatting.BOLD});

@@ -3,9 +3,10 @@
 	"package": "com.mclegoman.luminance.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
+		"client.shaders.GameRendererAccessor",
 		"client.shaders.MouseMixin",
 		"client.shaders.PostEffectPassMixin",
-		"client.shaders.GameRendererAccessor"
+		"client.hud.InGameHudMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -8,6 +8,7 @@
 package com.mclegoman.luminance.client.util;
 
 import com.mclegoman.luminance.client.data.ClientData;
+import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.shaders.Uniforms;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
@@ -18,7 +19,10 @@ public class Tick {
 	public static void init() {
 		try {
 			ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-				if (ClientData.minecraft.isFinishedLoading()) Uniforms.tick();
+				if (ClientData.minecraft.isFinishedLoading()) {
+					Keybindings.tick();
+					Uniforms.tick();
+				}
 			});
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to initialize tick: {}", error));

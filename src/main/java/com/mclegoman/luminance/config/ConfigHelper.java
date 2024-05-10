@@ -15,6 +15,7 @@ import net.minecraft.util.math.MathHelper;
 public class ConfigHelper {
 	protected static final int defaultConfigVersion = 1;
 	protected static final int defaultAlphaLevel = 100;
+	protected static final boolean defaultShowAlphaLevelOverlay = false;
 	public static void init() {
 		try {
 			Config.init();
@@ -42,7 +43,8 @@ public class ConfigHelper {
 	public static boolean resetConfig() {
 		boolean configChanged = false;
 		try {
-			configChanged = setConfig("alpha_level", 100);
+			configChanged = setConfig("alpha_level", defaultAlphaLevel);
+			configChanged = setConfig("show_alpha_level_overlay", defaultShowAlphaLevelOverlay);
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.WARN, "Failed to reset config!");
 		}
@@ -54,6 +56,10 @@ public class ConfigHelper {
 			switch (id) {
 				case "alpha_level" -> {
 					Config.alphaLevel = MathHelper.clamp((int) value, 0, 100);
+					configChanged = true;
+				}
+				case "show_alpha_level_overlay" -> {
+					Config.showAlphaLevelOverlay = (boolean)value;
 					configChanged = true;
 				}
 				case "config_version" -> {
@@ -71,6 +77,9 @@ public class ConfigHelper {
 		switch (id) {
 			case "alpha_level" -> {
 				return MathHelper.clamp(Config.alphaLevel, 0, 100);
+			}
+			case "show_alpha_level_overlay" -> {
+				return Config.showAlphaLevelOverlay;
 			}
 			case "config_version" -> {
 				return Config.configVersion;

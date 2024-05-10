@@ -11,6 +11,7 @@ import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.Accessors;
+import com.mclegoman.luminance.client.util.MessageOverlay;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mclegoman.luminance.config.ConfigHelper;
@@ -18,6 +19,7 @@ import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Formatting;
 
 public class Uniforms {
 	private static int prevAlpha = (int)ConfigHelper.getConfig("alpha_level");
@@ -163,9 +165,11 @@ public class Uniforms {
 	}
 	public static void resetAlpha() {
 		setAlpha(100);
+		if ((boolean)ConfigHelper.getConfig("show_alpha_level_overlay")) MessageOverlay.setOverlay(Translation.getTranslation(Data.version.getID(), "alpha_level", new Object[]{ConfigHelper.getConfig("alpha_level") + "%"}, new Formatting[]{Formatting.GOLD}));
 	}
 	public static void adjustAlpha(int amount) {
 		setAlpha((int)ConfigHelper.getConfig("alpha_level") + amount);
+		if ((boolean)ConfigHelper.getConfig("show_alpha_level_overlay")) MessageOverlay.setOverlay(Translation.getTranslation(Data.version.getID(), "alpha_level", new Object[]{ConfigHelper.getConfig("alpha_level") + "%"}, new Formatting[]{Formatting.GOLD}));
 	}
 	public static boolean updatingAlpha = false;
 	public static boolean updatingAlpha() {
