@@ -15,6 +15,7 @@ import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.util.Identifier;
 
 public class Shader {
+	// TODO: Add Depth and Shader Framebuffers.
 	private PostEffectProcessor postProcessor;
 	private Identifier shaderId;
 	private RenderType renderType;
