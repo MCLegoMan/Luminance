@@ -108,7 +108,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 						});
 					}
 				} catch (Exception error) {
-					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to load perspective shader: {}", error));
+					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to load luminance shader: {}", error));
 				}
 			});
 			Events.AfterShaderDataRegistered.registry.forEach((id, runnable) -> {

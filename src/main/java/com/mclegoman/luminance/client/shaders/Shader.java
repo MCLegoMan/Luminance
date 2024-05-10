@@ -26,7 +26,6 @@ public class Shader {
 	private RenderType renderType;
 	private List<Object> shaderData;
 	public Shader(Identifier id, RenderType renderType, List<Object> shaderData) {
-		setShaderId(id);
 		setRenderType(renderType);
 		setShaderData(shaderData);
 	}
@@ -51,7 +50,7 @@ public class Shader {
 	public Identifier getShaderId() {
 		return this.shaderId;
 	}
-	public void setShaderId(Identifier id) {
+	private void setShaderId(Identifier id) {
 		this.shaderId = id;
 	}
 	public RenderType getRenderType() {
@@ -65,6 +64,7 @@ public class Shader {
 	}
 	public void setShaderData(List<Object> shaderData) {
 		this.shaderData = shaderData;
+		setShaderId(Shaders.getPostShader((String)Shaders.get(getShaderData(), ShaderRegistry.ID)));
 	}
 	public enum RenderType {
 		// Depth Shaders should only be able to use WORLD, as you can't have depth outside of the world.
