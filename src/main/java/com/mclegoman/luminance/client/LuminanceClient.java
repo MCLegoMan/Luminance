@@ -8,13 +8,13 @@
 package com.mclegoman.luminance.client;
 
 import com.mclegoman.luminance.client.keybindings.Keybindings;
-import com.mclegoman.luminance.client.shaders.Uniforms;
+import com.mclegoman.luminance.client.shaders.Shaders;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.ResourcePacks;
 import com.mclegoman.luminance.client.util.Tick;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.config.ConfigHelper;
 import com.mclegoman.luminance.common.util.LogType;
+import com.mclegoman.luminance.config.ConfigHelper;
 import net.fabricmc.api.ClientModInitializer;
 
 public class LuminanceClient implements ClientModInitializer {
@@ -26,7 +26,7 @@ public class LuminanceClient implements ClientModInitializer {
 			Keybindings.init();
 			ResourcePacks.init();
 			Tick.init();
-			Uniforms.init();
+			Shaders.init();
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to run onInitializeClient: {}", error));
 		}

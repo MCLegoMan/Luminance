@@ -8,6 +8,7 @@
 package com.mclegoman.luminance.client.shaders;
 
 import com.mclegoman.luminance.client.data.ClientData;
+import com.mclegoman.luminance.client.events.ShaderRenderEvents;
 import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.Accessors;
@@ -24,7 +25,7 @@ import net.minecraft.util.Formatting;
 public class Uniforms {
 	private static int prevAlpha = (int)ConfigHelper.getConfig("alpha_level");
 	public static void tick() {
-		UniformHelper.updateTime();
+		Shaders.updateTime();
 		prevAlpha = (int)ConfigHelper.getConfig("alpha_level");
 		if (!updatingAlpha() && updatingAlpha) {
 			updatingAlpha = false;
@@ -68,7 +69,6 @@ public class Uniforms {
 			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "alpha", Uniforms::getAlpha);
 			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "perspective", Uniforms::getPerspective);
 			SmoothUniforms.init();
-			UniformHelper.init();
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to initialize uniforms: {}", error));
 		}
@@ -83,7 +83,7 @@ public class Uniforms {
 		return ClientData.minecraft.getCurrentFps();
 	}
 	public static float getTime() {
-		return UniformHelper.time;
+		return Shaders.time;
 	}
 	public static float[] getEyePosition() {
 		return ClientData.minecraft.player != null ? new float[]{(float) ClientData.minecraft.player.getEyePos().x, (float) ClientData.minecraft.player.getEyePos().y, (float) ClientData.minecraft.player.getEyePos().z} : new float[]{0.0F, 66.0F, 0.0F};

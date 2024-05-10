@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(priority = 0, value = InGameHud.class)
 public abstract class InGameHudMixin {
 	@Inject(at = @At("RETURN"), method = "render")
-	private void perspective$render(DrawContext context, float tickDelta, CallbackInfo ci) {
+	private void luminance$render(DrawContext context, float tickDelta, CallbackInfo ci) {
 		if (!ClientData.minecraft.gameRenderer.isRenderingPanorama()) {
 			float h = MessageOverlay.remaining - tickDelta;
 			int l = (int) (h * 255.0F / 20.0F);

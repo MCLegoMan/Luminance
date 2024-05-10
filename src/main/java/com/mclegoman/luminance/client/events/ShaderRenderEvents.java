@@ -5,10 +5,9 @@
     Licence: GNU LGPLv3
 */
 
-package com.mclegoman.luminance.client.shaders;
+package com.mclegoman.luminance.client.events;
 
 import com.mclegoman.luminance.common.util.Couple;
-import net.minecraft.client.gl.JsonEffectShaderProgram;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
@@ -17,17 +16,38 @@ import java.util.concurrent.Callable;
 
 public class ShaderRenderEvents {
 	public static class BeforeRender {
-		public static final Map<String, ShaderRunnable> registry = new HashMap<>();
-		public static void register(String id, ShaderRunnable runnable) {
+		public static final Map<Couple<String, String>, ShaderRunnable> registry = new HashMap<>();
+		public static void register(Couple<String, String> id, ShaderRunnable runnable) {
 			add(id, runnable);
 		}
-		public static void add(String id, ShaderRunnable runnable) {
+		public static void add(Couple<String, String> id, ShaderRunnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static void modify(String id, ShaderRunnable runnable) {
+		public static void get(Couple<String, String> id) {
+			registry.get(id);
+		}
+		public static void modify(Couple<String, String> id, ShaderRunnable runnable) {
 			registry.replace(id, runnable);
 		}
-		public static void remove(String id) {
+		public static void remove(Couple<String, String> id) {
+			registry.remove(id);
+		}
+	}
+	public static class AfterRender {
+		public static final Map<Couple<String, String>, ShaderRunnable> registry = new HashMap<>();
+		public static void register(Couple<String, String> id, ShaderRunnable runnable) {
+			add(id, runnable);
+		}
+		public static void add(Couple<String, String> id, ShaderRunnable runnable) {
+			if (!registry.containsKey(id)) registry.put(id, runnable);
+		}
+		public static void get(Couple<String, String> id) {
+			registry.get(id);
+		}
+		public static void modify(Couple<String, String> id, ShaderRunnable runnable) {
+			registry.replace(id, runnable);
+		}
+		public static void remove(Couple<String, String> id) {
 			registry.remove(id);
 		}
 	}
@@ -65,6 +85,9 @@ public class ShaderRenderEvents {
 		public static void registerFloat(Couple<String, String> shader, Callable<Float> callable) {
 			if (!registryFloat.containsKey(shader)) registryFloat.put(shader, callable);
 		}
+		public static float getFloat(Couple<String, String> shader) throws Exception {
+			return registryFloat.get(shader).call();
+		}
 		public static void modifyFloat(Couple<String, String> shader, Callable<Float> callable) {
 			if (registryFloat.containsKey(shader)) registryFloat.replace(shader, callable);
 		}
@@ -73,6 +96,9 @@ public class ShaderRenderEvents {
 		}
 		public static void registerFloatArray(Couple<String, String> shader, Callable<float[]> callable) {
 			if (!registryFloatArray.containsKey(shader)) registryFloatArray.put(shader, callable);
+		}
+		public static float[] getFloats(Couple<String, String> shader) throws Exception {
+			return registryFloatArray.get(shader).call();
 		}
 		public static void modifyFloatArray(Couple<String, String> shader, Callable<float[]> callable) {
 			if (registryFloatArray.containsKey(shader)) registryFloatArray.replace(shader, callable);
@@ -83,14 +109,14 @@ public class ShaderRenderEvents {
 		public static void registerVector3f(Couple<String, String> shader, Callable<Vector3f> callable) {
 			if (!registryVector3f.containsKey(shader)) registryVector3f.put(shader, callable);
 		}
+		public static Vector3f getVector3f(Couple<String, String> shader) throws Exception {
+			return registryVector3f.get(shader).call();
+		}
 		public static void modifyVector3f(Couple<String, String> shader, Callable<Vector3f> callable) {
 			if (registryVector3f.containsKey(shader)) registryVector3f.replace(shader, callable);
 		}
 		public static void removeVector3f(Couple<String, String> shader) {
 			registryVector3f.remove(shader);
 		}
-	}
-	public interface ShaderRunnable {
-		default void run(JsonEffectShaderProgram program) {}
 	}
 }

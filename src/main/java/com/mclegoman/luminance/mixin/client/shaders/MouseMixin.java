@@ -21,7 +21,7 @@ public abstract class MouseMixin {
 	@Shadow
 	private double eventDeltaVerticalWheel;
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isSpectator()Z"), method = "onMouseScroll", cancellable = true)
-	private void perspective$onMouseScroll(long window, double horizontal, double vertical, CallbackInfo ci) {
+	private void luminance$onMouseScroll(long window, double horizontal, double vertical, CallbackInfo ci) {
 		if (Uniforms.updatingAlpha()) {
 			boolean discreteMouseScroll = ClientData.minecraft.options.getDiscreteMouseScroll().getValue();
 			double mouseWheelSensitivity = ClientData.minecraft.options.getMouseWheelSensitivity().getValue();
@@ -39,7 +39,7 @@ public abstract class MouseMixin {
 		}
 	}
 	@Inject(at = @At("HEAD"), method = "onMouseButton", cancellable = true)
-	private void perspective$onMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
+	private void luminance$onMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
 		if (Uniforms.updatingAlpha()) {
 			if (button == 2) {
 				if (Uniforms.updatingAlpha()) Uniforms.resetAlpha();
