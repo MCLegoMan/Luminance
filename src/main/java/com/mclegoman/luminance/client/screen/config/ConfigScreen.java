@@ -8,6 +8,7 @@
 package com.mclegoman.luminance.client.screen.config;
 
 import com.mclegoman.luminance.client.data.ClientData;
+import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.logo.LuminanceLogo;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
@@ -19,6 +20,7 @@ import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.*;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 
 public class ConfigScreen extends Screen {
@@ -76,11 +78,11 @@ public class ConfigScreen extends Screen {
 				ConfigHelper.setConfig("alpha_level", (int) ((value) * 100));
 				saveConfig = true;
 			}
-		}, 1).setTooltip(Tooltip.of(Translation.getConfigTranslation(Data.version.getID(), "alpha", true)));
+		}, 1).setTooltip(Tooltip.of(Translation.getConfigTranslation(Data.version.getID(), "alpha", new Object[]{Translation.getConfigTranslation(Data.version.getID(), "keybinding", new Object[]{Keybindings.adjustAlpha.getBoundKeyLocalizedText()}, new Formatting[]{Formatting.RED, Formatting.BOLD})}, true)));
 		gridAdder.add(ButtonWidget.builder(Translation.getConfigTranslation(Data.version.getID(), "alpha.show_overlay", new Object[]{Translation.getVariableTranslation(Data.version.getID(), "onff", (boolean) ConfigHelper.getConfig("show_alpha_level_overlay"))}), (button) -> {
 			ConfigHelper.setConfig("show_alpha_level_overlay", !(boolean) ConfigHelper.getConfig("show_alpha_level_overlay"));
 			this.refresh = true;
-		}).build(), 1);
+		}).build(), 1).setTooltip(Tooltip.of(Translation.getConfigTranslation(Data.version.getID(), "alpha.show_overlay", true)));
 		return grid;
 	}
 	private GridWidget createFooter() {
