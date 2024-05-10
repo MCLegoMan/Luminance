@@ -7,7 +7,7 @@
 
 package com.mclegoman.luminance.mixin.client.shaders;
 
-import com.mclegoman.luminance.client.events.ShaderRenderEvents;
+import com.mclegoman.luminance.client.events.RenderEvents;
 import net.minecraft.client.gl.JsonEffectShaderProgram;
 import net.minecraft.client.gl.PostEffectPass;
 import org.spongepowered.asm.mixin.Final;
@@ -22,10 +22,10 @@ public abstract class PostEffectPassMixin {
 	@Shadow @Final private JsonEffectShaderProgram program;
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/JsonEffectShaderProgram;enable()V"))
 	private void luminance$beforeRender(float time, CallbackInfo ci) {
-		ShaderRenderEvents.BeforeRender.registry.forEach(((id, runnable) -> runnable.run(program)));
+		RenderEvents.BeforeShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
 	@Inject(method = "render", at = @At(value = "TAIL"))
 	private void luminance$afterRender(float time, CallbackInfo ci) {
-		ShaderRenderEvents.AfterRender.registry.forEach(((id, runnable) -> runnable.run(program)));
+		RenderEvents.AfterShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
 }

@@ -7,7 +7,7 @@
 
 package com.mclegoman.luminance.mixin.client.shaders;
 
-import com.mclegoman.luminance.client.events.GameRenderEvents;
+import com.mclegoman.luminance.client.events.RenderEvents;
 import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,12 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GameRendererMixin {
 	@Inject(method = "render", at = @At("TAIL"))
 	private void luminance$afterGameRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-		GameRenderEvents.AfterGameRender.registry.forEach(((id, runnable) -> runnable.run()));
+		RenderEvents.AfterGameRender.registry.forEach(((id, runnable) -> runnable.run()));
 	}
 	@Inject(method = "onResized", at = @At(value = "TAIL"))
 	private void luminance$onResized(int width, int height, CallbackInfo ci) {
-		GameRenderEvents.ShaderRender.registry.forEach((id, shader) -> {
-			shader.getPostProcessor().setupDimensions(width, height);
-		});
+		RenderEvents.ShaderRender.registry.forEach((id, shaders) -> shaders.forEach(shader -> shader.getSecond().getPostProcessor().setupDimensions(width, height)));
 	}
 }

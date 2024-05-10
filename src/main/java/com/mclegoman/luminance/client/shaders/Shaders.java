@@ -8,8 +8,7 @@
 package com.mclegoman.luminance.client.shaders;
 
 import com.mclegoman.luminance.client.data.ClientData;
-import com.mclegoman.luminance.client.events.GameRenderEvents;
-import com.mclegoman.luminance.client.events.ShaderRenderEvents;
+import com.mclegoman.luminance.client.events.RenderEvents;
 import com.mclegoman.luminance.client.events.ShaderRunnable;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
@@ -28,15 +27,15 @@ public class Shaders {
 	public static float time = 0.0F;
 	public static void init() {
 		Uniforms.init();
-		ShaderRenderEvents.BeforeRender.register(new Couple<>(Data.version.getID(), "main"), new ShaderRunnable() {
+		RenderEvents.BeforeShaderRender.register(new Couple<>(Data.version.getID(), "main"), new ShaderRunnable() {
 			public void run(JsonEffectShaderProgram program) {
-				ShaderRenderEvents.ShaderUniform.registryFloat.forEach((uniform, callable) -> setFloat(program, uniform.first(), uniform.second(), callable));
-				ShaderRenderEvents.ShaderUniform.registryFloatArray.forEach((uniform, callable) -> setFloatArray(program, uniform.first(), uniform.second(), callable));
-				ShaderRenderEvents.ShaderUniform.registryVector3f.forEach((uniform, callable) -> setVector3f(program, uniform.first(), uniform.second(), callable));
+				RenderEvents.ShaderUniform.registryFloat.forEach((uniform, callable) -> setFloat(program, uniform.first(), uniform.second(), callable));
+				RenderEvents.ShaderUniform.registryFloatArray.forEach((uniform, callable) -> setFloatArray(program, uniform.first(), uniform.second(), callable));
+				RenderEvents.ShaderUniform.registryVector3f.forEach((uniform, callable) -> setVector3f(program, uniform.first(), uniform.second(), callable));
 			}
 		});
-		GameRenderEvents.AfterWorldBorder.add(new Couple<>(Data.version.getID(), "main"), () -> GameRenderEvents.ShaderRender.registry.forEach((id, shader) -> render(id, shader, Shader.RenderType.WORLD)));
-		GameRenderEvents.AfterGameRender.add(new Couple<>(Data.version.getID(), "main"), () -> GameRenderEvents.ShaderRender.registry.forEach((id, shader) -> render(id, shader, Shader.RenderType.GAME)));
+		RenderEvents.AfterWorldBorder.add(new Couple<>(Data.version.getID(), "main"), () -> RenderEvents.ShaderRender.registry.forEach((id, shaders) -> shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.WORLD))));
+		RenderEvents.AfterGameRender.add(new Couple<>(Data.version.getID(), "main"), () -> RenderEvents.ShaderRender.registry.forEach((id, shaders) -> shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.GAME))));
 	}
 	public static void render(Couple<String, String> id, Shader shader, Shader.RenderType renderType) {
 		try {

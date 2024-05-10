@@ -7,15 +7,89 @@
 
 package com.mclegoman.luminance.client.events;
 
+import com.mclegoman.luminance.client.shaders.Shader;
 import com.mclegoman.luminance.common.util.Couple;
 import org.joml.Vector3f;
 
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class ShaderRenderEvents {
-	public static class BeforeRender {
+public class RenderEvents {
+	public static class BeforeWorldRender {
+		public static final Map<Couple<String, String>, Runnable> registry = new HashMap<>();
+		public static void register(Couple<String, String> id, Runnable runnable) {
+			add(id, runnable);
+		}
+		public static void add(Couple<String, String> id, Runnable runnable) {
+			if (!registry.containsKey(id)) registry.put(id, runnable);
+		}
+		public static Runnable get(Couple<String, String> id) {
+			return registry.get(id);
+		}
+		public static void modify(Couple<String, String> id, Runnable runnable) {
+			registry.replace(id, runnable);
+		}
+		public static void remove(Couple<String, String> id) {
+			registry.remove(id);
+		}
+	}
+	public static class AfterWorldBorder {
+		public static final Map<Couple<String, String>, Runnable> registry = new HashMap<>();
+		public static void register(Couple<String, String> id, Runnable runnable) {
+			add(id, runnable);
+		}
+		public static void add(Couple<String, String> id, Runnable runnable) {
+			if (!registry.containsKey(id)) registry.put(id, runnable);
+		}
+		public static Runnable get(Couple<String, String> id) {
+			return registry.get(id);
+		}
+		public static void modify(Couple<String, String> id, Runnable runnable) {
+			registry.replace(id, runnable);
+		}
+		public static void remove(Couple<String, String> id) {
+			registry.remove(id);
+		}
+	}
+	public static class AfterWorldRender {
+		public static final Map<Couple<String, String>, Runnable> registry = new HashMap<>();
+		public static void register(Couple<String, String> id, Runnable runnable) {
+			add(id, runnable);
+		}
+		public static void add(Couple<String, String> id, Runnable runnable) {
+			if (!registry.containsKey(id)) registry.put(id, runnable);
+		}
+		public static Runnable get(Couple<String, String> id) {
+			return registry.get(id);
+		}
+		public static void modify(Couple<String, String> id, Runnable runnable) {
+			registry.replace(id, runnable);
+		}
+		public static void remove(Couple<String, String> id) {
+			registry.remove(id);
+		}
+	}
+	public static class AfterGameRender {
+		public static final Map<Couple<String, String>, Runnable> registry = new HashMap<>();
+		public static void register(Couple<String, String> id, Runnable runnable) {
+			add(id, runnable);
+		}
+		public static void add(Couple<String, String> id, Runnable runnable) {
+			if (!registry.containsKey(id)) registry.put(id, runnable);
+		}
+		public static Runnable get(Couple<String, String> id) {
+			return registry.get(id);
+		}
+		public static void modify(Couple<String, String> id, Runnable runnable) {
+			registry.replace(id, runnable);
+		}
+		public static void remove(Couple<String, String> id) {
+			registry.remove(id);
+		}
+	}
+	public static class BeforeShaderRender {
 		public static final Map<Couple<String, String>, ShaderRunnable> registry = new HashMap<>();
 		public static void register(Couple<String, String> id, ShaderRunnable runnable) {
 			add(id, runnable);
@@ -33,7 +107,7 @@ public class ShaderRenderEvents {
 			registry.remove(id);
 		}
 	}
-	public static class AfterRender {
+	public static class AfterShaderRender {
 		public static final Map<Couple<String, String>, ShaderRunnable> registry = new HashMap<>();
 		public static void register(Couple<String, String> id, ShaderRunnable runnable) {
 			add(id, runnable);
@@ -117,6 +191,46 @@ public class ShaderRenderEvents {
 		}
 		public static void removeVector3f(Couple<String, String> shader) {
 			registryVector3f.remove(shader);
+		}
+	}
+	public static class ShaderRender {
+		public static final Map<Couple<String, String>, List<Couple<String, Shader>>> registry = new HashMap<>();
+		public static void register(Couple<String, String> id, List<Couple<String, Shader>> shaders) {
+			add(id, shaders);
+		}
+		public static void add(Couple<String, String> id, List<Couple<String, Shader>> shaders) {
+			if (!registry.containsKey(id)) registry.put(id, shaders);
+		}
+		public static List<Couple<String, Shader>> get(Couple<String, String> id) {
+			return exists(id) ? registry.get(id) : null;
+		}
+		public static boolean exists(Couple<String, String> id) {
+			return registry.containsKey(id);
+		}
+		public static void modify(Couple<String, String> id, List<Couple<String, Shader>> shaders) {
+			registry.replace(id, shaders);
+		}
+		public static void remove(Couple<String, String> id) {
+			registry.remove(id);
+		}
+		public static Couple<String, Shader> getShader(Couple<String, String> id, String shader) {
+			List<Couple<String, Shader>> shaders = get(id);
+			if (shaders != null) {
+				for (Couple<String, Shader> shader1 : shaders) {
+					if (shader1.getFirst().equals(shader)) return shader1;
+				}
+			}
+			return null;
+		}
+		public static void setShader(Couple<String, String> id, String shader, Shader data) {
+			List<Couple<String, Shader>> shaders = get(id);
+			if (shaders != null) {
+				for (Couple<String, Shader> shader1 : shaders) {
+					if (shader1.getFirst().equals(shader)) {
+						shaders.set(shaders.indexOf(shader1), new Couple<>(shader, data));
+					}
+				}
+			}
 		}
 	}
 }

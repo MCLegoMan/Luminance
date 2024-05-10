@@ -8,7 +8,7 @@
 package com.mclegoman.luminance.client.shaders;
 
 import com.mclegoman.luminance.client.data.ClientData;
-import com.mclegoman.luminance.client.events.ShaderRenderEvents;
+import com.mclegoman.luminance.client.events.RenderEvents;
 import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.Accessors;
@@ -38,38 +38,38 @@ public class Uniforms {
 	}
 	public static void init() {
 		try {
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "viewDistance", Uniforms::getViewDistance);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "fov", Uniforms::getFov);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "fps", Uniforms::getFps);
+			RenderEvents.ShaderUniform.registerFloat("lu", "viewDistance", Uniforms::getViewDistance);
+			RenderEvents.ShaderUniform.registerFloat("lu", "fov", Uniforms::getFov);
+			RenderEvents.ShaderUniform.registerFloat("lu", "fps", Uniforms::getFps);
 			// Time Uniform should be updated to be customizable.
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "time", Uniforms::getTime);
-			ShaderRenderEvents.ShaderUniform.registerFloats("lu", "eyePosition", Uniforms::getEyePosition);
-			ShaderRenderEvents.ShaderUniform.registerFloats("lu", "position", Uniforms::getPosition);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "pitch", Uniforms::getPitch);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "yaw", Uniforms::getYaw);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "currentHealth", Uniforms::getCurrentHealth);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "maxHealth", Uniforms::getMaxHealth);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "currentAbsorption", Uniforms::getCurrentAbsorption);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "maxAbsorption", Uniforms::getMaxAbsorption);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "currentHurtTime", Uniforms::getCurrentHurtTime);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "maxHurtTime", Uniforms::getMaxHurtTime);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "currentAir", Uniforms::getCurrentAir);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "maxAir", Uniforms::getMaxAir);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isSprinting", Uniforms::getIsSprinting);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isSwimming", Uniforms::getIsSwimming);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isSneaking", Uniforms::getIsSneaking);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isCrawling", Uniforms::getIsCrawling);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isInvisible", Uniforms::getIsInvisible);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isWithered", () -> Uniforms.getHasEffect(StatusEffects.WITHER));
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isPoisoned", () -> Uniforms.getHasEffect(StatusEffects.POISON));
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isBurning", Uniforms::getIsBurning);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isOnGround", Uniforms::getIsOnGround);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isOnLadder", Uniforms::getIsOnLadder);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "isRiding", Uniforms::getIsRiding);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "hasPassengers", Uniforms::getHasPassengers);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "biomeTemperature", Uniforms::getBiomeTemperature);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "alpha", Uniforms::getAlpha);
-			ShaderRenderEvents.ShaderUniform.registerFloat("lu", "perspective", Uniforms::getPerspective);
+			RenderEvents.ShaderUniform.registerFloat("lu", "time", Uniforms::getTime);
+			RenderEvents.ShaderUniform.registerFloats("lu", "eyePosition", Uniforms::getEyePosition);
+			RenderEvents.ShaderUniform.registerFloats("lu", "position", Uniforms::getPosition);
+			RenderEvents.ShaderUniform.registerFloat("lu", "pitch", Uniforms::getPitch);
+			RenderEvents.ShaderUniform.registerFloat("lu", "yaw", Uniforms::getYaw);
+			RenderEvents.ShaderUniform.registerFloat("lu", "currentHealth", Uniforms::getCurrentHealth);
+			RenderEvents.ShaderUniform.registerFloat("lu", "maxHealth", Uniforms::getMaxHealth);
+			RenderEvents.ShaderUniform.registerFloat("lu", "currentAbsorption", Uniforms::getCurrentAbsorption);
+			RenderEvents.ShaderUniform.registerFloat("lu", "maxAbsorption", Uniforms::getMaxAbsorption);
+			RenderEvents.ShaderUniform.registerFloat("lu", "currentHurtTime", Uniforms::getCurrentHurtTime);
+			RenderEvents.ShaderUniform.registerFloat("lu", "maxHurtTime", Uniforms::getMaxHurtTime);
+			RenderEvents.ShaderUniform.registerFloat("lu", "currentAir", Uniforms::getCurrentAir);
+			RenderEvents.ShaderUniform.registerFloat("lu", "maxAir", Uniforms::getMaxAir);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isSprinting", Uniforms::getIsSprinting);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isSwimming", Uniforms::getIsSwimming);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isSneaking", Uniforms::getIsSneaking);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isCrawling", Uniforms::getIsCrawling);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isInvisible", Uniforms::getIsInvisible);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isWithered", () -> Uniforms.getHasEffect(StatusEffects.WITHER));
+			RenderEvents.ShaderUniform.registerFloat("lu", "isPoisoned", () -> Uniforms.getHasEffect(StatusEffects.POISON));
+			RenderEvents.ShaderUniform.registerFloat("lu", "isBurning", Uniforms::getIsBurning);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isOnGround", Uniforms::getIsOnGround);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isOnLadder", Uniforms::getIsOnLadder);
+			RenderEvents.ShaderUniform.registerFloat("lu", "isRiding", Uniforms::getIsRiding);
+			RenderEvents.ShaderUniform.registerFloat("lu", "hasPassengers", Uniforms::getHasPassengers);
+			RenderEvents.ShaderUniform.registerFloat("lu", "biomeTemperature", Uniforms::getBiomeTemperature);
+			RenderEvents.ShaderUniform.registerFloat("lu", "alpha", Uniforms::getAlpha);
+			RenderEvents.ShaderUniform.registerFloat("lu", "perspective", Uniforms::getPerspective);
 			SmoothUniforms.init();
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to initialize uniforms: {}", error));

@@ -8,18 +8,12 @@
 package com.mclegoman.luminance.client.keybindings;
 
 import com.mclegoman.luminance.client.data.ClientData;
-import com.mclegoman.luminance.client.events.GameRenderEvents;
 import com.mclegoman.luminance.client.screen.config.ConfigScreen;
-import com.mclegoman.luminance.client.shaders.Shader;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.Objects;
 
 public class Keybindings {
 	public static final KeyBinding adjustAlpha;
