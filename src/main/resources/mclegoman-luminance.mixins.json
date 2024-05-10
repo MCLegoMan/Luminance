@@ -10,7 +10,7 @@
 		"client.shaders.PostEffectPassMixin",
 		"client.shaders.GameRendererMixin",
 		"client.shaders.ShaderNamespaceFix",
-		"client.shaders.ShaderTextureFix",
+		"client.shaders.ShaderTextureNamespaceFix",
 		"client.shaders.WorldRendererMixin",
 		"compat.modmenu.FabricModMixin",
 		"compat.modmenu.ModsScreenMixin"

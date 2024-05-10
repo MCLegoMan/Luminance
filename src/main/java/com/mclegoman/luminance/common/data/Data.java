@@ -17,10 +17,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Data {
 	public static final Version version = Version.create("Luminance", "luminance", 1, 0, 0, ReleaseType.ALPHA, 4, "EBTw0O1c");
-	public static boolean isModInstalled(String MOD_ID) {
-		return FabricLoader.getInstance().isModLoaded(MOD_ID);
+	public static boolean isModInstalled(String modId) {
+		return FabricLoader.getInstance().isModLoaded(modId);
 	}
-	public static boolean isModInstalledVersionOrHigher(String modId, String requiredVersion, boolean substring) {
+	public static boolean isModInstalledVersionOrHigher(String modId, String requiredVersion, boolean substring, String separator) {
 		try {
 			if (isModInstalled(modId)) {
 				return checkModVersion(getModContainer(modId).getMetadata().getVersion().getFriendlyString(), requiredVersion, substring);
@@ -30,13 +30,22 @@ public class Data {
 		}
 		return false;
 	}
-	public static boolean checkModVersion(String currentVersion, String requiredVersion, boolean substring) {
+	public static boolean isModInstalledVersionOrHigher(String modId, String requiredVersion, boolean substring) {
+		return isModInstalledVersionOrHigher(modId, requiredVersion, substring, "-");
+	}
+	public static boolean isModInstalledVersionOrHigher(String modId, String requiredVersion) {
+		return isModInstalledVersionOrHigher(modId, requiredVersion, false);
+	}
+	public static boolean checkModVersion(String currentVersion, String requiredVersion, boolean substring, String separator) {
 		try {
-			return net.fabricmc.loader.api.Version.parse(requiredVersion).compareTo(net.fabricmc.loader.api.Version.parse(substring ? StringUtils.substringBefore(currentVersion, "-") : currentVersion)) <= 0;
+			return net.fabricmc.loader.api.Version.parse(requiredVersion).compareTo(net.fabricmc.loader.api.Version.parse(substring ? StringUtils.substringBefore(currentVersion, separator) : currentVersion)) <= 0;
 		} catch (Exception error) {
 			version.sendToLog(LogType.ERROR, Translation.getString("Failed to check mod version!"));
 		}
 		return false;
+	}
+	public static boolean checkModVersion(String currentVersion, String requiredVersion, boolean substring) {
+		return checkModVersion(currentVersion, requiredVersion, substring, "-");
 	}
 	public static ModContainer getModContainer(String modId) {
 		return FabricLoader.getInstance().getModContainer(modId).get();

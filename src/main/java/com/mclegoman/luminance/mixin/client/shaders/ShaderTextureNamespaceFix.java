@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(priority = 100, value = PostEffectProcessor.class)
-public abstract class ShaderTextureFix {
+public abstract class ShaderTextureNamespaceFix {
 	@Redirect(method = "parsePass", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
 	private static Identifier luminance$loadTexture(String id) {
 		return luminance$get(id);
