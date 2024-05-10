@@ -213,6 +213,14 @@ public class RenderEvents {
 		public static void remove(Couple<String, String> id) {
 			registry.remove(id);
 		}
+		public static boolean addShader(Couple<String, String> id, Couple<String, Shader> shaderData) {
+			List<Couple<String, Shader>> shaders = get(id);
+			if (shaders != null) {
+				shaders.add(shaderData);
+				return true;
+			}
+			return false;
+		}
 		public static Couple<String, Shader> getShader(Couple<String, String> id, String shader) {
 			List<Couple<String, Shader>> shaders = get(id);
 			if (shaders != null) {
@@ -222,15 +230,31 @@ public class RenderEvents {
 			}
 			return null;
 		}
-		public static void setShader(Couple<String, String> id, String shader, Shader data) {
+		// If you want to update the shader, you can use getShader(new Couple<>("", ""), "").getSecond().setShaderId(new Identifier(""));
+		// These functions could probably be improved.
+		public static boolean modifyShader(Couple<String, String> id, String shader, Shader data) {
 			List<Couple<String, Shader>> shaders = get(id);
 			if (shaders != null) {
 				for (Couple<String, Shader> shader1 : shaders) {
 					if (shader1.getFirst().equals(shader)) {
 						shaders.set(shaders.indexOf(shader1), new Couple<>(shader, data));
+						return true;
 					}
 				}
 			}
+			return false;
+		}
+		public static boolean removeShader(Couple<String, String> id, String shader) {
+			List<Couple<String, Shader>> shaders = get(id);
+			if (shaders != null) {
+				for (Couple<String, Shader> shader1 : shaders) {
+					if (shader1.getFirst().equals(shader)) {
+						shaders.remove(shader1);
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	}
 }
