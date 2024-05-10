@@ -46,13 +46,14 @@ include(modImplementation "maven.modrinth:luminance:${project.luminance}")
 ```
 3. Add the following line to your gradle.properties:  
    1. Replace 1.0.0-alpha.3.+1.20.5 with the latest version of Luminance!  
-      1. This can be found on the version page on Modrinth.  
+      1. This can be found on the version page on [Modrinth](https://modrinth.com/mod/luminance).  
 ```
 luminance = 1.0.0-alpha.3+1.20.5
 ```
-4. Reload gradle and you're ready to use Luminance!  
+4. Reload gradle and you're ready to use Luminance!
 
-## Also check out
+## Also check out  
+[Our Modrinth Page](https://modrinth.com/mod/luminance)  
 [Perspective](https://modrinth.com/mod/mclegoman-perspective) by MCLegoMan  
 [Souper Secret Settings](https://modrinth.com/mod/souper-secret-settings) by Nettakrim  
 
