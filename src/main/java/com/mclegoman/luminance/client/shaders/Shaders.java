@@ -159,6 +159,9 @@ public class Shaders {
 	public static Text getShaderName(int shaderIndex, boolean shouldShowNamespace) {
 		return Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.NAMESPACE), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE), shouldShowNamespace);
 	}
+	public static Text getShaderName(int shaderIndex) {
+		return Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.NAMESPACE), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE));
+	}
 	public static String guessPostShaderNamespace(String id) {
 		// If the shader registry contains at least one shader with the name, the first detected instance will be used.
 		if (!id.contains(":")) {
