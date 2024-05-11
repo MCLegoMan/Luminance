@@ -320,23 +320,19 @@ public class Events {
 			}
 			return null;
 		}
-		public static void setShader(Couple<String, String> id, String shader, int index, Shader.RenderType renderType, boolean enabled) {
+		public static void setShader(Couple<String, String> id, String shader, int index, Shader.RenderType renderType) {
 			try {
 				if (!Events.ShaderRender.exists(id)) Events.ShaderRender.register(id, new ArrayList<>());
-				if (enabled) {
-					if (!existsShader(id, shader)) {
-						addShader(id, new Couple<>(shader, new Shader(renderType, Shaders.get(index))));
-					} else {
-						Couple<String, Shader> data = getShader(id, shader);
-						if (data != null) {
-							data.getSecond().setRenderType(renderType);
-							data.getSecond().setShaderData(Shaders.get(index));
-						}
-					}
-					modify(id, get(id));
+				if (!existsShader(id, shader)) {
+					addShader(id, new Couple<>(shader, new Shader(renderType, Shaders.get(index))));
 				} else {
-					removeShader(id, shader);
+					Couple<String, Shader> data = getShader(id, shader);
+					if (data != null) {
+						data.getSecond().setRenderType(renderType);
+						data.getSecond().setShaderData(Shaders.get(index));
+					}
 				}
+				modify(id, get(id));
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", id, index, error));
 			}
