@@ -293,49 +293,59 @@ public class Events {
 		public static void remove(Couple<String, String> id) {
 			registry.remove(id);
 		}
-		public static boolean addShader(Couple<String, String> id, Couple<String, Shader> shaderData) {
-			if (exists(id)) {
-				List<Couple<String, Shader>> shaders = get(id);
+		public static boolean add(Couple<String, String> registryId, String shaderName, Shader shader) {
+			if (exists(registryId)) {
+				List<Couple<String, Shader>> shaders = get(registryId);
 				if (shaders == null) shaders = new ArrayList<>();
 				for (Couple<String, Shader> data : shaders) {
-					if (data.getFirst().equalsIgnoreCase(shaderData.getFirst())) {
+					if (data.getFirst().equalsIgnoreCase(shaderName)) {
 						return false;
 					}
 				}
-				shaders.add(shaderData);
-				modify(id, shaders);
+				shaders.add(new Couple<>(shaderName, shader));
+				modify(registryId, shaders);
 				return true;
 			}
 			return false;
 		}
-		public static Couple<String, Shader> getShader(Couple<String, String> id, String shader) {
-			if (exists(id)) {
-				List<Couple<String, Shader>> shaders = get(id);
+		public static Couple<String, Shader> get(Couple<String, String> registryId, String shaderName) {
+			if (exists(registryId)) {
+				List<Couple<String, Shader>> shaders = get(registryId);
 				if (shaders == null) shaders = new ArrayList<>();
 				for (Couple<String, Shader> data : shaders) {
-					if (data.getFirst().equalsIgnoreCase(shader)) {
+					if (data.getFirst().equalsIgnoreCase(shaderName)) {
 						return data;
 					}
 				}
 			}
 			return null;
 		}
-		public static void setShader(Couple<String, String> id, String shader, int index, Shader.RenderType renderType) {
+		public static boolean modify(Couple<String, String> registryId, String shaderName, Shader shader) {
 			try {
-				if (!Events.ShaderRender.exists(id)) Events.ShaderRender.register(id, new ArrayList<>());
-				if (!existsShader(id, shader)) {
-					addShader(id, new Couple<>(shader, new Shader(renderType, Shaders.get(index))));
-				} else {
-					Couple<String, Shader> data = getShader(id, shader);
-					if (data != null) {
-						data.getSecond().setRenderType(renderType);
-						data.getSecond().setShaderData(Shaders.get(index));
+				List<Couple<String, Shader>> shaders = get(registryId);
+				if (shaders != null) {
+					for (Couple<String, Shader> data : shaders) {
+						if (data.getFirst().equals(shaderName)) {
+							data.setSecond(shader);
+							break;
+						}
 					}
 				}
-				modify(id, get(id));
+				modify(registryId, shaders);
+				return true;
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", id, index, error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", registryId, shaderName, error));
 			}
+			return false;
+		}
+		public static boolean set(Couple<String, String> registryId, String shaderName, Shader shader) {
+			try {
+				if (!Events.ShaderRender.exists(registryId)) Events.ShaderRender.register(registryId, new ArrayList<>());
+				return !existsShader(registryId, shaderName) ? add(registryId, shaderName, shader) : modify(registryId, shaderName, shader);
+			} catch (Exception error) {
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", registryId, shaderName, error));
+			}
+			return false;
 		}
 		public static boolean existsShader(Couple<String, String> id, String shader) {
 			if (exists(id)) {
