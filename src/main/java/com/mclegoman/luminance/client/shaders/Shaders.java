@@ -68,6 +68,8 @@ public class Shaders {
 			}
 		}));
 	}
+	// TODO: Fix bug that causes the shader to disable game rendertype upon loading a world.
+	// Is this to do with Luminance or Perspective?
 	public static void render(Couple<String, String> id, Couple<String, Shader> shader, Shader.RenderType targetRenderType, boolean canDepthShader) {
 		try {
 			if ((canDepthShader && shader.getSecond().getUseDepth()) || (!canDepthShader && !shader.getSecond().getUseDepth())) {
