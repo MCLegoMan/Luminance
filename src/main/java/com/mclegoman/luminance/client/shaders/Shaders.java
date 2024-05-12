@@ -39,9 +39,9 @@ public class Shaders {
 		Uniforms.init();
 		Events.BeforeShaderRender.register(new Couple<>(Data.version.getID(), "main"), new Runnables.Shader() {
 			public void run(JsonEffectShaderProgram program) {
-				Events.ShaderUniform.registryFloat.forEach((uniform, callable) -> setFloat(program, uniform.first(), uniform.second(), callable));
-				Events.ShaderUniform.registryFloatArray.forEach((uniform, callable) -> setFloatArray(program, uniform.first(), uniform.second(), callable));
-				Events.ShaderUniform.registryVector3f.forEach((uniform, callable) -> setVector3f(program, uniform.first(), uniform.second(), callable));
+				Events.ShaderUniform.registryFloat.forEach((uniform, callable) -> setFloat(program, uniform.getFirst(), uniform.getSecond(), callable));
+				Events.ShaderUniform.registryFloatArray.forEach((uniform, callable) -> setFloatArray(program, uniform.getFirst(), uniform.getSecond(), callable));
+				Events.ShaderUniform.registryVector3f.forEach((uniform, callable) -> setVector3f(program, uniform.getFirst(), uniform.getSecond(), callable));
 			}
 		});
 		Events.AfterWorldBorder.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
