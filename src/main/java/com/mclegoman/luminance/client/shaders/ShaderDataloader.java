@@ -70,6 +70,9 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 	public static int getShaderAmount() {
 		return registry.size();
 	}
+	public static boolean isValidIndex(int index) {
+		return index <= getShaderAmount() && index >= 0;
+	}
 	private void remove(String namespace, String name) {
 		registry.removeIf((shader) -> shader.get(1).toString().equalsIgnoreCase(namespace) && shader.get(2).toString().equalsIgnoreCase(name));
 	}

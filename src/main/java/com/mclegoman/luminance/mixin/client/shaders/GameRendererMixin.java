@@ -8,9 +8,12 @@
 package com.mclegoman.luminance.mixin.client.shaders;
 
 import com.mclegoman.luminance.client.events.Events;
+import com.mclegoman.luminance.client.shaders.Shaders;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,5 +43,10 @@ public abstract class GameRendererMixin {
 				}
 			});
 		});
+		if (Shaders.depthFramebuffer == null) {
+			Shaders.depthFramebuffer = new SimpleFramebuffer(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
+		} else {
+			Shaders.depthFramebuffer.resize(width, height, MinecraftClient.IS_SYSTEM_MAC);
+		}
 	}
 }

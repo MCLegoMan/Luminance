@@ -6,9 +6,9 @@
 	"client": [
 		"client.hud.InGameHudMixin",
 		"client.shaders.GameRendererAccessor",
+		"client.shaders.GameRendererMixin",
 		"client.shaders.MouseMixin",
 		"client.shaders.PostEffectPassMixin",
-		"client.shaders.GameRendererMixin",
 		"client.shaders.ShaderNamespaceFix",
 		"client.shaders.ShaderTextureNamespaceFix",
 		"client.shaders.WorldRendererMixin",
@@ -17,5 +17,8 @@
 	],
 	"injectors": {
 		"defaultRequire": 1
-	}
+	},
+	"mixins": [
+		"client.shaders.PostEffectProcessorMixin"
+	]
 }

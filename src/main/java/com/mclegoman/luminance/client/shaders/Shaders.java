@@ -18,6 +18,7 @@ import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.JsonEffectShaderProgram;
 import net.minecraft.client.gl.Uniform;
 import net.minecraft.resource.ResourceType;
@@ -34,6 +35,7 @@ import java.util.concurrent.Callable;
 
 public class Shaders {
 	public static float time = 0.0F;
+	public static Framebuffer depthFramebuffer;
 	public static void init() {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ShaderDataloader());
 		Uniforms.init();
@@ -81,11 +83,24 @@ public class Shaders {
 		}
 	}
 	public static Object get(int shaderIndex, ShaderRegistry dataType) {
-		List<Object> shaderData = shaderIndex <= ShaderDataloader.registry.size() ? ShaderDataloader.registry.get(shaderIndex) : getFallbackShader();
+		List<Object> shaderData = ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : getFallbackShader();
 		return get(shaderData, dataType);
 	}
 	public static List<Object> get(int shaderIndex) {
-		return shaderIndex <= ShaderDataloader.registry.size() ? ShaderDataloader.registry.get(shaderIndex) : null;
+		return ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : null;
+	}
+	public static Object get(String id, ShaderRegistry dataType) {
+		return get(getShaderIndex(id), dataType);
+	}
+	public static List<Object> get(String id) {
+		return get(getShaderIndex(id));
+	}
+	public static Object get(String namespace, String name, ShaderRegistry dataType) {
+		return get(getShaderIndex(namespace, name), dataType);
+	}
+	public static List<Object> get(String namespace, String name) {
+		int index = getShaderIndex(namespace, name);
+		return ShaderDataloader.isValidIndex(index) ? get(index) : getFallbackShader();
 	}
 	public static Object get(List<Object> shaderData, ShaderRegistry dataType) {
 		switch (dataType) {
@@ -140,12 +155,25 @@ public class Shaders {
 		String shader = IdentifierHelper.getStringPart(IdentifierHelper.Type.KEY, id);
 		return getPostShader(namespace, shader);
 	}
-	public static Identifier getPostShader(String namespace, String shader) {
-		if (namespace != null && shader != null) {
-			shader = shader.replace("\"", "").toLowerCase();
-			return new Identifier(namespace.toLowerCase(), ("shaders/post/" + shader + ".json"));
+	public static Identifier getPostShader(String namespace, String name) {
+		if (namespace != null && name != null) {
+			name = name.replace("\"", "").toLowerCase();
+			return new Identifier(namespace.toLowerCase(), ("shaders/post/" + name + ".json"));
 		}
 		return null;
+	}
+	public static int getShaderIndex(String id) {
+		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id, "minecraft");
+		String name = IdentifierHelper.getStringPart(IdentifierHelper.Type.KEY, id);
+		return getShaderIndex(namespace, name);
+	}
+	public static int getShaderIndex(String namespace, String name) {
+		if (namespace != null && name != null) {
+			for (List<Object> data : ShaderDataloader.registry) {
+				if (get(data, ShaderRegistry.NAMESPACE).equals(namespace) && get(data, ShaderRegistry.SHADER_NAME).equals(name)) return ShaderDataloader.registry.indexOf(data);
+			}
+		}
+		return -1;
 	}
 	public static JsonObject getCustom(int shaderIndex, String namespace) {
 		JsonObject customData = (JsonObject) get(shaderIndex, ShaderRegistry.CUSTOM);

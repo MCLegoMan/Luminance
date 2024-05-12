@@ -22,10 +22,12 @@ import java.util.List;
 public class Shader {
 	// TODO: Add Depth and Shader Framebuffers.
 	private PostEffectProcessor postProcessor;
+	private boolean useDepth;
 	private Identifier shaderId;
 	private RenderType renderType;
 	private List<Object> shaderData;
 	public Shader(RenderType renderType, List<Object> shaderData) {
+		setUseDepth(false);
 		setRenderType(renderType);
 		setShaderData(shaderData);
 	}
@@ -46,6 +48,12 @@ public class Shader {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set post processor: {}", error));
 			if (this.postProcessor != null) this.postProcessor.close();
 		}
+	}
+	public boolean getUseDepth() {
+		return this.useDepth;
+	}
+	public void setUseDepth(boolean useDepth) {
+		this.useDepth = useDepth;
 	}
 	public Identifier getShaderId() {
 		return this.shaderId;
