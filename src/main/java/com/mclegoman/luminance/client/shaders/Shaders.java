@@ -194,11 +194,11 @@ public class Shaders {
 		return null;
 	}
 	public static Text getShaderName(int shaderIndex, boolean shouldShowNamespace) {
-		if (get(shaderIndex) != null) Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.NAMESPACE), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE), shouldShowNamespace);
+		if (get(shaderIndex) != null) return Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.SHADER_NAME), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE), shouldShowNamespace);
 		return Translation.getErrorTranslation(Data.version.getID());
 	}
 	public static Text getShaderName(int shaderIndex) {
-		if (get(shaderIndex) != null) Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.NAMESPACE), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE));
+		if (get(shaderIndex) != null) return Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.SHADER_NAME), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE));
 		return Translation.getErrorTranslation(Data.version.getID());
 	}
 	public static String guessPostShaderNamespace(String id) {

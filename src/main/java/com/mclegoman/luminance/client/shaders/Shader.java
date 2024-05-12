@@ -62,18 +62,21 @@ public class Shader {
 		return this.shaderId;
 	}
 	private void setShaderId(Identifier id) {
+		setUseDepth(false);
 		this.shaderId = id;
 	}
 	public Callable<RenderType> getRenderType() {
 		return this.renderType;
 	}
 	public void setRenderType(Callable<RenderType> renderType) {
+		setUseDepth(false);
 		this.renderType = renderType;
 	}
 	public Callable<Boolean> getShouldRender() {
 		return this.shouldRender;
 	}
 	public void setShouldRender(Callable<Boolean> shouldRender) {
+		setUseDepth(false);
 		this.shouldRender = shouldRender;
 	}
 	public List<Object> getShaderData() {
