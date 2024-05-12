@@ -72,6 +72,9 @@ public class Shader {
 		setUseDepth(false);
 		this.renderType = renderType;
 	}
+	public boolean getDisableGameRendertype() {
+		return (boolean)Shaders.get(getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE) || getUseDepth();
+	}
 	public Callable<Boolean> getShouldRender() {
 		return this.shouldRender;
 	}

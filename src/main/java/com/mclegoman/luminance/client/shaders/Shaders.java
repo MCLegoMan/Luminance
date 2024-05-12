@@ -48,54 +48,60 @@ public class Shaders {
 		});
 		Events.AfterHandRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
-				if (shaders != null) shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.WORLD, true));
+				if (shaders != null) shaders.forEach(shader -> render(id, shader, Shader.RenderType.WORLD, true));
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 			}
 		}));
 		Events.AfterWorldBorder.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
-				if (shaders != null) shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.WORLD, false));
+				if (shaders != null) shaders.forEach(shader -> render(id, shader, Shader.RenderType.WORLD, false));
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 			}
 		}));
 		Events.AfterGameRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
-				if (shaders != null) shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.GAME, false));
+				if (shaders != null) shaders.forEach(shader -> render(id, shader, Shader.RenderType.GAME, false));
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 			}
 		}));
 	}
-	public static void render(Couple<String, String> id, Shader shader, Shader.RenderType renderType, boolean canDepthShader) {
+	public static void render(Couple<String, String> id, Couple<String, Shader> shader, Shader.RenderType renderType, boolean canDepthShader) {
 		try {
-			if ((!canDepthShader && shader.getUseDepth()) || (canDepthShader && !shader.getUseDepth())) {
-					if (shader.getRenderType().call().equals(renderType)) {
-						if (!(renderType.equals(Shader.RenderType.GAME) && ((boolean) get(shader.getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE) || shader.getUseDepth()))) render(shader);
-					} else {
-						if (renderType.equals(Shader.RenderType.WORLD) && ((boolean) get(shader.getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE) || shader.getUseDepth())) render(shader);
+			if ((!canDepthShader && shader.getSecond().getUseDepth()) || (canDepthShader && !shader.getSecond().getUseDepth())) {
+				if (shader.getSecond().getPostProcessor() == null || !Objects.equals(shader.getSecond().getPostProcessor().getName(), shader.getSecond().getShaderId().toString())) {
+					try {
+						shader.getSecond().setPostProcessor();
+					} catch (Exception error) {
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}\" post processor: {}", get(shader.getSecond().getShaderData(), ShaderRegistry.ID), error));
+						Events.ShaderRender.Shaders.remove(id, shader.getFirst());
 					}
+				}
+				if (shader.getSecond().getRenderType().call().equals(renderType)) {
+					if (!(renderType.equals(Shader.RenderType.GAME) && shader.getSecond().getDisableGameRendertype())) render(shader);
+				} else {
+					if (renderType.equals(Shader.RenderType.WORLD) && shader.getSecond().getDisableGameRendertype()) render(shader);
+				}
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}", id.getFirst(), id.getSecond(), error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", id.getFirst(), id.getSecond(), get(shader.getSecond().getShaderData(), ShaderRegistry.ID), error));
 		}
 	}
-	public static void render(Shader shader) {
+	private static void render(Couple<String, Shader> shader) {
 		try {
-			if (shader.getShouldRender().call()) {
-				if (shader.getPostProcessor() == null || !Objects.equals(shader.getPostProcessor().getName(), shader.getShaderId().toString()))
-					shader.setPostProcessor();
-				if (shader.getPostProcessor() != null) {
+			if (shader.getSecond().getShouldRender().call()) {
+				if (shader.getSecond().getPostProcessor() != null) {
 					RenderSystem.enableBlend();
 					RenderSystem.defaultBlendFunc();
-					shader.getPostProcessor().render(ClientData.minecraft.getTickDelta());
+					shader.getSecond().getPostProcessor().render(ClientData.minecraft.getTickDelta());
 					RenderSystem.disableBlend();
 					ClientData.minecraft.getFramebuffer().beginWrite(true);
 				}
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}\" shader: {}", get(shader.getShaderData(), ShaderRegistry.ID), error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), get(shader.getSecond().getShaderData(), ShaderRegistry.ID), error));
 		}
 	}
 	public static Object get(int shaderIndex, ShaderRegistry dataType) {

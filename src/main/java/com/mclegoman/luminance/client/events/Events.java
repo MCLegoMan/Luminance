@@ -387,5 +387,10 @@ public class Events {
 				return false;
 			}
 		}
+		public static boolean remove(Couple<String, String> id, Couple<String, Shader> shader) {
+			List<Couple<String, Shader>> shaders = ShaderRender.get(id);
+			if (shaders != null) shaders.remove(shader);
+			return false;
+		}
 	}
 }

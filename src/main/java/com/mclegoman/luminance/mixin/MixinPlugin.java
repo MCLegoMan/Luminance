@@ -8,11 +8,17 @@
 package com.mclegoman.luminance.mixin;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
+import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
+import com.mclegoman.luminance.common.util.LogType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.Version;
+import net.fabricmc.loader.impl.util.version.StringVersion;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,15 +35,40 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return switch (mixinClassName) {
-			case "com.mclegoman.luminance.mixin.client.shaders.ShaderNamespaceFix" ->
-					!(Data.isModInstalled("architectury") || Data.isModInstalled("satin") || (Data.isModInstalled("souper_secret_settings") && !Data.isModInstalledVersionOrHigher("souper_secret_settings", "v1.0.9", true)) || (Data.isModInstalled("perspective") && !Data.isModInstalledVersionOrHigher("perspective", "1.3.0-alpha.7", true, "+")));
-			case "com.mclegoman.luminance.mixin.client.shaders.ShaderTextureNamespaceFix" ->
-					!((Data.isModInstalled("souper_secret_settings") && !Data.isModInstalledVersionOrHigher("souper_secret_settings", "v1.0.9", true)) || (Data.isModInstalled("perspective") && !Data.isModInstalledVersionOrHigher("perspective", "1.3.0-alpha.7", true, "+")));
-			case "com.mclegoman.luminance.mixin.compat.modmenu.FabricModMixin", "com.mclegoman.luminance.mixin.compat.modmenu.ModsScreenMixin" ->
-					Data.isModInstalled("modmenu");
-			default -> true;
-		};
+		switch (mixinClassName) {
+			case "com.mclegoman.luminance.mixin.client.shaders.ShaderNamespaceFix" -> {
+				boolean isArchitecturyInstalled = Data.isModInstalled("architectury");
+				boolean isSatinInstalled = Data.isModInstalled("satin");
+				boolean isSoupInstalled = (Data.isModInstalled("souper_secret_settings") && !Data.isModInstalledVersionOrHigher("souper_secret_settings", "v1.0.9", true));
+				boolean isPerspectiveInstalled = (Data.isModInstalled("perspective") && !Data.isModInstalledVersionOrHigher("perspective", "1.3.0-alpha.7"));
+				List<String> modsInstalled = new ArrayList<>();
+				if (isArchitecturyInstalled) modsInstalled.add("architectury");
+				if (isSatinInstalled) modsInstalled.add("satin");
+				if (isSoupInstalled) modsInstalled.add("souper_secret_settings");
+				if (isPerspectiveInstalled) modsInstalled.add("perspective");
+				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Disabling {}: {}", mixinClassName, modsInstalled));
+				return modsInstalled.isEmpty();
+			}
+			case "com.mclegoman.luminance.mixin.client.shaders.ShaderTextureNamespaceFix" -> {
+				boolean isSoupInstalled = (Data.isModInstalled("souper_secret_settings") && !Data.isModInstalledVersionOrHigher("souper_secret_settings", "v1.0.9", true));
+				boolean isPerspectiveInstalled = Data.isModInstalled("perspective") && !Data.isModInstalledVersionOrHigher("perspective", "1.3.0-alpha.7");
+				List<String> modsInstalled = new ArrayList<>();
+				if (isSoupInstalled) modsInstalled.add("souper_secret_settings");
+				if (isPerspectiveInstalled) modsInstalled.add("perspective");
+				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Disabling {}: {}", mixinClassName, modsInstalled));
+				return modsInstalled.isEmpty();
+			}
+			case "com.mclegoman.luminance.mixin.compat.modmenu.FabricModMixin", "com.mclegoman.luminance.mixin.compat.modmenu.ModsScreenMixin" -> {
+				boolean isModMenuInstalled = Data.isModInstalled("modmenu");
+				List<String> modsInstalled = new ArrayList<>();
+				if (isModMenuInstalled) modsInstalled.add("modmenu");
+				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Enabling {}: {}", mixinClassName, modsInstalled));
+				return !modsInstalled.isEmpty();
+			}
+			default -> {
+				return true;
+			}
+		}
 	}
 
 	@Override
