@@ -8,7 +8,6 @@
 package com.mclegoman.luminance.client.events;
 
 import com.mclegoman.luminance.client.shaders.Shader;
-import com.mclegoman.luminance.client.shaders.Shaders;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
@@ -293,79 +292,82 @@ public class Events {
 		public static void remove(Couple<String, String> id) {
 			registry.remove(id);
 		}
-		public static boolean add(Couple<String, String> registryId, String shaderName, Shader shader) {
-			if (exists(registryId)) {
-				List<Couple<String, Shader>> shaders = get(registryId);
-				if (shaders == null) shaders = new ArrayList<>();
-				for (Couple<String, Shader> data : shaders) {
-					if (data.getFirst().equalsIgnoreCase(shaderName)) {
-						return false;
-					}
-				}
-				shaders.add(new Couple<>(shaderName, shader));
-				modify(registryId, shaders);
-				return true;
-			}
-			return false;
-		}
-		public static Couple<String, Shader> get(Couple<String, String> registryId, String shaderName) {
-			if (exists(registryId)) {
-				List<Couple<String, Shader>> shaders = get(registryId);
-				if (shaders == null) shaders = new ArrayList<>();
-				for (Couple<String, Shader> data : shaders) {
-					if (data.getFirst().equalsIgnoreCase(shaderName)) {
-						return data;
-					}
-				}
-			}
-			return null;
-		}
-		public static boolean modify(Couple<String, String> registryId, String shaderName, Shader shader) {
-			try {
-				List<Couple<String, Shader>> shaders = get(registryId);
-				if (shaders != null) {
+		public static class Shader {
+			// Using these functions is optional, but makes it easier for mod developers to add shaders to their shader list.
+			public static boolean add(Couple<String, String> registryId, String shaderName, Shader shader) {
+				if (ShaderRender.exists(registryId)) {
+					List<Couple<String, Shader>> shaders = ShaderRender.get(registryId);
+					if (shaders == null) shaders = new ArrayList<>();
 					for (Couple<String, Shader> data : shaders) {
-						if (data.getFirst().equals(shaderName)) {
-							data.setSecond(shader);
-							break;
+						if (data.getFirst().equalsIgnoreCase(shaderName)) {
+							return false;
+						}
+					}
+					shaders.add(new Couple<>(shaderName, shader));
+					ShaderRender.modify(registryId, shaders);
+					return true;
+				}
+				return false;
+			}
+			public static Couple<String, Shader> get(Couple<String, String> registryId, String shaderName) {
+				if (ShaderRender.exists(registryId)) {
+					List<Couple<String, Shader>> shaders = ShaderRender.get(registryId);
+					if (shaders == null) shaders = new ArrayList<>();
+					for (Couple<String, Shader> data : shaders) {
+						if (data.getFirst().equalsIgnoreCase(shaderName)) {
+							return data;
 						}
 					}
 				}
-				modify(registryId, shaders);
-				return true;
-			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", registryId, shaderName, error));
+				return null;
 			}
-			return false;
-		}
-		public static boolean set(Couple<String, String> registryId, String shaderName, Shader shader) {
-			try {
-				if (!Events.ShaderRender.exists(registryId)) Events.ShaderRender.register(registryId, new ArrayList<>());
-				return !existsShader(registryId, shaderName) ? add(registryId, shaderName, shader) : modify(registryId, shaderName, shader);
-			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", registryId, shaderName, error));
+			public static boolean modify(Couple<String, String> registryId, String shaderName, Shader shader) {
+				try {
+					List<Couple<String, Shader>> shaders = ShaderRender.get(registryId);
+					if (shaders != null) {
+						for (Couple<String, Shader> data : shaders) {
+							if (data.getFirst().equals(shaderName)) {
+								data.setSecond(shader);
+								break;
+							}
+						}
+					}
+					ShaderRender.modify(registryId, shaders);
+					return true;
+				} catch (Exception error) {
+					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", registryId, shaderName, error));
+				}
+				return false;
 			}
-			return false;
-		}
-		public static boolean existsShader(Couple<String, String> id, String shader) {
-			if (exists(id)) {
-				List<Couple<String, Shader>> shaders = get(id);
+			public static boolean set(Couple<String, String> registryId, String shaderName, Shader shader) {
+				try {
+					if (!ShaderRender.exists(registryId)) ShaderRender.register(registryId, new ArrayList<>());
+					return !exists(registryId, shaderName) ? add(registryId, shaderName, shader) : modify(registryId, shaderName, shader);
+				} catch (Exception error) {
+					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", registryId, shaderName, error));
+				}
+				return false;
+			}
+			public static boolean exists(Couple<String, String> id, String shader) {
+				if (ShaderRender.exists(id)) {
+					List<Couple<String, Shader>> shaders = ShaderRender.get(id);
+					if (shaders != null) {
+						for (Couple<String, Shader> data : shaders) {
+							if (data.getFirst().equalsIgnoreCase(shader)) return true;
+						}
+					}
+				} return false;
+			}
+			public static boolean remove(Couple<String, String> id, String shader) {
+				List<Couple<String, Shader>> shaders = ShaderRender.get(id);
 				if (shaders != null) {
-					for (Couple<String, Shader> data : shaders) {
-						if (data.getFirst().equalsIgnoreCase(shader)) return true;
+					if (shaders.removeIf(shaderData -> shaderData.getFirst().equalsIgnoreCase(shader))) {
+						ShaderRender.modify(id, shaders);
+						return true;
 					}
 				}
-			} return false;
-		}
-		public static boolean removeShader(Couple<String, String> id, String shader) {
-			List<Couple<String, Shader>> shaders = get(id);
-			if (shaders != null) {
-				if (shaders.removeIf(shaderData -> shaderData.getFirst().equalsIgnoreCase(shader))) {
-					modify(id, shaders);
-					return true;
-				}
+				return false;
 			}
-			return false;
 		}
 	}
 }
