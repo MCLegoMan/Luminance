@@ -83,7 +83,7 @@ public class Shaders {
 		}
 	}
 	public static Object get(int shaderIndex, ShaderRegistry dataType) {
-		List<Object> shaderData = ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : getFallbackShader();
+		List<Object> shaderData = ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : null;
 		return get(shaderData, dataType);
 	}
 	public static List<Object> get(int shaderIndex) {
@@ -100,7 +100,7 @@ public class Shaders {
 	}
 	public static List<Object> get(String namespace, String name) {
 		int index = getShaderIndex(namespace, name);
-		return ShaderDataloader.isValidIndex(index) ? get(index) : getFallbackShader();
+		return ShaderDataloader.isValidIndex(index) ? get(index) : null;
 	}
 	public static Object get(List<Object> shaderData, ShaderRegistry dataType) {
 		switch (dataType) {
@@ -139,16 +139,6 @@ public class Shaders {
 	}
 	public static Shader get(List<Object> shaderData, Shader.RenderType renderType) {
 		return new Shader(renderType, shaderData);
-	}
-	public static List<Object> getFallbackShader() {
-		List<Object> shaderMap = new ArrayList<>();
-		shaderMap.add("minecraft:blit");
-		shaderMap.add("minecraft");
-		shaderMap.add("blit");
-		shaderMap.add(false);
-		shaderMap.add(false);
-		shaderMap.add(new JsonObject());
-		return shaderMap;
 	}
 	public static Identifier getPostShader(String id) {
 		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id, "minecraft");
