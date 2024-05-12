@@ -22,6 +22,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(priority = 100, value = GameRenderer.class)
 public abstract class GameRendererMixin {
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;beginWrite(Z)V"))
+	private void luminance$afterHandRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+		Events.AfterHandRender.registry.forEach(((id, runnable) -> {
+			try {
+				runnable.run();
+			} catch (Exception error) {
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterHandRender event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+			}
+		}));
+	}
 	@Inject(method = "render", at = @At("TAIL"))
 	private void luminance$afterGameRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
 		Events.AfterGameRender.registry.forEach(((id, runnable) -> {
@@ -37,7 +47,7 @@ public abstract class GameRendererMixin {
 		Events.ShaderRender.registry.forEach((id, shaders) -> {
 			if (shaders != null) shaders.forEach(shader -> {
 				try {
-					shader.getSecond().getPostProcessor().setupDimensions(width, height);
+					if (shader.getSecond() != null && shader.getSecond().getPostProcessor() != null) shader.getSecond().getPostProcessor().setupDimensions(width, height);
 				} catch (Exception error) {
 					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to resize shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 				}

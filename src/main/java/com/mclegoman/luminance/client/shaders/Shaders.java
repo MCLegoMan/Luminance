@@ -46,40 +46,56 @@ public class Shaders {
 				Events.ShaderUniform.registryVector3f.forEach((uniform, callable) -> setVector3f(program, uniform.getFirst(), uniform.getSecond(), callable));
 			}
 		});
+		Events.AfterHandRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
+			try {
+				if (shaders != null) shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.WORLD, true));
+			} catch (Exception error) {
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+			}
+		}));
 		Events.AfterWorldBorder.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
-				if (shaders != null) shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.WORLD));
+				if (shaders != null) shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.WORLD, false));
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 			}
 		}));
 		Events.AfterGameRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
-				if (shaders != null) shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.GAME));
+				if (shaders != null) shaders.forEach(shader -> render(id, shader.getSecond(), Shader.RenderType.GAME, false));
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 			}
 		}));
 	}
-	public static void render(Couple<String, String> id, Shader shader, Shader.RenderType renderType) {
+	public static void render(Couple<String, String> id, Shader shader, Shader.RenderType renderType, boolean isDepthShader) {
 		try {
-			if (shader.getRenderType().equals(renderType)) {
-				if (!(renderType.equals(Shader.RenderType.GAME) && (boolean) get(shader.getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE))) render(shader);
-			} else {
-				if (renderType.equals(Shader.RenderType.WORLD) && (boolean) get(shader.getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE)) render(shader);
+			if ((isDepthShader && shader.getUseDepth()) || (!isDepthShader && !shader.getUseDepth())) {
+					if (shader.getRenderType().call().equals(renderType)) {
+						if (!(renderType.equals(Shader.RenderType.GAME) && ((boolean) get(shader.getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE) || shader.getUseDepth()))) render(shader);
+					} else {
+						if (renderType.equals(Shader.RenderType.WORLD) && ((boolean) get(shader.getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE) || shader.getUseDepth())) render(shader);
+					}
 			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}", id.getFirst(), id.getSecond(), error));
 		}
 	}
 	public static void render(Shader shader) {
-		if (shader.getPostProcessor() == null || !Objects.equals(shader.getPostProcessor().getName(), shader.getShaderId().toString())) shader.setPostProcessor();
-		if (shader.getPostProcessor() != null) {
-			RenderSystem.enableBlend();
-			RenderSystem.defaultBlendFunc();
-			shader.getPostProcessor().render(ClientData.minecraft.getTickDelta());
-			RenderSystem.disableBlend();
-			ClientData.minecraft.getFramebuffer().beginWrite(true);
+		try {
+			if (shader.getShouldRender().call()) {
+				if (shader.getPostProcessor() == null || !Objects.equals(shader.getPostProcessor().getName(), shader.getShaderId().toString()))
+					shader.setPostProcessor();
+				if (shader.getPostProcessor() != null) {
+					RenderSystem.enableBlend();
+					RenderSystem.defaultBlendFunc();
+					shader.getPostProcessor().render(ClientData.minecraft.getTickDelta());
+					RenderSystem.disableBlend();
+					ClientData.minecraft.getFramebuffer().beginWrite(true);
+				}
+			}
+		} catch (Exception error) {
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}\" shader: {}", get(shader.getShaderData(), ShaderRegistry.ID), error));
 		}
 	}
 	public static Object get(int shaderIndex, ShaderRegistry dataType) {
@@ -137,8 +153,11 @@ public class Shaders {
 		shaderMap.add(customData);
 		return shaderMap;
 	}
-	public static Shader get(List<Object> shaderData, Shader.RenderType renderType) {
-		return new Shader(renderType, shaderData);
+	public static Shader get(List<Object> shaderData, Callable<Shader.RenderType> renderType, Callable<Boolean> shouldRender) {
+		return new Shader(shaderData, renderType, shouldRender);
+	}
+	public static Shader get(List<Object> shaderData, Callable<Shader.RenderType> renderType) {
+		return new Shader(shaderData, renderType);
 	}
 	public static Identifier getPostShader(String id) {
 		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id, "minecraft");
@@ -175,10 +194,12 @@ public class Shaders {
 		return null;
 	}
 	public static Text getShaderName(int shaderIndex, boolean shouldShowNamespace) {
-		return Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.NAMESPACE), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE), shouldShowNamespace);
+		if (get(shaderIndex) != null) Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.NAMESPACE), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE), shouldShowNamespace);
+		return Translation.getErrorTranslation(Data.version.getID());
 	}
 	public static Text getShaderName(int shaderIndex) {
-		return Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.NAMESPACE), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE));
+		if (get(shaderIndex) != null) Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.NAMESPACE), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE));
+		return Translation.getErrorTranslation(Data.version.getID());
 	}
 	public static String guessPostShaderNamespace(String id) {
 		// If the shader registry contains at least one shader with the name, the first detected instance will be used.
@@ -193,6 +214,14 @@ public class Shaders {
 		// Ideally, lu_time/lu_timeSmooth should be customizable from post/x.json, and if omitted, it would default to every 20 ticks (matching vanilla).
 		// This would require Luminance to add a time variable for each pass, how big of a performance hit would this be?
 		// If omitted, we could use the vanilla variable to help with performance.
+
+		// Could we add something like this to the post/x.json and program/x.json files?
+		// options {
+		//     "lu_time": {
+		//         "type": "int",
+		//         "value": 20,
+		//     }
+		// }
 
 		// This will get reset every 48 hours to prevent shader stuttering/freezing on some shaders.
 		// This may still stutter/freeze on weaker systems.

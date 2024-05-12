@@ -18,21 +18,24 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class Shader {
 	// TODO: Add Depth and Shader Framebuffers.
 	private PostEffectProcessor postProcessor;
 	private boolean useDepth;
 	private Identifier shaderId;
-	private RenderType renderType;
+	private Callable<RenderType> renderType;
+	private Callable<Boolean> shouldRender;
 	private List<Object> shaderData;
-	public Shader(RenderType renderType, List<Object> shaderData) {
+	public Shader(List<Object> shaderData, Callable<RenderType> renderType, Callable<Boolean> shouldRender) {
 		setUseDepth(false);
 		setRenderType(renderType);
+		setShouldRender(shouldRender);
 		setShaderData(shaderData);
 	}
-	public Shader(RenderType renderType) {
-		this(renderType, null);
+	public Shader(List<Object> shaderData, Callable<RenderType> renderType) {
+		this(shaderData, renderType, () -> true);
 	}
 	public PostEffectProcessor getPostProcessor() {
 		return postProcessor;
@@ -61,11 +64,17 @@ public class Shader {
 	private void setShaderId(Identifier id) {
 		this.shaderId = id;
 	}
-	public RenderType getRenderType() {
+	public Callable<RenderType> getRenderType() {
 		return this.renderType;
 	}
-	public void setRenderType(RenderType renderType) {
+	public void setRenderType(Callable<RenderType> renderType) {
 		this.renderType = renderType;
+	}
+	public Callable<Boolean> getShouldRender() {
+		return this.shouldRender;
+	}
+	public void setShouldRender(Callable<Boolean> shouldRender) {
+		this.shouldRender = shouldRender;
 	}
 	public List<Object> getShaderData() {
 		return this.shaderData;

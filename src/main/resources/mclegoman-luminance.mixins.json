@@ -13,12 +13,10 @@
 		"client.shaders.ShaderTextureNamespaceFix",
 		"client.shaders.WorldRendererMixin",
 		"compat.modmenu.FabricModMixin",
-		"compat.modmenu.ModsScreenMixin"
+		"compat.modmenu.ModsScreenMixin",
+		"client.shaders.PostEffectProcessorMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
-	},
-	"mixins": [
-		"client.shaders.PostEffectProcessorMixin"
-	]
+	}
 }
