@@ -292,7 +292,7 @@ public class Events {
 		public static void remove(Couple<String, String> id) {
 			registry.remove(id);
 		}
-		public static class Shader {
+		public static class Shaders {
 			// Using these functions is optional, but makes it easier for mod developers to add shaders to their shader list.
 			public static boolean add(Couple<String, String> registryId, String shaderName, Shader shader) {
 				if (ShaderRender.exists(registryId)) {
