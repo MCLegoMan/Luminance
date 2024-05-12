@@ -87,7 +87,6 @@ public class Shader {
 		setShaderId(Shaders.getPostShader((String)Shaders.get(getShaderData(), ShaderRegistry.ID)));
 	}
 	public enum RenderType {
-		// Depth Shaders should only be able to use WORLD, as you can't have depth outside of the world.
 		WORLD,
 		GAME
 	}

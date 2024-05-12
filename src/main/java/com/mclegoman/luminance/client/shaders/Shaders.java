@@ -68,9 +68,9 @@ public class Shaders {
 			}
 		}));
 	}
-	public static void render(Couple<String, String> id, Shader shader, Shader.RenderType renderType, boolean isDepthShader) {
+	public static void render(Couple<String, String> id, Shader shader, Shader.RenderType renderType, boolean canDepthShader) {
 		try {
-			if ((isDepthShader && shader.getUseDepth()) || (!isDepthShader && !shader.getUseDepth())) {
+			if ((!canDepthShader && shader.getUseDepth()) || (canDepthShader && !shader.getUseDepth())) {
 					if (shader.getRenderType().call().equals(renderType)) {
 						if (!(renderType.equals(Shader.RenderType.GAME) && ((boolean) get(shader.getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE) || shader.getUseDepth()))) render(shader);
 					} else {

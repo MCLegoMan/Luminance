@@ -86,10 +86,12 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 				try {
 					JsonObject reader = jsonElement.getAsJsonObject();
 					String namespace = JsonHelper.getString(reader, "namespace", Data.version.getID());
-					String name = JsonHelper.getString(reader, "name");
+					// Please use "name", we check for "shader" for backwards compatibility with older Perspective packs.
+					String name = JsonHelper.hasString(reader, "shader") ? JsonHelper.getString(reader, "shader") : JsonHelper.getString(reader, "name");
 					boolean enabled = JsonHelper.getBoolean(reader, "enabled", true);
 					boolean translatable = JsonHelper.getBoolean(reader, "translatable", false);
-					boolean disableGameRenderType = JsonHelper.getBoolean(reader, "disable_game_rendertype", false);
+					// Please use "disable_game_rendertype", we check for "disable_screen_mode" for backwards compatibility with older Perspective packs.
+					boolean disableGameRenderType = JsonHelper.hasBoolean(reader, "disable_screen_mode") ? JsonHelper.getBoolean(reader, "disable_screen_mode") : JsonHelper.getBoolean(reader, "disable_game_rendertype", false);
 					JsonObject customData = JsonHelper.getObject(reader, "customData", new JsonObject());
 					if (enabled) {
 						add(namespace, name, translatable, disableGameRenderType, customData, manager);
