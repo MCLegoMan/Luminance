@@ -68,9 +68,9 @@ public class Shaders {
 			}
 		}));
 	}
-	public static void render(Couple<String, String> id, Couple<String, Shader> shader, Shader.RenderType renderType, boolean canDepthShader) {
+	public static void render(Couple<String, String> id, Couple<String, Shader> shader, Shader.RenderType targetRenderType, boolean canDepthShader) {
 		try {
-			if ((!canDepthShader && shader.getSecond().getUseDepth()) || (canDepthShader && !shader.getSecond().getUseDepth())) {
+			if ((canDepthShader && shader.getSecond().getUseDepth()) || (!canDepthShader && !shader.getSecond().getUseDepth())) {
 				if (shader.getSecond().getPostProcessor() == null || !Objects.equals(shader.getSecond().getPostProcessor().getName(), shader.getSecond().getShaderId().toString())) {
 					try {
 						shader.getSecond().setPostProcessor();
@@ -79,10 +79,15 @@ public class Shaders {
 						Events.ShaderRender.Shaders.remove(id, shader.getFirst());
 					}
 				}
-				if (shader.getSecond().getRenderType().call().equals(renderType)) {
-					if (renderType.equals(Shader.RenderType.GAME) || shader.getSecond().getDisableGameRendertype()) render(shader);
+				if (shader.getSecond().getRenderType().call().equals(targetRenderType)) {
+					if (targetRenderType.equals(Shader.RenderType.GAME)) {
+						if (!shader.getSecond().getDisableGameRendertype()) render(shader);
+					}
+					else if (targetRenderType.equals(Shader.RenderType.WORLD)) render(shader);
 				} else {
-					if (renderType.equals(Shader.RenderType.WORLD) && !shader.getSecond().getDisableGameRendertype()) render(shader);
+					if (targetRenderType.equals(Shader.RenderType.WORLD)) {
+						if (shader.getSecond().getDisableGameRendertype()) render(shader);
+					}
 				}
 			}
 		} catch (Exception error) {
