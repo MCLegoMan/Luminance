@@ -80,9 +80,9 @@ public class Shaders {
 					}
 				}
 				if (shader.getSecond().getRenderType().call().equals(renderType)) {
-					if (!(renderType.equals(Shader.RenderType.GAME) && shader.getSecond().getDisableGameRendertype())) render(shader);
+					if (renderType.equals(Shader.RenderType.GAME) || shader.getSecond().getDisableGameRendertype()) render(shader);
 				} else {
-					if (renderType.equals(Shader.RenderType.WORLD) && shader.getSecond().getDisableGameRendertype()) render(shader);
+					if (renderType.equals(Shader.RenderType.WORLD) && !shader.getSecond().getDisableGameRendertype()) render(shader);
 				}
 			}
 		} catch (Exception error) {
