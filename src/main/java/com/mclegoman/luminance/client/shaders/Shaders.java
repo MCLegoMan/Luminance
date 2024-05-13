@@ -12,6 +12,7 @@ import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.events.Runnables;
 import com.mclegoman.luminance.client.translation.Translation;
+import com.mclegoman.luminance.client.util.MessageOverlay;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.IdentifierHelper;
@@ -48,128 +49,84 @@ public class Shaders {
 		});
 		Events.AfterHandRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
-				if (shaders != null) shaders.forEach(shader -> render(id, shader, Shader.RenderType.WORLD, true));
+				if (shaders != null) shaders.forEach(shader -> {
+					if (shader.getSecond().getUseDepth()) render(id, shader);
+				});
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 			}
 		}));
 		Events.AfterWorldBorder.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
-				if (shaders != null) shaders.forEach(shader -> render(id, shader, Shader.RenderType.WORLD, false));
+				if (shaders != null) shaders.forEach(shader -> {
+					if (!shader.getSecond().getUseDepth()) {
+						try {
+							if ((shader.getSecond().getRenderType() == Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType() == Shader.RenderType.GAME) && shader.getSecond().getDisableGameRendertype())) {
+								render(id, shader);
+							}
+						} catch (Exception error) {
+							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
+						}
+					}
+				});
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 			}
 		}));
 		Events.AfterGameRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
-				if (shaders != null) shaders.forEach(shader -> render(id, shader, Shader.RenderType.GAME, false));
+				if (shaders != null) shaders.forEach(shader -> {
+					if (!shader.getSecond().getUseDepth() && !shader.getSecond().getDisableGameRendertype()) render(id, shader);
+				});
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 			}
 		}));
 	}
-	// TODO: Fix bug that causes the shader to disable game rendertype upon loading a world.
-	// Is this to do with Luminance or Perspective?
-	public static void render(Couple<String, String> id, Couple<String, Shader> shader, Shader.RenderType targetRenderType, boolean canDepthShader) {
+	private static void render(Couple<String, String> id, Couple<String, Shader> shader) {
 		try {
-			if ((canDepthShader && shader.getSecond().getUseDepth()) || (!canDepthShader && !shader.getSecond().getUseDepth())) {
+			if (shader.getSecond().getShouldRender()) {
 				if (shader.getSecond().getPostProcessor() == null || !Objects.equals(shader.getSecond().getPostProcessor().getName(), shader.getSecond().getShaderId().toString())) {
 					try {
 						shader.getSecond().setPostProcessor();
 					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}\" post processor: {}", get(shader.getSecond().getShaderData(), ShaderRegistry.ID), error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}\" post processor: {}", shader.getSecond().getShaderData().getId(), error));
 						Events.ShaderRender.Shaders.remove(id, shader.getFirst());
 					}
 				}
-				if (shader.getSecond().getRenderType().call().equals(targetRenderType)) {
-					if (targetRenderType.equals(Shader.RenderType.GAME)) {
-						if (!shader.getSecond().getDisableGameRendertype()) render(shader);
-					}
-					else if (targetRenderType.equals(Shader.RenderType.WORLD)) render(shader);
-				} else {
-					if (targetRenderType.equals(Shader.RenderType.WORLD)) {
-						if (shader.getSecond().getDisableGameRendertype()) render(shader);
-					}
-				}
+				render(shader);
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", id.getFirst(), id.getSecond(), get(shader.getSecond().getShaderData(), ShaderRegistry.ID), error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getId(), error));
 		}
 	}
 	private static void render(Couple<String, Shader> shader) {
 		try {
-			if (shader.getSecond().getShouldRender().call()) {
-				if (shader.getSecond().getPostProcessor() != null) {
-					RenderSystem.enableBlend();
-					RenderSystem.defaultBlendFunc();
-					shader.getSecond().getPostProcessor().render(ClientData.minecraft.getTickDelta());
-					RenderSystem.disableBlend();
-					ClientData.minecraft.getFramebuffer().beginWrite(true);
-				}
+			if (shader.getSecond().getPostProcessor() != null) {
+				RenderSystem.enableBlend();
+				RenderSystem.defaultBlendFunc();
+				shader.getSecond().getPostProcessor().render(ClientData.minecraft.getTickDelta());
+				RenderSystem.disableBlend();
+				ClientData.minecraft.getFramebuffer().beginWrite(true);
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), get(shader.getSecond().getShaderData(), ShaderRegistry.ID), error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getId(), error));
 		}
 	}
-	public static Object get(int shaderIndex, ShaderRegistry dataType) {
-		List<Object> shaderData = ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : null;
-		return get(shaderData, dataType);
-	}
-	public static List<Object> get(int shaderIndex) {
+	public static ShaderRegistry get(int shaderIndex) {
 		return ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : null;
 	}
-	public static Object get(String id, ShaderRegistry dataType) {
-		return get(getShaderIndex(id), dataType);
-	}
-	public static List<Object> get(String id) {
+	public static ShaderRegistry get(String id) {
 		return get(getShaderIndex(id));
 	}
-	public static Object get(String namespace, String name, ShaderRegistry dataType) {
-		return get(getShaderIndex(namespace, name), dataType);
-	}
-	public static List<Object> get(String namespace, String name) {
+	public static ShaderRegistry get(String namespace, String name) {
 		int index = getShaderIndex(namespace, name);
 		return ShaderDataloader.isValidIndex(index) ? get(index) : null;
 	}
-	public static Object get(List<Object> shaderData, ShaderRegistry dataType) {
-		switch (dataType) {
-			case ID -> {
-				return shaderData.get(0);
-			}
-			case NAMESPACE -> {
-				return shaderData.get(1);
-			}
-			case SHADER_NAME -> {
-				return shaderData.get(2);
-			}
-			case TRANSLATABLE -> {
-				return shaderData.get(3);
-			}
-			case DISABLE_GAME_RENDERTYPE -> {
-				return shaderData.get(4);
-			}
-			case CUSTOM -> {
-				return shaderData.get(5);
-			}
-			default -> {
-				return new Object();
-			}
-		}
-	}
-	public static List<Object> get(String namespace, String name, boolean translatable, boolean disableGameRenderType, JsonObject customData) {
-		List<Object> shaderMap = new ArrayList<>();
-		shaderMap.add(namespace + ":" + name);
-		shaderMap.add(namespace);
-		shaderMap.add(name);
-		shaderMap.add(translatable);
-		shaderMap.add(disableGameRenderType);
-		shaderMap.add(customData);
-		return shaderMap;
-	}
-	public static Shader get(List<Object> shaderData, Callable<Shader.RenderType> renderType, Callable<Boolean> shouldRender) {
+	public static Shader get(ShaderRegistry shaderData, Shader.RenderType renderType, Boolean shouldRender) {
 		return new Shader(shaderData, renderType, shouldRender);
 	}
-	public static Shader get(List<Object> shaderData, Callable<Shader.RenderType> renderType) {
+	public static Shader get(ShaderRegistry shaderData, Shader.RenderType renderType) {
 		return new Shader(shaderData, renderType);
 	}
 	public static Identifier getPostShader(String id) {
@@ -191,34 +148,37 @@ public class Shaders {
 	}
 	public static int getShaderIndex(String namespace, String name) {
 		if (namespace != null && name != null) {
-			for (List<Object> data : ShaderDataloader.registry) {
-				if (get(data, ShaderRegistry.NAMESPACE).equals(namespace) && get(data, ShaderRegistry.SHADER_NAME).equals(name)) return ShaderDataloader.registry.indexOf(data);
+			for (ShaderRegistry data : ShaderDataloader.registry) {
+				if (data.getNamespace().equals(namespace) && data.getName().equals(name)) return ShaderDataloader.registry.indexOf(data);
 			}
 		}
 		return -1;
 	}
 	public static JsonObject getCustom(int shaderIndex, String namespace) {
-		JsonObject customData = (JsonObject) get(shaderIndex, ShaderRegistry.CUSTOM);
-		if (customData != null) {
-			if (customData.has(namespace)) {
-				return JsonHelper.getObject(customData, namespace);
+		ShaderRegistry shader = get(shaderIndex);
+		if (shader != null) {
+			JsonObject customData = shader.getCustom();
+			if (customData != null) {
+				if (customData.has(namespace)) {
+					return JsonHelper.getObject(customData, namespace);
+				}
 			}
 		}
 		return null;
 	}
 	public static Text getShaderName(int shaderIndex, boolean shouldShowNamespace) {
-		if (get(shaderIndex) != null) return Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.SHADER_NAME), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE), shouldShowNamespace);
+		ShaderRegistry shader = get(shaderIndex);
+		if (shader != null) return Translation.getShaderTranslation(shader.getNamespace(), shader.getName(), shader.getTranslatable(), shouldShowNamespace);
 		return Translation.getErrorTranslation(Data.version.getID());
 	}
 	public static Text getShaderName(int shaderIndex) {
-		if (get(shaderIndex) != null) return Translation.getShaderTranslation((String)get(shaderIndex, ShaderRegistry.NAMESPACE), (String)get(shaderIndex, ShaderRegistry.SHADER_NAME), (boolean)get(shaderIndex, ShaderRegistry.TRANSLATABLE));
-		return Translation.getErrorTranslation(Data.version.getID());
+		return getShaderName(shaderIndex, true);
 	}
 	public static String guessPostShaderNamespace(String id) {
 		// If the shader registry contains at least one shader with the name, the first detected instance will be used.
 		if (!id.contains(":")) {
-			for (List<Object> registry : ShaderDataloader.registry) {
-				if (((String)registry.get(2)).equalsIgnoreCase(id)) return (String)registry.get(1);
+			for (ShaderRegistry registry : ShaderDataloader.registry) {
+				if (registry.getName().equalsIgnoreCase(id)) return registry.getNamespace();
 			}
 		}
 		return IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id, "minecraft");

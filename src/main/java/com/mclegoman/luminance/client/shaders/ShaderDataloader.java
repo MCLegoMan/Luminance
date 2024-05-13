@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class ShaderDataloader extends JsonDataLoader implements IdentifiableResourceReloadListener {
 	protected static boolean isReloading;
-	public static final List<List<Object>> registry = new ArrayList<>();
+	public static final List<ShaderRegistry> registry = new ArrayList<>();
 	public static final String resourceLocation = "shaders/shaders";
 	public ShaderDataloader() {
 		super(new Gson(), resourceLocation);
@@ -47,22 +47,16 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		try {
 			String id = namespace.toLowerCase() + ":" + shaderName.toLowerCase();
 			manager.getResourceOrThrow(Shaders.getPostShader(id));
-			List<Object> shaderMap = new ArrayList<>();
-			shaderMap.add(id);
-			shaderMap.add(namespace.toLowerCase());
-			shaderMap.add(shaderName.toLowerCase());
-			shaderMap.add(translatable);
-			shaderMap.add(disableGameRendertype);
-			shaderMap.add(custom);
+			ShaderRegistry shaderData = new ShaderRegistry(namespace.toLowerCase(), shaderName.toLowerCase(), translatable, disableGameRendertype, custom);
 			boolean alreadyRegistered = false;
-			for (List<Object> shaderData : registry) {
-				if (shaderData.contains(id)) {
+			for (ShaderRegistry data : registry) {
+				if (data.getId().equals(id)) {
 					alreadyRegistered = true;
 					Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to add \"{}\" shader to registry: This shader has already been registered!", id));
 					break;
 				}
 			}
-			if (!alreadyRegistered) registry.add(shaderMap);
+			if (!alreadyRegistered) registry.add(shaderData);
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.WARN, "Failed to add shader to registry: " + error);
 		}
@@ -74,7 +68,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		return index <= getShaderAmount() && index >= 0;
 	}
 	private void remove(String namespace, String name) {
-		registry.removeIf((shader) -> shader.get(1).toString().equalsIgnoreCase(namespace) && shader.get(2).toString().equalsIgnoreCase(name));
+		registry.removeIf((shader) -> shader.getNamespace().equals(namespace) && shader.getName().equals(name));
 	}
 	@Override
 	public void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
@@ -97,7 +91,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 						add(namespace, name, translatable, disableGameRenderType, customData, manager);
 						Events.OnShaderDataRegistered.registry.forEach((id, runnable) -> {
 							try {
-								runnable.run(Shaders.get(namespace, name, translatable, disableGameRenderType, customData));
+								runnable.run(new ShaderRegistry(namespace, name, translatable, disableGameRenderType, customData));
 							} catch (Exception error) {
 								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataRegistered event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 							}
@@ -106,7 +100,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 						remove(namespace, name);
 						Events.OnShaderDataRemoved.registry.forEach((id, runnable) -> {
 							try {
-								runnable.run(Shaders.get(namespace, name, translatable, disableGameRenderType, customData));
+								runnable.run(new ShaderRegistry(namespace, name, translatable, disableGameRenderType, customData));
 							} catch (Exception error) {
 								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataRemoved event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 							}

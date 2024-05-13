@@ -18,24 +18,23 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class Shader {
 	// TODO: Add Depth and Shader Framebuffers.
 	private PostEffectProcessor postProcessor;
 	private boolean useDepth;
 	private Identifier shaderId;
-	private Callable<RenderType> renderType;
-	private Callable<Boolean> shouldRender;
-	private List<Object> shaderData;
-	public Shader(List<Object> shaderData, Callable<RenderType> renderType, Callable<Boolean> shouldRender) {
+	private RenderType renderType;
+	private Boolean shouldRender;
+	private ShaderRegistry shaderData;
+	public Shader(ShaderRegistry shaderData, RenderType renderType, Boolean shouldRender) {
 		setUseDepth(false);
 		setRenderType(renderType);
 		setShouldRender(shouldRender);
 		setShaderData(shaderData);
 	}
-	public Shader(List<Object> shaderData, Callable<RenderType> renderType) {
-		this(shaderData, renderType, () -> true);
+	public Shader(ShaderRegistry shaderData, RenderType renderType) {
+		this(shaderData, renderType, true);
 	}
 	public PostEffectProcessor getPostProcessor() {
 		return postProcessor;
@@ -65,29 +64,30 @@ public class Shader {
 		setUseDepth(false);
 		this.shaderId = id;
 	}
-	public Callable<RenderType> getRenderType() {
+	public RenderType getRenderType() {
 		return this.renderType;
 	}
-	public void setRenderType(Callable<RenderType> renderType) {
+	public void setRenderType(RenderType renderType) {
 		setUseDepth(false);
 		this.renderType = renderType;
 	}
 	public boolean getDisableGameRendertype() {
-		return (boolean)Shaders.get(getShaderData(), ShaderRegistry.DISABLE_GAME_RENDERTYPE) || getUseDepth();
+		return getShaderData().getDisableGameRendertype();
 	}
-	public Callable<Boolean> getShouldRender() {
+	public Boolean getShouldRender() {
 		return this.shouldRender;
 	}
-	public void setShouldRender(Callable<Boolean> shouldRender) {
+	public void setShouldRender(Boolean shouldRender) {
 		setUseDepth(false);
 		this.shouldRender = shouldRender;
 	}
-	public List<Object> getShaderData() {
+	public ShaderRegistry getShaderData() {
 		return this.shaderData;
 	}
-	public void setShaderData(List<Object> shaderData) {
+	public void setShaderData(ShaderRegistry shaderData) {
+		setUseDepth(false);
 		this.shaderData = shaderData;
-		setShaderId(Shaders.getPostShader((String)Shaders.get(getShaderData(), ShaderRegistry.ID)));
+		setShaderId(Shaders.getPostShader(this.shaderData.getId()));
 	}
 	public enum RenderType {
 		WORLD,
