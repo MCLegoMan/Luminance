@@ -1,6 +1,6 @@
 /*
     Luminance
-    Contributor(s): MCLegoMan
+    Contributor(s): MCLegoMan, Nettakrim
     Github: https://github.com/MCLegoMan/Luminance
     Licence: GNU LGPLv3
 */
@@ -12,15 +12,16 @@ import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.events.Runnables;
 import com.mclegoman.luminance.client.translation.Translation;
-import com.mclegoman.luminance.client.util.MessageOverlay;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.gl.Uniform;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
@@ -29,8 +30,6 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
@@ -82,6 +81,24 @@ public class Shaders {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 			}
 		}));
+		Events.OnResized.register(new Couple<>(Data.version.getID(), "main"), new Runnables.OnResized() {
+			public void run(int width, int height) {
+				Events.ShaderRender.registry.forEach((id, shaders) -> {
+					if (shaders != null) shaders.forEach(shader -> {
+						try {
+							if (shader.getSecond() != null && shader.getSecond().getPostProcessor() != null) shader.getSecond().getPostProcessor().setupDimensions(width, height);
+						} catch (Exception error) {
+							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to resize shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+						}
+					});
+				});
+				if (Shaders.depthFramebuffer == null) {
+					Shaders.depthFramebuffer = new SimpleFramebuffer(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
+				} else {
+					Shaders.depthFramebuffer.resize(width, height, MinecraftClient.IS_SYSTEM_MAC);
+				}
+			}
+		});
 	}
 	private static void render(Couple<String, String> id, Couple<String, Shader> shader) {
 		try {

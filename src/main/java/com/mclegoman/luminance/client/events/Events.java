@@ -180,6 +180,24 @@ public class Events {
 			registry.remove(id);
 		}
 	}
+	public static class OnResized {
+		public static final Map<Couple<String, String>, Runnables.OnResized> registry = new HashMap<>();
+		public static void register(Couple<String, String> id, Runnables.OnResized runnable) {
+			add(id, runnable);
+		}
+		public static void add(Couple<String, String> id, Runnables.OnResized runnable) {
+			if (!registry.containsKey(id)) registry.put(id, runnable);
+		}
+		public static Runnables.OnResized get(Couple<String, String> id) {
+			return registry.get(id);
+		}
+		public static void modify(Couple<String, String> id, Runnables.OnResized runnable) {
+			registry.replace(id, runnable);
+		}
+		public static void remove(Couple<String, String> id) {
+			registry.remove(id);
+		}
+	}
 	public static class BeforeShaderRender {
 		public static final Map<Couple<String, String>, Runnables.Shader> registry = new HashMap<>();
 		public static void register(Couple<String, String> id, Runnables.Shader runnable) {

@@ -1,6 +1,6 @@
 /*
     Luminance
-    Contributor(s): MCLegoMan, Nettakrim
+    Contributor(s): MCLegoMan
     Github: https://github.com/MCLegoMan/Luminance
     Licence: GNU LGPLv3
 */
@@ -8,12 +8,9 @@
 package com.mclegoman.luminance.mixin.client.shaders;
 
 import com.mclegoman.luminance.client.events.Events;
-import com.mclegoman.luminance.client.shaders.Shaders;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -44,19 +41,6 @@ public abstract class GameRendererMixin {
 	}
 	@Inject(method = "onResized", at = @At(value = "TAIL"))
 	private void luminance$onResized(int width, int height, CallbackInfo ci) {
-		Events.ShaderRender.registry.forEach((id, shaders) -> {
-			if (shaders != null) shaders.forEach(shader -> {
-				try {
-					if (shader.getSecond() != null && shader.getSecond().getPostProcessor() != null) shader.getSecond().getPostProcessor().setupDimensions(width, height);
-				} catch (Exception error) {
-					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to resize shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
-				}
-			});
-		});
-		if (Shaders.depthFramebuffer == null) {
-			Shaders.depthFramebuffer = new SimpleFramebuffer(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
-		} else {
-			Shaders.depthFramebuffer.resize(width, height, MinecraftClient.IS_SYSTEM_MAC);
-		}
+		Events.OnResized.registry.forEach((id, runnable) -> runnable.run(width, height));
 	}
 }
