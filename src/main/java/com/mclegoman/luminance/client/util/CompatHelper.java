@@ -20,19 +20,19 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CompatHelper {
-	public static Map<Couple<String, String>, Couple<String, Callable<Boolean>>> overriddenModMenuIcons = new HashMap<>();
+	public static Map<Couple<String, String>, Couple<Callable<String>, Callable<Boolean>>> overriddenModMenuIcons = new HashMap<>();
 	public static List<String> luminanceModMenuBadge = new ArrayList<>();
 	public static void init() {
-		addOverrideModMenuIcon(new Couple<>(Data.version.getID(), "pride"), "assets/" + Data.version.getID() + "/icon_pride.png", DateHelper::isPride);
+		addOverrideModMenuIcon(new Couple<>(Data.version.getID(), "pride"), () -> "assets/" + Data.version.getID() + "/icons/pride.png", DateHelper::isPride);
 		addLuminanceModMenuBadge(Data.version.getID());
 	}
 	public static boolean isIrisShadersEnabled() {
 		return Data.isModInstalled("iris") && IrisApi.getInstance().isShaderPackInUse();
 	}
-	public static void addOverrideModMenuIcon(Couple<String, String> modId, String iconPath, Callable<Boolean> shouldOverride) {
+	public static void addOverrideModMenuIcon(Couple<String, String> modId, Callable<String> iconPath, Callable<Boolean> shouldOverride) {
 		if (!shouldOverrideModMenuIcon(modId.getFirst())) overriddenModMenuIcons.put(modId, new Couple<>(iconPath, shouldOverride));
 	}
-	public static void modifyOverrideModMenuIcon(Couple<String, String> modId, String iconPath, Callable<Boolean> shouldOverride) {
+	public static void modifyOverrideModMenuIcon(Couple<String, String> modId, Callable<String> iconPath, Callable<Boolean> shouldOverride) {
 		overriddenModMenuIcons.replace(modId, new Couple<>(iconPath, shouldOverride));
 	}
 	public static void removeOverrideModMenuIcon(Couple<String, String> modId) {
@@ -54,7 +54,7 @@ public class CompatHelper {
 			if (mod.getFirst().equalsIgnoreCase(modId)) {
 				try {
 					if (data.getSecond().call()) {
-						modMenuIcon.set(data.getFirst());
+						modMenuIcon.set(data.getFirst().call());
 					}
 				} catch (Exception ignored) {}
 			}

@@ -7,6 +7,7 @@
 
 package com.mclegoman.luminance.common.util;
 
+import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import net.fabricmc.loader.api.ModContainer;
 import org.slf4j.Logger;
@@ -73,16 +74,16 @@ public class Version implements Comparable<Version> {
 		return build;
 	}
 	public String getFriendlyString() {
-		return String.format("%s.%s.%s-%s.%s", getMajor(), getMinor(), getPatch(), Helper.releaseTypeString(getType(), Helper.TranslationType.CODE), getBuild());
+		return Translation.getString("{}.{}.{}-{}.{}", getMajor(), getMinor(), getPatch(), Helper.releaseTypeString(getType(), Helper.TranslationType.CODE), getBuild());
+	}
+	public String getLoggerPrefix() {
+		return Translation.getString("[{} {}]", getName(), getFriendlyString());
 	}
 	public boolean isDevelopmentBuild() {
 		return !type.equals(ReleaseType.RELEASE);
 	}
 	private Logger getLogger() {
 		return LoggerFactory.getLogger(getName());
-	}
-	public String getLoggerPrefix() {
-		return String.format("[%s %s] ", getName(), getFriendlyString());
 	}
 	@Override
 	public int compareTo(Version other) {
@@ -99,9 +100,9 @@ public class Version implements Comparable<Version> {
 		}
 	}
 	public void sendToLog(LogType logType, String logMessage) {
-		if (logType.equals(LogType.INFO)) getLogger().info(getLoggerPrefix() + logMessage);
-		if (logType.equals(LogType.WARN)) getLogger().warn(getLoggerPrefix() + logMessage);
-		if (logType.equals(LogType.ERROR)) getLogger().error(getLoggerPrefix() + logMessage);
-		if (logType.equals(LogType.DEBUG)) getLogger().debug(getLoggerPrefix() + logMessage);
+		if (logType.equals(LogType.INFO)) getLogger().info(Translation.getString("{} {}", getLoggerPrefix(), logMessage));
+		if (logType.equals(LogType.WARN)) getLogger().warn(Translation.getString("{} {}", getLoggerPrefix(), logMessage));
+		if (logType.equals(LogType.ERROR)) getLogger().error(Translation.getString("{} {}", getLoggerPrefix(), logMessage));
+		if (logType.equals(LogType.DEBUG)) getLogger().debug(Translation.getString("{} {}", getLoggerPrefix(), logMessage));
 	}
 }

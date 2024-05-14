@@ -35,8 +35,9 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		switch (mixinClassName) {
-			case "com.mclegoman.luminance.mixin.client.shaders.ShaderNamespaceFix" -> {
+		String mixin = mixinClassName.replaceFirst("com.mclegoman.luminance.mixin.", "");
+		switch (mixin) {
+			case "client.shaders.ShaderNamespaceFix" -> {
 				boolean isArchitecturyInstalled = Data.isModInstalled("architectury");
 				boolean isSatinInstalled = Data.isModInstalled("satin");
 				boolean isSoupInstalled = (Data.isModInstalled("souper_secret_settings") && !Data.isModInstalledVersionOrHigher("souper_secret_settings", "v1.0.9", true));
@@ -46,23 +47,23 @@ public class MixinPlugin implements IMixinConfigPlugin {
 				if (isSatinInstalled) modsInstalled.add("satin");
 				if (isSoupInstalled) modsInstalled.add("souper_secret_settings");
 				if (isPerspectiveInstalled) modsInstalled.add("perspective");
-				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Disabling {}: {}", mixinClassName, modsInstalled));
+				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Disabling {}: {}", mixin, modsInstalled));
 				return modsInstalled.isEmpty();
 			}
-			case "com.mclegoman.luminance.mixin.client.shaders.ShaderTextureNamespaceFix" -> {
+			case "client.shaders.ShaderTextureNamespaceFix" -> {
 				boolean isSoupInstalled = (Data.isModInstalled("souper_secret_settings") && !Data.isModInstalledVersionOrHigher("souper_secret_settings", "v1.0.9", true));
 				boolean isPerspectiveInstalled = Data.isModInstalled("perspective") && !Data.isModInstalledVersionOrHigher("perspective", "1.3.0-alpha.7");
 				List<String> modsInstalled = new ArrayList<>();
 				if (isSoupInstalled) modsInstalled.add("souper_secret_settings");
 				if (isPerspectiveInstalled) modsInstalled.add("perspective");
-				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Disabling {}: {}", mixinClassName, modsInstalled));
+				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Disabling {}: {}", mixin, modsInstalled));
 				return modsInstalled.isEmpty();
 			}
-			case "com.mclegoman.luminance.mixin.compat.modmenu.FabricModMixin", "com.mclegoman.luminance.mixin.compat.modmenu.ModsScreenMixin" -> {
+			case "compat.modmenu.FabricModMixin", "compat.modmenu.ModsScreenMixin" -> {
 				boolean isModMenuInstalled = Data.isModInstalled("modmenu");
 				List<String> modsInstalled = new ArrayList<>();
 				if (isModMenuInstalled) modsInstalled.add("modmenu");
-				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Enabling {}: {}", mixinClassName, modsInstalled));
+				if (!modsInstalled.isEmpty()) Data.version.sendToLog(LogType.INFO, Translation.getString("Enabling {}: {}", mixin, modsInstalled));
 				return !modsInstalled.isEmpty();
 			}
 			default -> {
