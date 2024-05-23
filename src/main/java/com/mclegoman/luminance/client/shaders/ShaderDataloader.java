@@ -76,6 +76,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 			isReloading = true;
 			releaseShaders();
 			reset();
+			// TODO: Add backwards compatibility layer for soup layout, note it will be a very basic version of it.
 			prepared.forEach((identifier, jsonElement) -> {
 				try {
 					JsonObject reader = jsonElement.getAsJsonObject();
