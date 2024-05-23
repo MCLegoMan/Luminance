@@ -78,68 +78,70 @@ publishing {
 	repositories {
 	}
 }
-githubRelease {
-	token rootProject.file(".env").text.readLines().get(1).replace("GITHUB=", "").replace("\"", "")
-	owner "MCLegoMan"
-	repo "${project.mod_name}"
-	tagName "${project.mod_version}-${project.mc_version.replace("/", "-")}"
-	targetCommitish "${(project.version_type == "release" ? "release" : "development")}-${project.mc_version.replace("/", "-")}"
-	releaseName "[${project.mc_version}] ${project.mod_name} ${project.mod_version}"
-	generateReleaseNotes false
-	body String.valueOf(((project.version_type == "release") ? rootProject.file("changelog/header_release.md").text : rootProject.file("changelog/header_development.md").text) + "\n## ${project.mod_name} ${project.mod_version} for ${project.mc_version}\n\n" + rootProject.file("changelog/body.md").text + "\n\n" + ((project.version_type == "release") ? rootProject.file("changelog/footer_release.md").text : rootProject.file("changelog/footer_development.md").text))
-	draft false
-	if (project.version_type == "release") prerelease false
-	else prerelease true
-	releaseAssets tasks.remapJar
-	allowUploadToExisting.set false
-	overwrite false
-	dryRun false
-	apiEndpoint "https://api.github.com"
-	client
-}
-modrinth {
-	token = rootProject.file(".env").text.readLines().get(0).replace("MODRINTH=", "").replace("\"", "")
-	projectId = "${project.modrinth_id}"
-	versionName = "[${project.mc_version}] ${project.mod_name} ${project.mod_version}"
-	versionNumber = "${project.mod_version}${project.mc_version}"
-	versionType = "${project.version_type}"
-	uploadFile = tasks.remapJar
-	gameVersions = List.of(project.mc_versions.split(", "))
-	loaders = ["fabric", "quilt"]
-	changelog = String.valueOf(((project.version_type == "release") ? rootProject.file("changelog/header_release.md").text : rootProject.file("changelog/header_development.md").text) + "\n## ${project.mod_name} ${project.mod_version} for ${project.mc_version}\n\n" + rootProject.file("changelog/body.md").text + "\n\n" + ((project.version_type == "release") ? rootProject.file("changelog/footer_release.md").text : rootProject.file("changelog/footer_development.md").text))
-	dependencies {
-		required.project "fabric-api"
-		required.project "qsl"
+if (rootProject.file(".env").exists()) {
+	githubRelease {
+		token rootProject.file(".env").text.readLines().get(1).replace("GITHUB=", "").replace("\"", "")
+		owner "MCLegoMan"
+		repo "${project.mod_name}"
+		tagName "${project.mod_version}-${project.mc_version.replace("/", "-")}"
+		targetCommitish "${(project.version_type == "release" ? "release" : "development")}-${project.mc_version.replace("/", "-")}"
+		releaseName "[${project.mc_version}] ${project.mod_name} ${project.mod_version}"
+		generateReleaseNotes false
+		body String.valueOf(((project.version_type == "release") ? rootProject.file("changelog/header_release.md").text : rootProject.file("changelog/header_development.md").text) + "\n## ${project.mod_name} ${project.mod_version} for ${project.mc_version}\n\n" + rootProject.file("changelog/body.md").text + "\n\n" + ((project.version_type == "release") ? rootProject.file("changelog/footer_release.md").text : rootProject.file("changelog/footer_development.md").text))
+		draft false
+		if (project.version_type == "release") prerelease false
+		else prerelease true
+		releaseAssets tasks.remapJar
+		allowUploadToExisting.set false
+		overwrite false
+		dryRun false
+		apiEndpoint "https://api.github.com"
+		client
+	}
+	modrinth {
+		token = rootProject.file(".env").text.readLines().get(0).replace("MODRINTH=", "").replace("\"", "")
+		projectId = "${project.modrinth_id}"
+		versionName = "[${project.mc_version}] ${project.mod_name} ${project.mod_version}"
+		versionNumber = "${project.mod_version}${project.mc_version}"
+		versionType = "${project.version_type}"
+		uploadFile = tasks.remapJar
+		gameVersions = List.of(project.mc_versions.split(", "))
+		loaders = ["fabric", "quilt"]
+		changelog = String.valueOf(((project.version_type == "release") ? rootProject.file("changelog/header_release.md").text : rootProject.file("changelog/header_development.md").text) + "\n## ${project.mod_name} ${project.mod_version} for ${project.mc_version}\n\n" + rootProject.file("changelog/body.md").text + "\n\n" + ((project.version_type == "release") ? rootProject.file("changelog/footer_release.md").text : rootProject.file("changelog/footer_development.md").text))
+		dependencies {
+			required.project "fabric-api"
+			required.project "qsl"
+		}
+	}
+	tasks.register("uploadVersion") {
+		group = project.archive_name
+		description = 'Upload project to both GitHub and Modrinth.'
+		dependsOn(tasks.githubRelease)
+		dependsOn(tasks.modrinth)
 	}
 }
-tasks.register("uploadVersion") {
-	group = base.archivesName
-	description = 'Upload project to both GitHub and Modrinth.'
-	dependsOn(tasks.githubRelease)
-	dependsOn(tasks.modrinth)
-}
 tasks.register("quickPlaySingleplayer") {
-	group = base.archivesName
+	group = project.archive_name
 	description = 'Uses Quick Play to join singleplayer world `New World` on launch.'
 	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World']))
 }
 tasks.register("quickPlayMultiplayer") {
-	group = base.archivesName
+	group = project.archive_name
 	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch.'
 	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565']))
 }
 tasks.register("runClientLoggedIn") {
-	group = base.archivesName
+	group = project.archive_name
 	description = 'Uses DevLogin to login to your Minecraft Account'
 	dependsOn(tasks.runClient.args(['--msa']))
 }
 tasks.register("quickPlaySingleplayerLoggedIn") {
-	group = base.archivesName
+	group = project.archive_name
 	description = 'Uses Quick Play to join singleplayer world `New World` on launch and uses DevLogin to login to your Minecraft Account.'
 	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World', '--msa']))
 }
 tasks.register("quickPlayMultiplayerLoggedIn") {
-	group = base.archivesName
+	group = project.archive_name
 	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch and uses DevLogin to login to your Minecraft Account.'
 	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565', '--msa']))
 }
