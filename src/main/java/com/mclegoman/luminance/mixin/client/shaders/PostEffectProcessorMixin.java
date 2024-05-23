@@ -22,11 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PostEffectProcessorMixin {
 	@Inject(at = @At(value = "INVOKE", target = "Ljava/lang/String;substring(II)Ljava/lang/String;"), method = "parsePass")
 	public void luminance$detectDepth(TextureManager textureManager, JsonElement jsonPass, CallbackInfo ci) {
-		Events.ShaderRender.registry.forEach((id, shaders) -> {
-			shaders.forEach(shader -> {
-				shader.getSecond().setUseDepth(true);
-			});
-		});
+		Events.ShaderRender.registry.forEach((id, shaders) -> shaders.forEach(shader -> shader.getSecond().setUseDepth(true)));
 	}
 	@Inject(at = @At(value = "HEAD"), method = "render")
 	public void luminance$fixDepth(float tickDelta, CallbackInfo ci) {

@@ -21,9 +21,10 @@ public class Version implements Comparable<Version> {
 	private final int patch;
 	private final ReleaseType type;
 	private final int build;
+	private final int dirty;
 	private final boolean hasModrinthId;
 	private final String modrinthId;
-	private Version(String name, String id, int major, int minor, int patch, ReleaseType type, int build, boolean hasModrinthId, String modrinthId) {
+	private Version(String name, String id, int major, int minor, int patch, ReleaseType type, int build, int dirty, boolean hasModrinthId, String modrinthId) {
 		this.name = name;
 		this.id = id;
 		this.major = major;
@@ -31,14 +32,21 @@ public class Version implements Comparable<Version> {
 		this.patch = patch;
 		this.type = type;
 		this.build = build;
+		this.dirty = dirty;
 		this.hasModrinthId = hasModrinthId;
 		this.modrinthId = modrinthId;
 	}
+	public static Version create(String name, String id, int major, int minor, int patch, ReleaseType type, int build, int dirty, String modrinthId) {
+		return new Version(name, id, major, minor, patch, type, build, dirty, true, modrinthId);
+	}
+	public static Version create(String name, String id, int major, int minor, int patch, ReleaseType type, int dirty, int build) {
+		return new Version(name, id, major, minor, patch, type, build, dirty, false, "");
+	}
 	public static Version create(String name, String id, int major, int minor, int patch, ReleaseType type, int build, String modrinthId) {
-		return new Version(name, id, major, minor, patch, type, build, true, modrinthId);
+		return new Version(name, id, major, minor, patch, type, build, -1, true, modrinthId);
 	}
 	public static Version create(String name, String id, int major, int minor, int patch, ReleaseType type, int build) {
-		return new Version(name, id, major, minor, patch, type, build, false, "");
+		return new Version(name, id, major, minor, patch, type, build, -1, false, "");
 	}
 	public String getFriendlyString(boolean full) {
 		return full ? getFriendlyString() : (getType().equals(ReleaseType.RELEASE) ? String.format("%s.%s.%s", getMajor(), getMinor(), getPatch()) : getFriendlyString());
@@ -73,8 +81,14 @@ public class Version implements Comparable<Version> {
 	public int getBuild() {
 		return build;
 	}
+	public int getDirty() {
+		return dirty;
+	}
+	public boolean isDirty() {
+		return getDirty() > 0;
+	}
 	public String getFriendlyString() {
-		return Translation.getString("{}.{}.{}-{}.{}", getMajor(), getMinor(), getPatch(), Helper.releaseTypeString(getType(), Helper.TranslationType.CODE), getBuild());
+		return Translation.getString("{}.{}.{}-{}.{}{}", getMajor(), getMinor(), getPatch(), Helper.releaseTypeString(getType(), Helper.TranslationType.CODE), getBuild(), (isDirty() ? "+dirty." + getDirty() : ""));
 	}
 	public String getLoggerPrefix() {
 		return Translation.getString("[{} {}]", getName(), getFriendlyString());
