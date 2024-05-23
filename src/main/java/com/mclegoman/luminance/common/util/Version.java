@@ -24,6 +24,10 @@ public class Version implements Comparable<Version> {
 	private final int dirty;
 	private final boolean hasModrinthId;
 	private final String modrinthId;
+	// dirty should be set to -1 for versions released to modrinth (etc). dirty should only be set (to 1 or higher) if you are building a version that won't get released.
+	public static Version create(String name, String id, int major, int minor, int patch, ReleaseType type, int build, int dirty, String modrinthId) {
+		return new Version(name, id, major, minor, patch, type, build, dirty, true, modrinthId);
+	}
 	private Version(String name, String id, int major, int minor, int patch, ReleaseType type, int build, int dirty, boolean hasModrinthId, String modrinthId) {
 		this.name = name;
 		this.id = id;
@@ -35,9 +39,6 @@ public class Version implements Comparable<Version> {
 		this.dirty = dirty;
 		this.hasModrinthId = hasModrinthId;
 		this.modrinthId = modrinthId;
-	}
-	public static Version create(String name, String id, int major, int minor, int patch, ReleaseType type, int build, int dirty, String modrinthId) {
-		return new Version(name, id, major, minor, patch, type, build, dirty, true, modrinthId);
 	}
 	public static Version create(String name, String id, int major, int minor, int patch, ReleaseType type, int dirty, int build) {
 		return new Version(name, id, major, minor, patch, type, build, dirty, false, "");
