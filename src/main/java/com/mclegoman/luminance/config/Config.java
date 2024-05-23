@@ -20,6 +20,7 @@ public class Config {
 	protected static int alphaLevel;
 	protected static boolean showAlphaLevelOverlay;
 	protected static int configVersion;
+	protected static final Object[] options;
 	protected static void init() {
 		try {
 			configProvider = new ConfigProvider();
@@ -46,5 +47,12 @@ public class Config {
 		configProvider.setConfig("show_alpha_level_overlay", showAlphaLevelOverlay);
 		configProvider.setConfig("config_version", ConfigHelper.defaultConfigVersion);
 		configProvider.saveConfig(Data.version, id);
+	}
+	static {
+		options = new Object[]{
+				alphaLevel,
+				showAlphaLevelOverlay,
+				configVersion
+		};
 	}
 }

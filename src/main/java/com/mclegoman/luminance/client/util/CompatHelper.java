@@ -27,7 +27,12 @@ public class CompatHelper {
 		addLuminanceModMenuBadge(Data.version.getID());
 	}
 	public static boolean isIrisShadersEnabled() {
-		return Data.isModInstalled("iris") && IrisApi.getInstance().isShaderPackInUse();
+		try {
+			return Data.isModInstalled("iris") && IrisApi.getInstance().isShaderPackInUse();
+		} catch (Exception ignored) {
+			// We use a try/catch here just in case Iris ever changes where isShaderPackInUse is located.
+			return false;
+		}
 	}
 	public static void addOverrideModMenuIcon(Couple<String, String> modId, Callable<String> iconPath, Callable<Boolean> shouldOverride) {
 		if (!shouldOverrideModMenuIcon(modId.getFirst())) overriddenModMenuIcons.put(modId, new Couple<>(iconPath, shouldOverride));

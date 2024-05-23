@@ -6,9 +6,11 @@ pluginManagement {
         }
         gradlePluginPortal()
         mavenCentral()
+        mavenLocal()
     }
 }
 
 if (JavaVersion.current().ordinal() + 1 < 21) {
     throw new IllegalStateException("Please run gradle with Java 21+! Error: Currently running with Java " + String.valueOf(JavaVersion.current().ordinal() + 1) + ".")
 }
+rootProject.name = "luminance"

@@ -17,23 +17,23 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
+import java.util.concurrent.Callable;
 
 public class Shader {
 	// TODO: Add Depth and Shader Framebuffers.
 	private PostEffectProcessor postProcessor;
 	private boolean useDepth;
 	private Identifier shaderId;
-	private RenderType renderType;
+	private Callable<RenderType> renderType;
 	private Boolean shouldRender;
 	private ShaderRegistry shaderData;
-	public Shader(ShaderRegistry shaderData, RenderType renderType, Boolean shouldRender) {
+	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType, Boolean shouldRender) {
 		setUseDepth(false);
 		setRenderType(renderType);
 		setShouldRender(shouldRender);
 		setShaderData(shaderData);
 	}
-	public Shader(ShaderRegistry shaderData, RenderType renderType) {
+	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType) {
 		this(shaderData, renderType, true);
 	}
 	public PostEffectProcessor getPostProcessor() {
@@ -64,10 +64,10 @@ public class Shader {
 		setUseDepth(false);
 		this.shaderId = id;
 	}
-	public RenderType getRenderType() {
+	public Callable<RenderType> getRenderType() {
 		return this.renderType;
 	}
-	public void setRenderType(RenderType renderType) {
+	public void setRenderType(Callable<RenderType> renderType) {
 		setUseDepth(false);
 		this.renderType = renderType;
 	}

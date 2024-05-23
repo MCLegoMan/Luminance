@@ -7,7 +7,7 @@ plugins {
 group = project.maven_group
 version = "${project.mod_version}+${project.mc_version.replace("/", "-")}"
 base {
-	archivesName = project.mod_name.toLowerCase()
+	archivesName = project.archive_name
 }
 loom {
 	mods {
@@ -66,7 +66,7 @@ java {
 }
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
+		rename { "${it}_${base.archivesName}"}
 	}
 }
 publishing {
@@ -113,33 +113,33 @@ modrinth {
 	}
 }
 tasks.register("uploadVersion") {
-	group = project.mod_name.toLowerCase()
+	group = base.archivesName
 	description = 'Upload project to both GitHub and Modrinth.'
 	dependsOn(tasks.githubRelease)
 	dependsOn(tasks.modrinth)
 }
 tasks.register("quickPlaySingleplayer") {
-	group = project.mod_name.toLowerCase()
+	group = base.archivesName
 	description = 'Uses Quick Play to join singleplayer world `New World` on launch.'
 	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World']))
 }
 tasks.register("quickPlayMultiplayer") {
-	group = project.mod_name.toLowerCase()
+	group = base.archivesName
 	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch.'
 	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565']))
 }
 tasks.register("runClientLoggedIn") {
-	group = project.mod_name.toLowerCase()
+	group = base.archivesName
 	description = 'Uses DevLogin to login to your Minecraft Account'
 	dependsOn(tasks.runClient.args(['--msa']))
 }
 tasks.register("quickPlaySingleplayerLoggedIn") {
-	group = project.mod_name.toLowerCase()
+	group = base.archivesName
 	description = 'Uses Quick Play to join singleplayer world `New World` on launch and uses DevLogin to login to your Minecraft Account.'
 	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World', '--msa']))
 }
 tasks.register("quickPlayMultiplayerLoggedIn") {
-	group = project.mod_name.toLowerCase()
+	group = base.archivesName
 	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch and uses DevLogin to login to your Minecraft Account.'
 	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565', '--msa']))
 }

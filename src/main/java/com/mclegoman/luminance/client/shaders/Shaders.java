@@ -12,6 +12,7 @@ import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.events.Runnables;
 import com.mclegoman.luminance.client.translation.Translation;
+import com.mclegoman.luminance.client.util.CompatHelper;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.IdentifierHelper;
@@ -46,10 +47,17 @@ public class Shaders {
 				Events.ShaderUniform.registryVector3f.forEach((uniform, callable) -> setVector3f(program, uniform.getFirst(), uniform.getSecond(), callable));
 			}
 		});
+		// This renders the shader after the hand if it has depth. We really should try to render the hand in-depth, but this works for now.
 		Events.AfterHandRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
-					if (shader.getSecond().getUseDepth()) render(id, shader);
+					try {
+						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType().call() == Shader.RenderType.GAME) && shader.getSecond().getDisableGameRendertype())) {
+							if (!shader.getSecond().getUseDepth() || CompatHelper.isIrisShadersEnabled()) render(id, shader);
+						}
+					} catch (Exception error) {
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
+					}
 				});
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
@@ -58,14 +66,12 @@ public class Shaders {
 		Events.AfterWorldBorder.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
-					if (!shader.getSecond().getUseDepth()) {
-						try {
-							if ((shader.getSecond().getRenderType() == Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType() == Shader.RenderType.GAME) && shader.getSecond().getDisableGameRendertype())) {
-								render(id, shader);
-							}
-						} catch (Exception error) {
-							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
+					try {
+						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType().call() == Shader.RenderType.GAME) && shader.getSecond().getDisableGameRendertype())) {
+							if (shader.getSecond().getUseDepth() && !CompatHelper.isIrisShadersEnabled()) render(id, shader);
 						}
+					} catch (Exception error) {
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 					}
 				});
 			} catch (Exception error) {
@@ -75,7 +81,13 @@ public class Shaders {
 		Events.AfterGameRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
-					if (!shader.getSecond().getUseDepth() && !shader.getSecond().getDisableGameRendertype()) render(id, shader);
+					try {
+						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.GAME)) {
+							if (!shader.getSecond().getUseDepth() && !shader.getSecond().getDisableGameRendertype()) render(id, shader);
+						}
+					} catch (Exception error) {
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
+					}
 				});
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
@@ -140,10 +152,10 @@ public class Shaders {
 		int index = getShaderIndex(namespace, name);
 		return ShaderDataloader.isValidIndex(index) ? get(index) : null;
 	}
-	public static Shader get(ShaderRegistry shaderData, Shader.RenderType renderType, Boolean shouldRender) {
+	public static Shader get(ShaderRegistry shaderData, Callable<Shader.RenderType> renderType, Boolean shouldRender) {
 		return new Shader(shaderData, renderType, shouldRender);
 	}
-	public static Shader get(ShaderRegistry shaderData, Shader.RenderType renderType) {
+	public static Shader get(ShaderRegistry shaderData, Callable<Shader.RenderType> renderType) {
 		return new Shader(shaderData, renderType);
 	}
 	public static Identifier getPostShader(String id) {

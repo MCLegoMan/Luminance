@@ -18,7 +18,11 @@ import org.apache.commons.lang3.StringUtils;
 public class Data {
 	public static final Version version = Version.create("Luminance", "luminance", 1, 0, 0, ReleaseType.ALPHA, 4, "EBTw0O1c");
 	public static boolean isModInstalled(String modId) {
-		return FabricLoader.getInstance().isModLoaded(modId);
+		try {
+			return FabricLoader.getInstance().isModLoaded(modId);
+		} catch (Exception ignored) {
+			return false;
+		}
 	}
 	public static boolean isModInstalledVersionOrHigher(String modId, String requiredVersion, boolean substring, String separator) {
 		try {
