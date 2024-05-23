@@ -42,8 +42,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
 
 	// Compatibility
-	// Place Iris and Sodium jars in ./libs!
-	modImplementation fileTree(dir: 'libs', include: '*.jar')
+	modImplementation "maven.modrinth:sodium:${project.sodium}"
+	modImplementation "maven.modrinth:iris:${project.iris}"
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
 
 	// Development Environment Only
