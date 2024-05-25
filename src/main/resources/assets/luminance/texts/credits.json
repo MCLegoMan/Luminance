@@ -35,7 +35,7 @@
 			]
 		},
 		{
-			"title": "Licenses",
+			"title": "Licences",
 			"subsections": [
 				{
 					"subtitle": "Luminance",
@@ -47,7 +47,7 @@
 									"subtitle": "Author: MCLegoMan"
 								},
 								{
-									"subtitle": "License: LGPL-3.0-or-later"
+									"subtitle": "Licence: LGPL-3.0-or-later"
 								}
 							]
 						}
@@ -63,7 +63,7 @@
 									"subtitle": "Author: magistermaks"
 								},
 								{
-									"subtitle": "License: MIT"
+									"subtitle": "Licence: MIT"
 								}
 							]
 						}
@@ -79,7 +79,7 @@
 									"subtitle": "Author: FabricMC"
 								},
 								{
-									"subtitle": "License: Apache-2.0"
+									"subtitle": "Licence: Apache-2.0"
 								}
 							]
 						}
@@ -95,7 +95,7 @@
 									"subtitle": "Author: FabricMC"
 								},
 								{
-									"subtitle": "License: Apache-2.0"
+									"subtitle": "Licence: Apache-2.0"
 								}
 							]
 						}
@@ -111,7 +111,7 @@
 									"subtitle": "Author: Mojang Studios"
 								},
 								{
-									"subtitle": "License: Minecraft EULA"
+									"subtitle": "Licence: Minecraft EULA"
 								}
 							]
 						}
