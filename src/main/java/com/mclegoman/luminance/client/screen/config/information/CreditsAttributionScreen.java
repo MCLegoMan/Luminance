@@ -95,8 +95,8 @@ public class CreditsAttributionScreen extends Screen {
 	}
 	protected JsonArray readSection(JsonObject section) {
 		if (section != null && !section.isEmpty()) {
-			String title = JsonHelper.getString(section, "title", "");
-			if (!title.isEmpty()) this.addText(Text.literal(title).formatted(Formatting.byName(JsonHelper.getString(section, "color", "gray"))), JsonHelper.getBoolean(section, "centered", false));
+			String text = JsonHelper.getString(section, "text", "");
+			if (!text.isEmpty()) this.addText(Text.literal(text).formatted(Formatting.byName(JsonHelper.getString(section, "color", "gray"))), JsonHelper.getBoolean(section, "centered", false));
 			if (JsonHelper.getBoolean(section, "spaced", false)) addEmptyLine();
 			readSections(JsonHelper.getArray(section, "sections", new JsonArray()));
 		}

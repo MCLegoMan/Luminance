@@ -3,11 +3,11 @@
 		{
 			"sections": [
 				{
-					"title": "Lead Developer",
+					"text": "Lead Developer",
 					"color": "white",
 					"sections": [
 						{
-							"title": "  MCLegoMan"
+							"text": "  MCLegoMan"
 						}
 					]
 				},
@@ -15,23 +15,23 @@
 					"spaced": true
 				},
 				{
-					"title": "Contributors",
+					"text": "Contributors",
 					"color": "white",
 					"sections": [
 						{
-							"title": "  Nettakrim",
+							"text": "  Nettakrim",
 							"sections": [
 								{
-									"title": "    Vanilla Shader Fixes"
+									"text": "    Vanilla Shader Fixes"
 								},
 								{
-									"title": "    Shader Namespace Fix"
+									"text": "    Shader Namespace Fix"
 								},
 								{
-									"title": "    Shader Texture Namespace Fix"
+									"text": "    Shader Texture Namespace Fix"
 								},
 								{
-									"title": "    Depth Shader Support"
+									"text": "    Depth Shader Support"
 								}
 							]
 						}
@@ -43,7 +43,7 @@
 			]
 		},
 		{
-			"title": "Attributions",
+			"text": "Attributions",
 			"color": "gold",
 			"centered": true,
 			"sections": [
@@ -51,17 +51,17 @@
 					"spaced": true
 				},
 				{
-					"title": "  Luminance",
+					"text": "  Luminance",
 					"color": "white",
 					"sections": [
 						{
-							"title": "  A library mod that helps other mods with shaders.",
+							"text": "  A library mod that helps other mods with shaders.",
 							"sections": [
 								{
-									"title": "    Author: MCLegoMan"
+									"text": "    Author: MCLegoMan"
 								},
 								{
-									"title": "    Licence: LGPL-3.0-or-later"
+									"text": "    Licence: LGPL-3.0-or-later"
 								}
 							]
 						}
@@ -71,17 +71,17 @@
 					"spaced": true
 				},
 				{
-					"title": "  SimpleConfig",
+					"text": "  SimpleConfig",
 					"color": "white",
 					"sections": [
 						{
-							"title": "  Simple and small, single file, configuration library.",
+							"text": "  Simple and small, single file, configuration library.",
 							"sections": [
 								{
-									"title": "    Author: magistermaks"
+									"text": "    Author: magistermaks"
 								},
 								{
-									"title": "    Licence: MIT"
+									"text": "    Licence: MIT"
 								}
 							]
 						}
@@ -91,17 +91,17 @@
 					"spaced": true
 				},
 				{
-					"title": "  Fabric API",
+					"text": "  Fabric API",
 					"color": "white",
 					"sections": [
 						{
-							"title": "    Essential hooks for modding with Fabric.",
+							"text": "    Essential hooks for modding with Fabric.",
 							"sections": [
 								{
-									"title": "    Author: FabricMC"
+									"text": "    Author: FabricMC"
 								},
 								{
-									"title": "    Licence: Apache-2.0"
+									"text": "    Licence: Apache-2.0"
 								}
 							]
 						}
@@ -111,17 +111,17 @@
 					"spaced": true
 				},
 				{
-					"title": "  Fabric Loader",
+					"text": "  Fabric Loader",
 					"color": "white",
 					"sections": [
 						{
-							"title": "    Fabric is a modular, lightweight mod loader for Minecraft.",
+							"text": "    Fabric is a modular, lightweight mod loader for Minecraft.",
 							"sections": [
 								{
-									"title": "    Author: FabricMC"
+									"text": "    Author: FabricMC"
 								},
 								{
-									"title": "    Licence: Apache-2.0"
+									"text": "    Licence: Apache-2.0"
 								}
 							]
 						}
@@ -131,17 +131,17 @@
 					"spaced": true
 				},
 				{
-					"title": "  Minecraft",
+					"text": "  Minecraft",
 					"color": "white",
 					"sections": [
 						{
-							"title": "    The base game.",
+							"text": "    The base game.",
 							"sections": [
 								{
-									"title": "    Author: Mojang Studios"
+									"text": "    Author: Mojang Studios"
 								},
 								{
-									"title": "    Licence: Minecraft EULA"
+									"text": "    Licence: Minecraft EULA"
 								}
 							]
 						}
