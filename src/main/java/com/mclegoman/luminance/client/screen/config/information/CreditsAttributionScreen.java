@@ -88,22 +88,22 @@ public class CreditsAttributionScreen extends Screen {
 	}
 	protected void readCredits(Reader reader) {
 		try {
-			readSubsections(JsonHelper.getArray(JsonHelper.deserialize(reader), "sections", new JsonArray()));
+			readSection(JsonHelper.deserialize(reader));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("An error occurred whilst trying to load credits! {}", error));
 		}
 	}
-	protected void readSubsections(JsonArray subsections) {
-		if (subsections != null && !subsections.isEmpty()) for (JsonElement subsection : subsections) readSubsections(readSubsection(subsection.getAsJsonObject()));
-	}
-	protected JsonArray readSubsection(JsonObject subsection) {
-		if (subsection != null && !subsection.isEmpty()) {
-			String subtitle = JsonHelper.getString(subsection, "subtitle", "");
-			if (!subtitle.isEmpty()) this.addText(Text.literal(subtitle).formatted(Formatting.byName(JsonHelper.getString(subsection, "color", "gray"))), JsonHelper.getBoolean(subsection, "centered", false));
-			if (JsonHelper.getBoolean(subsection, "spaced", false)) addEmptyLine();
-			return JsonHelper.getArray(subsection, "subsections", new JsonArray());
+	protected JsonArray readSection(JsonObject section) {
+		if (section != null && !section.isEmpty()) {
+			String title = JsonHelper.getString(section, "title", "");
+			if (!title.isEmpty()) this.addText(Text.literal(title).formatted(Formatting.byName(JsonHelper.getString(section, "color", "gray"))), JsonHelper.getBoolean(section, "centered", false));
+			if (JsonHelper.getBoolean(section, "spaced", false)) addEmptyLine();
+			readSections(JsonHelper.getArray(section, "sections", new JsonArray()));
 		}
 		return null;
+	}
+	protected void readSections(JsonArray sections) {
+		if (sections != null && !sections.isEmpty()) for (JsonElement section : sections) readSections(readSection(section.getAsJsonObject()));
 	}
 	protected void addEmptyLine() {
 		this.credits.add(OrderedText.EMPTY);
