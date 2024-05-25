@@ -89,6 +89,7 @@ public class CreditsAttributionScreen extends Screen {
 	protected void readCredits(Reader reader) {
 		try {
 			readSection(JsonHelper.deserialize(reader));
+			addEmptyLine();
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("An error occurred whilst trying to load credits! {}", error));
 		}
