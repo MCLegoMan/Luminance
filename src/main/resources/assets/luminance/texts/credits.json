@@ -4,7 +4,7 @@
 			"sections": [
 				{
 					"text": "Lead Developer",
-					"color": "white",
+					"formatting": "white",
 					"sections": [
 						{
 							"text": "  MCLegoMan"
@@ -16,7 +16,7 @@
 				},
 				{
 					"text": "Contributors",
-					"color": "white",
+					"formatting": "white",
 					"sections": [
 						{
 							"text": "  Nettakrim",
@@ -44,7 +44,7 @@
 		},
 		{
 			"text": "Attributions",
-			"color": "gold",
+			"formatting": "gold",
 			"centered": true,
 			"sections": [
 				{
@@ -52,7 +52,7 @@
 				},
 				{
 					"text": "  Luminance",
-					"color": "white",
+					"formatting": "white",
 					"sections": [
 						{
 							"text": "  A library mod that helps other mods with shaders.",
@@ -72,7 +72,7 @@
 				},
 				{
 					"text": "  SimpleConfig",
-					"color": "white",
+					"formatting": "white",
 					"sections": [
 						{
 							"text": "  Simple and small, single file, configuration library.",
@@ -92,7 +92,7 @@
 				},
 				{
 					"text": "  Fabric API",
-					"color": "white",
+					"formatting": "white",
 					"sections": [
 						{
 							"text": "    Essential hooks for modding with Fabric.",
@@ -112,7 +112,7 @@
 				},
 				{
 					"text": "  Fabric Loader",
-					"color": "white",
+					"formatting": "white",
 					"sections": [
 						{
 							"text": "    Fabric is a modular, lightweight mod loader for Minecraft.",
@@ -132,7 +132,7 @@
 				},
 				{
 					"text": "  Minecraft",
-					"color": "white",
+					"formatting": "white",
 					"sections": [
 						{
 							"text": "    The base game.",
