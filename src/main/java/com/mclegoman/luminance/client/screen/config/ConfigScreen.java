@@ -10,6 +10,7 @@ package com.mclegoman.luminance.client.screen.config;
 import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.logo.LuminanceLogo;
+import com.mclegoman.luminance.client.screen.config.information.InformationScreen;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
@@ -32,7 +33,7 @@ public class ConfigScreen extends Screen {
 	private boolean saveConfig;
 	private boolean shouldRenderSplashText;
 	private Couple<String, Boolean> splashText;
-	private boolean isPride;
+	private final boolean isPride;
 	public ConfigScreen(Screen parent, boolean refresh, boolean saveConfig, Couple<String, Boolean> splashText, boolean isPride) {
 		super(Text.literal(""));
 		this.grid = new GridWidget();
@@ -107,6 +108,7 @@ public class ConfigScreen extends Screen {
 			ConfigHelper.setConfig("show_alpha_level_overlay", !(boolean) ConfigHelper.getConfig("show_alpha_level_overlay"));
 			this.refresh = true;
 		}).build(), 1).setTooltip(Tooltip.of(Translation.getConfigTranslation(Data.version.getID(), "alpha.show_overlay", true)));
+		gridAdder.add(ButtonWidget.builder(Translation.getConfigTranslation(Data.version.getID(), "information"), button -> ClientData.minecraft.setScreen(new InformationScreen(ClientData.minecraft.currentScreen, false, splashText, isPride))).width(304).build(), 2);
 		return grid;
 	}
 	private GridWidget createFooter() {

@@ -18,6 +18,16 @@
 	"gui.luminance.config.alpha.show_overlay": "Show Percentage: %s",
 	"gui.luminance.config.alpha.show_overlay.hover": "Shows the percentage when adjusting shader strength using the keybinding.",
 
+	"gui.luminance.config.information": "Information",
+
+	"gui.luminance.config.information.documentation": "Documentation",
+
+	"gui.luminance.config.information.source_code": "Source Code",
+
+	"gui.luminance.config.information.report": "Report a bug",
+
+	"gui.luminance.config.information.credits": "Credits and Attribution",
+
 	"gui.luminance.config.keybinding": "Bound to: %s",
 
 	"gui.luminance.config.reset": "Reset to Default",

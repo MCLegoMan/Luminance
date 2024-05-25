@@ -1,8 +1,8 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id "fabric-loom" version "1.6-SNAPSHOT"
 	id "com.github.breadmoirai.github-release" version "2.4.1"
 	id "com.modrinth.minotaur" version "2.+"
-	id 'maven-publish'
+	id "maven-publish"
 }
 group = project.maven_group
 version = "${project.mod_version}+${project.mc_version.replace("/", "-")}"
@@ -17,11 +17,11 @@ loom {
 	}
 }
 runClient.doFirst {
-	args += ['--username', "Luminance${new Random().nextInt(1000)}"]
+	args += ["--username", "Luminance${new Random().nextInt(1000)}"]
 }
 repositories {
-	maven { url 'https://jitpack.io' }
-	maven { url 'https://maven.terraformersmc.com/releases/' }
+	maven { url "https://jitpack.io" }
+	maven { url "https://maven.terraformersmc.com/releases/" }
 	mavenCentral()
 	exclusiveContent {
 		forRepository {
@@ -115,33 +115,33 @@ if (rootProject.file(".env").exists()) {
 	}
 	tasks.register("uploadVersion") {
 		group = project.archive_name
-		description = 'Upload project to both GitHub and Modrinth.'
+		description = "Upload project to both GitHub and Modrinth."
 		dependsOn(tasks.githubRelease)
 		dependsOn(tasks.modrinth)
 	}
 }
 tasks.register("quickPlaySingleplayer") {
 	group = project.archive_name
-	description = 'Uses Quick Play to join singleplayer world `New World` on launch.'
-	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World']))
+	description = "Uses Quick Play to join singleplayer world `New World` on launch."
+	dependsOn(tasks.runClient.args(["--quickPlaySingleplayer", "New World"]))
 }
 tasks.register("quickPlayMultiplayer") {
 	group = project.archive_name
-	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch.'
-	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565']))
+	description = "Uses Quick Play to join multiplayer server `localhost:25565` on launch."
+	dependsOn(tasks.runClient.args(["--quickPlayMultiplayer", "localhost:25565"]))
 }
 tasks.register("runClientLoggedIn") {
 	group = project.archive_name
-	description = 'Uses DevLogin to login to your Minecraft Account'
-	dependsOn(tasks.runClient.args(['--msa']))
+	description = "Uses DevLogin to login to your Minecraft Account"
+	dependsOn(tasks.runClient.args(["--msa"]))
 }
 tasks.register("quickPlaySingleplayerLoggedIn") {
 	group = project.archive_name
-	description = 'Uses Quick Play to join singleplayer world `New World` on launch and uses DevLogin to login to your Minecraft Account.'
-	dependsOn(tasks.runClient.args(['--quickPlaySingleplayer', 'New World', '--msa']))
+	description = "Uses Quick Play to join singleplayer world `New World` on launch and uses DevLogin to login to your Minecraft Account."
+	dependsOn(tasks.runClient.args(["--quickPlaySingleplayer", "New World", "--msa"]))
 }
 tasks.register("quickPlayMultiplayerLoggedIn") {
 	group = project.archive_name
-	description = 'Uses Quick Play to join multiplayer server `localhost:25565` on launch and uses DevLogin to login to your Minecraft Account.'
-	dependsOn(tasks.runClient.args(['--quickPlayMultiplayer', 'localhost:25565', '--msa']))
+	description = "Uses Quick Play to join multiplayer server `localhost:25565` on launch and uses DevLogin to login to your Minecraft Account."
+	dependsOn(tasks.runClient.args(["--quickPlayMultiplayer", "localhost:25565", "--msa"]))
 }

@@ -1,0 +1,95 @@
+{
+	"sections": [
+		{
+			"subsections": [
+				{
+					"subtitle": "Lead Developer",
+					"subsections": [
+						{
+							"subtitle": "MCLegoMan"
+						}
+					]
+				},
+				{
+					"subtitle": "Contributors",
+					"subsections": [
+						{
+							"subtitle": "Nettakrim",
+							"subsections": [
+								"Vanilla Shader Fixes",
+								"Shader Namespace Fix",
+								"Shader Texture Namespace Fix",
+								"Depth Shader Support"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"title": "Licenses",
+			"subsections": [
+				{
+					"subtitle": "Luminance",
+					"subsections": [
+						{
+							"subtitle": "A library mod that helps other mods with shaders.",
+							"subsections": [
+								"Author: MCLegoMan",
+								"License: LGPL-3.0-or-later"
+							]
+						}
+					]
+				},
+				{
+					"subtitle": "SimpleConfig",
+					"subsections": [
+						{
+							"subtitle": "Simple and small, single file, configuration library.",
+							"subsections": [
+								"Author: magistermaks",
+								"License: MIT"
+							]
+						}
+					]
+				},
+				{
+					"subtitle": "Fabric API",
+					"subsections": [
+						{
+							"subtitle": "Essential hooks for modding with Fabric.",
+							"subsections": [
+								"Author: FabricMC",
+								"License: Apache-2.0"
+							]
+						}
+					]
+				},
+				{
+					"subtitle": "Fabric Loader",
+					"subsections": [
+						{
+							"subtitle": "Fabric is a modular, lightweight mod loader for Minecraft.",
+							"subsections": [
+								"Author: FabricMC",
+								"License: Apache-2.0"
+							]
+						}
+					]
+				},
+				{
+					"subtitle": "Minecraft",
+					"subsections": [
+						{
+							"subtitle": "The base game.",
+							"subsections": [
+								"Author: Mojang Studios",
+								"License: Minecraft EULA"
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
