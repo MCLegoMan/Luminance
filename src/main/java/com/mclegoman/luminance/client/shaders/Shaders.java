@@ -47,14 +47,11 @@ public class Shaders {
 				Events.ShaderUniform.registryVector3f.forEach((uniform, callable) -> setVector3f(program, uniform.getFirst(), uniform.getSecond(), callable));
 			}
 		});
-		// This renders the shader after the hand if it has depth. We really should try to render the hand in-depth, but this works for now.
 		Events.AfterHandRender.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType().call() == Shader.RenderType.GAME) && shader.getSecond().getDisableGameRendertype())) {
-							if (!shader.getSecond().getUseDepth() || CompatHelper.isIrisShadersEnabled()) render(id, shader);
-						}
+						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType().call() == Shader.RenderType.GAME) && (shader.getSecond().getDisableGameRendertype() && (!shader.getSecond().getUseDepth() || (shader.getSecond().getUseDepth() && CompatHelper.isIrisShadersEnabled()))))) render(id, shader);
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 					}
@@ -63,13 +60,12 @@ public class Shaders {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 			}
 		}));
+		// This renders the shader in the world if it has depth. We really should try to render the hand in-depth, but this works for now.
 		Events.AfterWorldBorder.add(new Couple<>(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType().call() == Shader.RenderType.GAME) && shader.getSecond().getDisableGameRendertype())) {
-							if (shader.getSecond().getUseDepth() && !CompatHelper.isIrisShadersEnabled()) render(id, shader);
-						}
+						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType().call() == Shader.RenderType.GAME) && (shader.getSecond().getDisableGameRendertype() && (shader.getSecond().getUseDepth() && !CompatHelper.isIrisShadersEnabled())))) render(id, shader);
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 					}

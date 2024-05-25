@@ -34,14 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreditsAttributionScreen extends Screen {
-	private final Screen parentScreen;
-	private final boolean isPride;
-	private final Identifier creditsJsonId;
-	private float time;
-	private List<OrderedText> credits;
-	private final List<Integer> centeredLines = new ArrayList<>();
-	private int creditsHeight;
-	private boolean isHoldingSpace;
+	protected final Screen parentScreen;
+	protected final boolean isPride;
+	protected final Identifier creditsJsonId;
+	protected float time;
+	protected List<OrderedText> credits;
+	protected final List<Integer> centeredLines = new ArrayList<>();
+	protected int creditsHeight;
+	protected boolean isHoldingSpace;
 	public CreditsAttributionScreen(Screen parentScreen, boolean isPride, Identifier creditsJsonId) {
 		super(NarratorManager.EMPTY);
 		this.parentScreen = parentScreen;
@@ -60,7 +60,7 @@ public class CreditsAttributionScreen extends Screen {
 	public void tick() {
 		if (this.time > (this.creditsHeight + ClientData.minecraft.getWindow().getScaledHeight() + 64)) this.close();
 	}
-	private float getSpeed() {
+	protected float getSpeed() {
 		return this.time > 0 ? ((isHoldingSpace ? 4.0F : 1.0F) * (hasControlDown() ? 4.0F : 1.0F)) : 1.0F;
 	}
 	public void close() {
@@ -73,7 +73,7 @@ public class CreditsAttributionScreen extends Screen {
 			this.creditsHeight = this.credits.size() * 12;
 		}
 	}
-	private void load(Identifier id, CreditsAttributionReader reader1) {
+	protected void load(Identifier id, CreditsAttributionReader reader1) {
 		try {
 			Reader reader2 = ClientData.minecraft.getResourceManager().openAsReader(id);
 			try {
@@ -86,7 +86,7 @@ public class CreditsAttributionScreen extends Screen {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("An error occurred whilst trying to load credits! {}", error));
 		}
 	}
-	private void readCredits(Reader reader1) {
+	protected void readCredits(Reader reader1) {
 		try {
 
 			JsonObject credits = JsonHelper.deserialize(reader1);
@@ -105,11 +105,19 @@ public class CreditsAttributionScreen extends Screen {
 						for (JsonElement object3 : subsections2) {
 							JsonObject subsection2 = object3.getAsJsonObject();
 							if (subsection2 != null) {
-								String subtitle = JsonHelper.getString(subsection2, "subtitle", "");
-								if (!subtitle.isEmpty())
-									this.addText(Text.literal("  ").append(subtitle).formatted(Formatting.GRAY), false);
-								for (JsonElement subsection3 : JsonHelper.getArray(subsection2, "subsections", new JsonArray())) {
-									this.addText(Text.literal("    ").append(subsection3.getAsString()).formatted(Formatting.GRAY), false);
+								String subtitle1 = JsonHelper.getString(subsection2, "subtitle", "");
+								if (!subtitle1.isEmpty())
+									this.addText(Text.literal("  ").append(subtitle1).formatted(Formatting.GRAY), false);
+								for (JsonElement object4 : JsonHelper.getArray(subsection2, "subsections", new JsonArray())) {
+									JsonObject subsection3 = object4.getAsJsonObject();
+									if (subsection3 != null) {
+										String subtitle2 = JsonHelper.getString(subsection3, "subtitle", "");
+										if (!subtitle2.isEmpty()) this.addText(Text.literal("  ").append(subtitle2).formatted(Formatting.GRAY), false);
+										for (JsonElement object5 : JsonHelper.getArray(subsection3, "subsections", new JsonArray())) {
+											JsonObject subsection4 = object5.getAsJsonObject();
+											this.addText(Text.literal("    ").append(subsection4.getAsString()).formatted(Formatting.GRAY), false);
+										}
+									}
 								}
 							}
 						}
@@ -122,10 +130,10 @@ public class CreditsAttributionScreen extends Screen {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("An error occurred whilst trying to load credits! {}", error));
 		}
 	}
-	private void addEmptyLine() {
+	protected void addEmptyLine() {
 		this.credits.add(OrderedText.EMPTY);
 	}
-	private void addText(Text text, boolean centered) {
+	protected void addText(Text text, boolean centered) {
 		if (centered) {
 			this.centeredLines.add(this.credits.size());
 		}
@@ -137,7 +145,7 @@ public class CreditsAttributionScreen extends Screen {
 		this.time = Math.max(0.0F, this.time + (delta * this.getSpeed()));
 		context.getMatrices().push();
 		context.getMatrices().translate(0.0F, -this.time, 0.0F);
-		LuminanceLogo.renderLogo(context, ClientData.minecraft.getWindow().getScaledWidth() / 2 - 128, ClientData.minecraft.getWindow().getScaledHeight() + 2, 256, 64, isPride);
+		renderLogo(context);
 		int height = ClientData.minecraft.getWindow().getScaledHeight() + 80;
 		for(int l = 0; l < this.credits.size(); ++l) {
 			if (l == this.credits.size() - 1) {
@@ -158,21 +166,22 @@ public class CreditsAttributionScreen extends Screen {
 		}
 		context.getMatrices().pop();
 	}
+	protected void renderLogo(DrawContext context) {
+		LuminanceLogo.renderLogo(context, ClientData.minecraft.getWindow().getScaledWidth() / 2 - 128, ClientData.minecraft.getWindow().getScaledHeight() + 2, 256, 64, isPride);
+	}
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (keyCode == GLFW.GLFW_KEY_SPACE) {
 			this.isHoldingSpace = true;
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
-
 	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
 		if (keyCode == GLFW.GLFW_KEY_SPACE) {
 			this.isHoldingSpace = false;
 		}
 		return super.keyReleased(keyCode, scanCode, modifiers);
 	}
-
-	private interface CreditsAttributionReader {
+	protected interface CreditsAttributionReader {
 		void read(Reader reader) throws IOException;
 	}
 }
