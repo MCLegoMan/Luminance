@@ -73,62 +73,37 @@ public class CreditsAttributionScreen extends Screen {
 			this.creditsHeight = this.credits.size() * 12;
 		}
 	}
-	protected void load(Identifier id, CreditsAttributionReader reader1) {
+	protected void load(Identifier id, CreditsAttributionReader reader) {
 		try {
-			Reader reader2 = ClientData.minecraft.getResourceManager().openAsReader(id);
+			Reader reader1 = ClientData.minecraft.getResourceManager().openAsReader(id);
 			try {
-				reader1.read(reader2);
+				reader.read(reader1);
 			} catch (Exception error) {
-				reader2.close();
+				reader1.close();
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("An error occurred whilst trying to load credits! {}", error));
 			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("An error occurred whilst trying to load credits! {}", error));
 		}
 	}
-	protected void readCredits(Reader reader1) {
+	protected void readCredits(Reader reader) {
 		try {
-
-			JsonObject credits = JsonHelper.deserialize(reader1);
-			JsonArray sections = credits.getAsJsonArray("sections");
-			for (JsonElement object1 : sections) {
-				String title1 = JsonHelper.getString(object1.getAsJsonObject(), "title", "");
-				if (!title1.isEmpty()) this.addText(Text.literal(title1).formatted(Formatting.GOLD), true);
-				JsonArray subsections1 = JsonHelper.getArray(object1.getAsJsonObject(), "subsections", new JsonArray());
-				for (JsonElement object2 : subsections1) {
-					JsonObject subsection1 = object2.getAsJsonObject();
-					String title2 = JsonHelper.getString(subsection1, "subtitle", "");
-					if (!title2.isEmpty())
-						this.addText(Text.literal("").append(title2).formatted(Formatting.WHITE), false);
-					JsonArray subsections2 = JsonHelper.getArray(subsection1, "subsections", new JsonArray());
-					if (!subsections2.equals(new JsonArray())) {
-						for (JsonElement object3 : subsections2) {
-							JsonObject subsection2 = object3.getAsJsonObject();
-							if (subsection2 != null) {
-								String subtitle1 = JsonHelper.getString(subsection2, "subtitle", "");
-								if (!subtitle1.isEmpty())
-									this.addText(Text.literal("  ").append(subtitle1).formatted(Formatting.GRAY), false);
-								for (JsonElement object4 : JsonHelper.getArray(subsection2, "subsections", new JsonArray())) {
-									JsonObject subsection3 = object4.getAsJsonObject();
-									if (subsection3 != null) {
-										String subtitle2 = JsonHelper.getString(subsection3, "subtitle", "");
-										if (!subtitle2.isEmpty()) this.addText(Text.literal("  ").append(subtitle2).formatted(Formatting.GRAY), false);
-										for (JsonElement object5 : JsonHelper.getArray(subsection3, "subsections", new JsonArray())) {
-											JsonObject subsection4 = object5.getAsJsonObject();
-											this.addText(Text.literal("    ").append(subsection4.getAsString()).formatted(Formatting.GRAY), false);
-										}
-									}
-								}
-							}
-						}
-						this.addEmptyLine();
-					}
-				}
-				this.addEmptyLine();
-			}
+			readSubsections(JsonHelper.getArray(JsonHelper.deserialize(reader), "sections", new JsonArray()));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("An error occurred whilst trying to load credits! {}", error));
 		}
+	}
+	protected void readSubsections(JsonArray subsections) {
+		if (subsections != null && !subsections.isEmpty()) for (JsonElement subsection : subsections) readSubsections(readSubsection(subsection.getAsJsonObject()));
+	}
+	protected JsonArray readSubsection(JsonObject subsection) {
+		if (subsection != null && !subsection.isEmpty()) {
+			String subtitle = JsonHelper.getString(subsection, "subtitle", "");
+			if (!subtitle.isEmpty()) this.addText(Text.literal(subtitle).formatted(Formatting.byName(JsonHelper.getString(subsection, "color", "gray"))), JsonHelper.getBoolean(subsection, "centered", false));
+			if (JsonHelper.getBoolean(subsection, "spaced", false)) addEmptyLine();
+			return JsonHelper.getArray(subsection, "subsections", new JsonArray());
+		}
+		return null;
 	}
 	protected void addEmptyLine() {
 		this.credits.add(OrderedText.EMPTY);

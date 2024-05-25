@@ -1,121 +1,155 @@
 {
 	"sections": [
 		{
+			"spaced": true,
 			"subsections": [
 				{
 					"subtitle": "Lead Developer",
+					"color": "white",
 					"subsections": [
 						{
-							"subtitle": "MCLegoMan"
+							"subtitle": "  MCLegoMan"
 						}
 					]
 				},
 				{
+					"spaced": true
+				},
+				{
 					"subtitle": "Contributors",
+					"color": "white",
 					"subsections": [
 						{
-							"subtitle": "Nettakrim",
+							"subtitle": "  Nettakrim",
 							"subsections": [
 								{
-									"subtitle": "Vanilla Shader Fixes"
+									"subtitle": "    Vanilla Shader Fixes"
 								},
 								{
-									"subtitle": "Shader Namespace Fix"
+									"subtitle": "    Shader Namespace Fix"
 								},
 								{
-									"subtitle": "Shader Texture Namespace Fix"
+									"subtitle": "    Shader Texture Namespace Fix"
 								},
 								{
-									"subtitle": "Depth Shader Support"
+									"subtitle": "    Depth Shader Support"
 								}
 							]
 						}
 					]
+				},
+				{
+					"spaced": true
 				}
 			]
 		},
 		{
-			"title": "Licences",
+			"subtitle": "Licences",
+			"color": "gold",
+			"centered": true,
 			"subsections": [
 				{
-					"subtitle": "Luminance",
+					"spaced": true
+				},
+				{
+					"subtitle": "  Luminance",
+					"color": "white",
 					"subsections": [
 						{
-							"subtitle": "A library mod that helps other mods with shaders.",
+							"subtitle": "  A library mod that helps other mods with shaders.",
 							"subsections": [
 								{
-									"subtitle": "Author: MCLegoMan"
+									"subtitle": "    Author: MCLegoMan"
 								},
 								{
-									"subtitle": "Licence: LGPL-3.0-or-later"
+									"subtitle": "    Licence: LGPL-3.0-or-later"
 								}
 							]
 						}
 					]
 				},
 				{
-					"subtitle": "SimpleConfig",
+					"spaced": true
+				},
+				{
+					"subtitle": "  SimpleConfig",
+					"color": "white",
 					"subsections": [
 						{
-							"subtitle": "Simple and small, single file, configuration library.",
+							"subtitle": "  Simple and small, single file, configuration library.",
 							"subsections": [
 								{
-									"subtitle": "Author: magistermaks"
+									"subtitle": "    Author: magistermaks"
 								},
 								{
-									"subtitle": "Licence: MIT"
+									"subtitle": "    Licence: MIT"
 								}
 							]
 						}
 					]
 				},
 				{
-					"subtitle": "Fabric API",
+					"spaced": true
+				},
+				{
+					"subtitle": "  Fabric API",
+					"color": "white",
 					"subsections": [
 						{
-							"subtitle": "Essential hooks for modding with Fabric.",
+							"subtitle": "    Essential hooks for modding with Fabric.",
 							"subsections": [
 								{
-									"subtitle": "Author: FabricMC"
+									"subtitle": "    Author: FabricMC"
 								},
 								{
-									"subtitle": "Licence: Apache-2.0"
+									"subtitle": "    Licence: Apache-2.0"
 								}
 							]
 						}
 					]
 				},
 				{
-					"subtitle": "Fabric Loader",
+					"spaced": true
+				},
+				{
+					"subtitle": "  Fabric Loader",
+					"color": "white",
 					"subsections": [
 						{
-							"subtitle": "Fabric is a modular, lightweight mod loader for Minecraft.",
+							"subtitle": "    Fabric is a modular, lightweight mod loader for Minecraft.",
 							"subsections": [
 								{
-									"subtitle": "Author: FabricMC"
+									"subtitle": "    Author: FabricMC"
 								},
 								{
-									"subtitle": "Licence: Apache-2.0"
+									"subtitle": "    Licence: Apache-2.0"
 								}
 							]
 						}
 					]
 				},
 				{
-					"subtitle": "Minecraft",
+					"spaced": true
+				},
+				{
+					"subtitle": "  Minecraft",
+					"color": "white",
 					"subsections": [
 						{
-							"subtitle": "The base game.",
+							"subtitle": "    The base game.",
 							"subsections": [
 								{
-									"subtitle": "Author: Mojang Studios"
+									"subtitle": "    Author: Mojang Studios"
 								},
 								{
-									"subtitle": "Licence: Minecraft EULA"
+									"subtitle": "    Licence: Minecraft EULA"
 								}
 							]
 						}
 					]
+				},
+				{
+					"spaced": true
 				}
 			]
 		}
