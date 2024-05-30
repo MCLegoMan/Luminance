@@ -16,7 +16,5 @@ uniform float speed;
 void main() {
     vec4 color = texture(DiffuseSampler, texCoord);
     vec4 overlay = texture(OverlaySampler, fract(vec2(texCoord.x, -texCoord.y) + (vec2(xAmount, yAmount) * (lu_timeSmooth * speed))));
-    vec4 outputColor = color;
-    if (overlay.a > 0.0) outputColor = mix(color, overlay, lu_alphaSmooth);
-    fragColor = vec4(outputColor.rgb, 1.0);
+    fragColor = vec4(mix(color.rgb, mix(color.rgb, overlay.rgb, overlay.a), lu_alphaSmooth), 1.0);
 }

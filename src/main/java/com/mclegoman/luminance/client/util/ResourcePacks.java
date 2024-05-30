@@ -33,7 +33,7 @@ public class ResourcePacks {
             Licence: Minecraft EULA
             Notes: These shaders have been modified to work with the latest version of minecraft, and also contain new code.
         */
-		register(new Identifier("super_secret_settings"), Data.getModContainer("luminance"), Translation.getTranslation(Data.version.getID(), "resource_pack.super_secret_settings"), ResourcePackActivationType.DEFAULT_ENABLED);
+		register(Identifier.of("super_secret_settings"), Data.getModContainer("luminance"), Translation.getTranslation(Data.version.getID(), "resource_pack.super_secret_settings"), ResourcePackActivationType.DEFAULT_ENABLED);
 	}
 	public static void register(Identifier id, ModContainer container, Text text, ResourcePackActivationType activationType) {
 		try {

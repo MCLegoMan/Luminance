@@ -11,4 +11,7 @@ import net.minecraft.client.MinecraftClient;
 
 public class ClientData {
 	public static final MinecraftClient minecraft = MinecraftClient.getInstance();
+	public static float getTickDelta(boolean bl) {
+		return minecraft.getRenderTickCounter().getTickDelta(bl);
+	}
 }

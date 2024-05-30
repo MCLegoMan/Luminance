@@ -75,7 +75,7 @@ public class Uniforms {
 		return ClientData.minecraft.options != null ? ClientData.minecraft.options.getViewDistance().getValue() : 12.0F;
 	}
 	public static float getFov() {
-		return Accessors.getGameRenderer() != null ? (float) Accessors.getGameRenderer().invokeGetFov(ClientData.minecraft.gameRenderer.getCamera(), ClientData.minecraft.getTickDelta(), false) : 70.0F;
+		return Accessors.getGameRenderer() != null ? (float) Accessors.getGameRenderer().invokeGetFov(ClientData.minecraft.gameRenderer.getCamera(), ClientData.getTickDelta(true), false) : 70.0F;
 	}
 	public static float getFps() {
 		return ClientData.minecraft.getCurrentFps();
@@ -90,10 +90,10 @@ public class Uniforms {
 		return ClientData.minecraft.player != null ? new float[]{(float) ClientData.minecraft.player.getPos().x, (float) ClientData.minecraft.player.getPos().y, (float) ClientData.minecraft.player.getPos().z} : new float[]{0.0F, 64.0F, 0.0F};
 	}
 	public static float getPitch() {
-		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getPitch(ClientData.minecraft.getTickDelta()) % 360.0F : 0.0F;
+		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getPitch(ClientData.getTickDelta(true)) % 360.0F : 0.0F;
 	}
 	public static float getYaw() {
-		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getYaw(ClientData.minecraft.getTickDelta()) % 360.0F : 0.0F;
+		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getYaw(ClientData.getTickDelta(true)) % 360.0F : 0.0F;
 	}
 	public static float getCurrentHealth() {
 		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getHealth() : 20.0F;

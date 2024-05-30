@@ -130,7 +130,7 @@ public class Shaders {
 			if (shader.getSecond().getPostProcessor() != null) {
 				RenderSystem.enableBlend();
 				RenderSystem.defaultBlendFunc();
-				shader.getSecond().getPostProcessor().render(ClientData.minecraft.getTickDelta());
+				shader.getSecond().getPostProcessor().render(ClientData.getTickDelta(true));
 				RenderSystem.disableBlend();
 				ClientData.minecraft.getFramebuffer().beginWrite(true);
 			}
@@ -155,19 +155,19 @@ public class Shaders {
 		return new Shader(shaderData, renderType);
 	}
 	public static Identifier getPostShader(String id) {
-		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id, "minecraft");
+		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id);
 		String shader = IdentifierHelper.getStringPart(IdentifierHelper.Type.KEY, id);
 		return getPostShader(namespace, shader);
 	}
 	public static Identifier getPostShader(String namespace, String name) {
 		if (namespace != null && name != null) {
 			name = name.replace("\"", "").toLowerCase();
-			return new Identifier(namespace.toLowerCase(), ("shaders/post/" + name + ".json"));
+			return Identifier.of(namespace.toLowerCase(), ("shaders/post/" + name + ".json"));
 		}
 		return null;
 	}
 	public static int getShaderIndex(String id) {
-		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id, "minecraft");
+		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id);
 		String name = IdentifierHelper.getStringPart(IdentifierHelper.Type.KEY, id);
 		return getShaderIndex(namespace, name);
 	}
@@ -206,7 +206,7 @@ public class Shaders {
 				if (registry.getName().equalsIgnoreCase(id)) return registry.getNamespace();
 			}
 		}
-		return IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id, "minecraft");
+		return IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id);
 	}
 	public static void updateTime() {
 		// Ideally, lu_time/lu_timeSmooth should be customizable from post/x.json, and if omitted, it would default to every 20 ticks (matching vanilla).
@@ -227,8 +227,7 @@ public class Shaders {
 		time = (time + 1.00F) % 3456000.0F;
 	}
 	public static float getSmooth(float prev, float current) {
-		float tickDelta = ClientData.minecraft.getTickDelta();
-		return MathHelper.lerp(tickDelta, prev, current);
+		return MathHelper.lerp(ClientData.getTickDelta(true), prev, current);
 	}
 	public static float[] getSmooth(float[] prev, float[] current) {
 		if (prev.length == current.length) {

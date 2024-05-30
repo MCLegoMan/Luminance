@@ -125,7 +125,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 	}
 	@Override
 	public Identifier getFabricId() {
-		return new Identifier(Data.version.getID(), resourceLocation);
+		return Identifier.of(Data.version.getID(), resourceLocation);
 	}
 	protected static void releaseShaders() {
 		try {

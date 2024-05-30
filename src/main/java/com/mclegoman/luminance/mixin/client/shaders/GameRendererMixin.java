@@ -12,6 +12,7 @@ import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(priority = 100, value = GameRenderer.class)
 public abstract class GameRendererMixin {
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;beginWrite(Z)V"))
-	private void luminance$afterHandRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+	private void luminance$afterHandRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
 		Events.AfterHandRender.registry.forEach(((id, runnable) -> {
 			try {
 				runnable.run();
@@ -30,7 +31,7 @@ public abstract class GameRendererMixin {
 		}));
 	}
 	@Inject(method = "render", at = @At("TAIL"))
-	private void luminance$afterGameRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+	private void luminance$afterGameRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
 		Events.AfterGameRender.registry.forEach(((id, runnable) -> {
 			try {
 				runnable.run();

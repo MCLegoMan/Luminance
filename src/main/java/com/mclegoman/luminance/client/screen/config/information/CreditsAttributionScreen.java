@@ -49,13 +49,13 @@ public class CreditsAttributionScreen extends Screen {
 		this.creditsJsonId = creditsJsonId;
 	}
 	public CreditsAttributionScreen(Screen parentScreen, boolean isPride) {
-		this(parentScreen, isPride, new Identifier(Data.version.getID(), "/texts/credits.json"));
+		this(parentScreen, isPride, Identifier.of(Data.version.getID(), "/texts/credits.json"));
 	}
 	public CreditsAttributionScreen(Screen parentScreen, Identifier creditsJsonId) {
 		this(parentScreen, DateHelper.isPride(), creditsJsonId);
 	}
 	public CreditsAttributionScreen(Screen parentScreen) {
-		this(parentScreen, DateHelper.isPride(), new Identifier(Data.version.getID(), "/texts/credits.json"));
+		this(parentScreen, DateHelper.isPride(), Identifier.of(Data.version.getID(), "/texts/credits.json"));
 	}
 	public void tick() {
 		if (this.time > (this.creditsHeight + ClientData.minecraft.getWindow().getScaledHeight() + 64)) this.close();
