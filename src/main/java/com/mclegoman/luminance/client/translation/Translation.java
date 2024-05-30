@@ -111,4 +111,28 @@ public class Translation {
 	public static MutableText getShaderTranslation(String namespace, String name, boolean canBeTranslated) {
 		return getShaderTranslation(namespace, name, canBeTranslated, true);
 	}
+	public static MutableText getTranslation(String type, String namespace, String key, Object[] variables, Formatting[] formattings) {
+		return getText(type + "." + namespace + "." + key, true, variables, formattings);
+	}
+	public static MutableText getTranslation(String type, String namespace, String key, Object[] variables) {
+		return getText(type + "." + namespace + "." + key, true, variables);
+	}
+	public static MutableText getTranslation(String type, String namespace, String key, Formatting[] formattings) {
+		return getText(type + "." + namespace + "." + key, true, formattings);
+	}
+	public static MutableText getTranslation(String type, String namespace, String key) {
+		return getText(type + "." + namespace + "." + key, true);
+	}
+	public static MutableText getItemTranslation(String namespace, String key, Object[] variables, Formatting[] formattings) {
+		return getTranslation("item", namespace, key, variables, formattings);
+	}
+	public static MutableText getItemTranslation(String namespace, String key, Object[] variables) {
+		return getTranslation("item", namespace, key, variables);
+	}
+	public static MutableText getItemTranslation(String namespace, String key, Formatting[] formattings) {
+		return getTranslation("item", namespace, key, formattings);
+	}
+	public static MutableText getItemTranslation(String namespace, String key) {
+		return getTranslation("item", namespace, key);
+	}
 }
