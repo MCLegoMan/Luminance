@@ -9,6 +9,7 @@ package com.mclegoman.luminance.client.shaders;
 
 import com.google.gson.JsonObject;
 import com.mclegoman.luminance.client.data.ClientData;
+import com.mclegoman.luminance.client.events.Callables;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.events.Runnables;
 import com.mclegoman.luminance.client.translation.Translation;
@@ -226,12 +227,12 @@ public class Shaders {
 		// This was tested using i5-11400@2.60GHz/8GB Allocated(of 32GB RAM)/RTX3050(31.0.15.5212).
 		time = (time + 1.00F) % 3456000.0F;
 	}
-	public static float getSmooth(float prev, float current) {
-		return MathHelper.lerp(ClientData.getTickDelta(true), prev, current);
+	public static float getSmooth(float tickDelta, float prev, float current) {
+		return MathHelper.lerp(tickDelta, prev, current);
 	}
-	public static float[] getSmooth(float[] prev, float[] current) {
+	public static float[] getSmooth(float tickDelta, float[] prev, float[] current) {
 		if (prev.length == current.length) {
-			return new float[]{getSmooth(prev[0], current[0]), getSmooth(prev[1], current[1]), getSmooth(prev[2], current[2])};
+			return new float[]{getSmooth(tickDelta, prev[0], current[0]), getSmooth(tickDelta, prev[1], current[1]), getSmooth(tickDelta, prev[2], current[2])};
 		}
 		return new float[]{};
 	}
@@ -241,23 +242,23 @@ public class Shaders {
 	public static String getUniformName(String prefix, String uniformName) {
 		return prefix + "_" + uniformName;
 	}
-	public static void setFloat(JsonEffectShaderProgram program, String prefix, String uniformName, Callable<Float> callable) {
+	public static void setFloat(JsonEffectShaderProgram program, String prefix, String uniformName, Callables.ShaderRender<Float> callable) {
 		try {
-			set(program, prefix, uniformName, callable.call());
+			set(program, prefix, uniformName, callable.call(ClientData.getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
-	public static void setFloatArray(JsonEffectShaderProgram program, String prefix, String uniformName, Callable<float[]> callable) {
+	public static void setFloatArray(JsonEffectShaderProgram program, String prefix, String uniformName,  Callables.ShaderRender<float[]> callable) {
 		try {
-			set(program, prefix, uniformName, callable.call());
+			set(program, prefix, uniformName, callable.call(ClientData.getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
-	public static void setVector3f(JsonEffectShaderProgram program, String prefix, String uniformName, Callable<Vector3f> callable) {
+	public static void setVector3f(JsonEffectShaderProgram program, String prefix, String uniformName,  Callables.ShaderRender<Vector3f> callable) {
 		try {
-			set(program, prefix, uniformName, callable.call());
+			set(program, prefix, uniformName, callable.call(ClientData.getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}

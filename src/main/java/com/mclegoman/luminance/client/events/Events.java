@@ -7,6 +7,7 @@
 
 package com.mclegoman.luminance.client.events;
 
+import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.shaders.Shader;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
@@ -15,7 +16,6 @@ import com.mclegoman.luminance.common.util.LogType;
 import org.joml.Vector3f;
 
 import java.util.*;
-import java.util.concurrent.Callable;
 
 public class Events {
 	public static class OnShaderDataReset {
@@ -235,67 +235,67 @@ public class Events {
 		}
 	}
 	public static class ShaderUniform {
-		public static final Map<Couple<String, String>, Callable<Float>> registryFloat = new HashMap<>();
-		public static final Map<Couple<String, String>, Callable<float[]>> registryFloatArray = new HashMap<>();
-		public static final Map<Couple<String, String>, Callable<Vector3f>> registryVector3f = new HashMap<>();
-		public static void registerFloat(String modId, String uniform, Callable<Float> callable) {
+		public static final Map<Couple<String, String>, Callables.ShaderRender<Float>> registryFloat = new HashMap<>();
+		public static final Map<Couple<String, String>, Callables.ShaderRender<float[]>> registryFloatArray = new HashMap<>();
+		public static final Map<Couple<String, String>, Callables.ShaderRender<Vector3f>> registryVector3f = new HashMap<>();
+		public static void registerFloat(String modId, String uniform, Callables.ShaderRender<Float> callable) {
 			registerFloat(new Couple<>(modId, uniform), callable);
 		}
-		public static void modifyFloat(String modId, String uniform, Callable<Float> callable) {
+		public static void modifyFloat(String modId, String uniform, Callables.ShaderRender<Float> callable) {
 			modifyFloat(new Couple<>(modId, uniform), callable);
 		}
 		public static void removeFloat(String modId, String uniform) {
 			removeFloat(new Couple<>(modId, uniform));
 		}
-		public static void registerFloats(String modId, String uniform, Callable<float[]> callable) {
+		public static void registerFloats(String modId, String uniform, Callables.ShaderRender<float[]> callable) {
 			registerFloatArray(new Couple<>(modId, uniform), callable);
 		}
-		public static void modifyFloats(String modId, String uniform, Callable<float[]> callable) {
+		public static void modifyFloats(String modId, String uniform, Callables.ShaderRender<float[]> callable) {
 			modifyFloatArray(new Couple<>(modId, uniform), callable);
 		}
 		public static void removeFloats(String modId, String uniform) {
 			removeFloatArray(new Couple<>(modId, uniform));
 		}
-		public static void registerVector3f(String modId, String uniform, Callable<Vector3f> callable) {
+		public static void registerVector3f(String modId, String uniform, Callables.ShaderRender<Vector3f> callable) {
 			registerVector3f(new Couple<>(modId, uniform), callable);
 		}
-		public static void modifyVector3f(String modId, String uniform, Callable<Vector3f> callable) {
+		public static void modifyVector3f(String modId, String uniform, Callables.ShaderRender<Vector3f> callable) {
 			modifyVector3f(new Couple<>(modId, uniform), callable);
 		}
 		public static void removeVector3f(String modId, String uniform) {
 			removeVector3f(new Couple<>(modId, uniform));
 		}
-		public static void registerFloat(Couple<String, String> shader, Callable<Float> callable) {
+		public static void registerFloat(Couple<String, String> shader, Callables.ShaderRender<Float> callable) {
 			if (!registryFloat.containsKey(shader)) registryFloat.put(shader, callable);
 		}
 		public static float getFloat(Couple<String, String> shader) throws Exception {
-			return registryFloat.get(shader).call();
+			return registryFloat.get(shader).call(ClientData.getTickDelta(true));
 		}
-		public static void modifyFloat(Couple<String, String> shader, Callable<Float> callable) {
+		public static void modifyFloat(Couple<String, String> shader, Callables.ShaderRender<Float> callable) {
 			if (registryFloat.containsKey(shader)) registryFloat.replace(shader, callable);
 		}
 		public static void removeFloat(Couple<String, String> shader) {
 			registryFloat.remove(shader);
 		}
-		public static void registerFloatArray(Couple<String, String> shader, Callable<float[]> callable) {
+		public static void registerFloatArray(Couple<String, String> shader, Callables.ShaderRender<float[]> callable) {
 			if (!registryFloatArray.containsKey(shader)) registryFloatArray.put(shader, callable);
 		}
 		public static float[] getFloats(Couple<String, String> shader) throws Exception {
-			return registryFloatArray.get(shader).call();
+			return registryFloatArray.get(shader).call(ClientData.getTickDelta(true));
 		}
-		public static void modifyFloatArray(Couple<String, String> shader, Callable<float[]> callable) {
+		public static void modifyFloatArray(Couple<String, String> shader, Callables.ShaderRender<float[]> callable) {
 			if (registryFloatArray.containsKey(shader)) registryFloatArray.replace(shader, callable);
 		}
 		public static void removeFloatArray(Couple<String, String> shader) {
 			registryFloatArray.remove(shader);
 		}
-		public static void registerVector3f(Couple<String, String> shader, Callable<Vector3f> callable) {
+		public static void registerVector3f(Couple<String, String> shader, Callables.ShaderRender<Vector3f> callable) {
 			if (!registryVector3f.containsKey(shader)) registryVector3f.put(shader, callable);
 		}
 		public static Vector3f getVector3f(Couple<String, String> shader) throws Exception {
-			return registryVector3f.get(shader).call();
+			return registryVector3f.get(shader).call(ClientData.getTickDelta(true));
 		}
-		public static void modifyVector3f(Couple<String, String> shader, Callable<Vector3f> callable) {
+		public static void modifyVector3f(Couple<String, String> shader, Callables.ShaderRender<Vector3f> callable) {
 			if (registryVector3f.containsKey(shader)) registryVector3f.replace(shader, callable);
 		}
 		public static void removeVector3f(Couple<String, String> shader) {

@@ -8,8 +8,10 @@
 package com.mclegoman.luminance.mixin.client.shaders;
 
 import com.mclegoman.luminance.client.events.Events;
+import com.mclegoman.luminance.client.util.MessageOverlay;
 import net.minecraft.client.gl.JsonEffectShaderProgram;
 import net.minecraft.client.gl.PostEffectPass;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
