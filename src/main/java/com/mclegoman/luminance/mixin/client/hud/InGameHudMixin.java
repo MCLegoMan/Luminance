@@ -22,7 +22,7 @@ public abstract class InGameHudMixin {
 	@Inject(at = @At("RETURN"), method = "render")
 	private void luminance$render(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
 		if (!ClientData.minecraft.gameRenderer.isRenderingPanorama()) {
-			float h = MessageOverlay.remaining - ClientData.getTickDelta(true);
+			float h = MessageOverlay.remaining - ClientData.minecraft.getRenderTickCounter().getTickDelta(true);
 			int l = (int) (h * 255.0F / 20.0F);
 			if (l > 255) l = 255;
 			if (l > 10) {

@@ -2,11 +2,10 @@
 
 package com.mclegoman.luminance.client.temp;
 
-import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.events.Events;
 
 public class ShaderTime {
-	public static float prev = ClientData.getTickDelta(true);
+	public static float prev = 0.0F;
 	public static float time = 0.0F;
 	public static void init() {
 		Events.ShaderUniform.registerFloat("luFix", "time", (tickDelta) -> getTime(tickDelta) / 20.0F);

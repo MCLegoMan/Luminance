@@ -36,7 +36,6 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public class Shaders {
-	public static float time = 0.0F;
 	public static Framebuffer depthFramebuffer;
 	public static void init() {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ShaderDataloader());
@@ -131,7 +130,7 @@ public class Shaders {
 			if (shader.getSecond().getPostProcessor() != null) {
 				RenderSystem.enableBlend();
 				RenderSystem.defaultBlendFunc();
-				shader.getSecond().getPostProcessor().render(ClientData.getTickDelta(true));
+				shader.getSecond().getPostProcessor().render(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
 				RenderSystem.disableBlend();
 				ClientData.minecraft.getFramebuffer().beginWrite(true);
 			}
@@ -209,24 +208,6 @@ public class Shaders {
 		}
 		return IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id);
 	}
-	public static void updateTime() {
-		// Ideally, lu_time/lu_timeSmooth should be customizable from post/x.json, and if omitted, it would default to every 20 ticks (matching vanilla).
-		// This would require Luminance to add a time variable for each pass, how big of a performance hit would this be?
-		// If omitted, we could use the vanilla variable to help with performance.
-
-		// Could we add something like this to the post/x.json and program/x.json files?
-		// options {
-		//     "lu_time": {
-		//         "type": "int",
-		//         "value": 20,
-		//     }
-		// }
-
-		// This will get reset every 48 hours to prevent shader stuttering/freezing on some shaders.
-		// This may still stutter/freeze on weaker systems.
-		// This was tested using i5-11400@2.60GHz/8GB Allocated(of 32GB RAM)/RTX3050(31.0.15.5212).
-		time = (time + 1.00F) % 3456000.0F;
-	}
 	public static float getSmooth(float tickDelta, float prev, float current) {
 		return MathHelper.lerp(tickDelta, prev, current);
 	}
@@ -244,21 +225,21 @@ public class Shaders {
 	}
 	public static void setFloat(JsonEffectShaderProgram program, String prefix, String uniformName, Callables.ShaderRender<Float> callable) {
 		try {
-			set(program, prefix, uniformName, callable.call(ClientData.getTickDelta(true)));
+			set(program, prefix, uniformName, callable.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
 	public static void setFloatArray(JsonEffectShaderProgram program, String prefix, String uniformName,  Callables.ShaderRender<float[]> callable) {
 		try {
-			set(program, prefix, uniformName, callable.call(ClientData.getTickDelta(true)));
+			set(program, prefix, uniformName, callable.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
 	public static void setVector3f(JsonEffectShaderProgram program, String prefix, String uniformName,  Callables.ShaderRender<Vector3f> callable) {
 		try {
-			set(program, prefix, uniformName, callable.call(ClientData.getTickDelta(true)));
+			set(program, prefix, uniformName, callable.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}

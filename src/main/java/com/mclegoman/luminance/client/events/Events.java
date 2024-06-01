@@ -269,7 +269,7 @@ public class Events {
 			if (!registryFloat.containsKey(shader)) registryFloat.put(shader, callable);
 		}
 		public static float getFloat(Couple<String, String> shader) throws Exception {
-			return registryFloat.get(shader).call(ClientData.getTickDelta(true));
+			return registryFloat.get(shader).call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
 		}
 		public static void modifyFloat(Couple<String, String> shader, Callables.ShaderRender<Float> callable) {
 			if (registryFloat.containsKey(shader)) registryFloat.replace(shader, callable);
@@ -281,7 +281,7 @@ public class Events {
 			if (!registryFloatArray.containsKey(shader)) registryFloatArray.put(shader, callable);
 		}
 		public static float[] getFloats(Couple<String, String> shader) throws Exception {
-			return registryFloatArray.get(shader).call(ClientData.getTickDelta(true));
+			return registryFloatArray.get(shader).call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
 		}
 		public static void modifyFloatArray(Couple<String, String> shader, Callables.ShaderRender<float[]> callable) {
 			if (registryFloatArray.containsKey(shader)) registryFloatArray.replace(shader, callable);
@@ -293,7 +293,7 @@ public class Events {
 			if (!registryVector3f.containsKey(shader)) registryVector3f.put(shader, callable);
 		}
 		public static Vector3f getVector3f(Couple<String, String> shader) throws Exception {
-			return registryVector3f.get(shader).call(ClientData.getTickDelta(true));
+			return registryVector3f.get(shader).call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
 		}
 		public static void modifyVector3f(Couple<String, String> shader, Callables.ShaderRender<Vector3f> callable) {
 			if (registryVector3f.containsKey(shader)) registryVector3f.replace(shader, callable);

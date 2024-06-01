@@ -23,14 +23,15 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Formatting;
 
 public class Uniforms {
+	private static float prevTimeTickDelta;
+	private static float time = 0.0F;
 	private static int prevAlpha = (int)ConfigHelper.getConfig("alpha_level");
 	public static void tick() {
-		Shaders.updateTime();
 		if (!updatingAlpha() && updatingAlpha) {
 			updatingAlpha = false;
 			if ((int)ConfigHelper.getConfig("alpha_level") != prevAlpha) ConfigHelper.saveConfig(true);
 		}
-		SmoothUniforms.tick(ClientData.getTickDelta(true));
+		SmoothUniforms.tick(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
 	}
 	public static void init() {
 		try {
@@ -75,13 +76,31 @@ public class Uniforms {
 		return ClientData.minecraft.options != null ? ClientData.minecraft.options.getViewDistance().getValue() : 12.0F;
 	}
 	public static float getFov(float tickDelta) {
-		return Accessors.getGameRenderer() != null ? (float) Accessors.getGameRenderer().invokeGetFov(ClientData.minecraft.gameRenderer.getCamera(), ClientData.getTickDelta(true), false) : 70.0F;
+		return Accessors.getGameRenderer() != null ? (float) Accessors.getGameRenderer().invokeGetFov(ClientData.minecraft.gameRenderer.getCamera(), tickDelta, false) : 70.0F;
 	}
 	public static float getFps(float tickDelta) {
 		return ClientData.minecraft.getCurrentFps();
 	}
 	public static float getTime(float tickDelta) {
-		return Shaders.time;
+		// Ideally, lu_time/lu_timeSmooth should be customizable from post/x.json, and if omitted, it would default to every 20 ticks (matching vanilla).
+		// This would require Luminance to add a time variable for each pass, how big of a performance hit would this be?
+		// If omitted, we could use the vanilla variable to help with performance.
+
+		// Could we add something like this to the post/x.json and program/x.json files?
+		// options {
+		//     "lu_time": {
+		//         "type": "int",
+		//         "value": 20,
+		//     }
+		// }
+		if (tickDelta < prevTimeTickDelta) {
+			time += 1.0F - prevTimeTickDelta;
+			time += tickDelta;
+		} else time += tickDelta - prevTimeTickDelta;
+		prevTimeTickDelta = tickDelta;
+		// This time should be customizable per shader, could we have a global float for amount of ticks and calculate each shaders ticks based on their max?
+		while (time > 3456000.0F) time = 0.0F;
+		return time / 3456000.0F;
 	}
 	public static float[] getEyePosition(float tickDelta) {
 		return ClientData.minecraft.player != null ? new float[]{(float) ClientData.minecraft.player.getEyePos().x, (float) ClientData.minecraft.player.getEyePos().y, (float) ClientData.minecraft.player.getEyePos().z} : new float[]{0.0F, 66.0F, 0.0F};
@@ -90,10 +109,10 @@ public class Uniforms {
 		return ClientData.minecraft.player != null ? new float[]{(float) ClientData.minecraft.player.getPos().x, (float) ClientData.minecraft.player.getPos().y, (float) ClientData.minecraft.player.getPos().z} : new float[]{0.0F, 64.0F, 0.0F};
 	}
 	public static float getPitch(float tickDelta) {
-		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getPitch(ClientData.getTickDelta(true)) % 360.0F : 0.0F;
+		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getPitch(tickDelta) % 360.0F : 0.0F;
 	}
 	public static float getYaw(float tickDelta) {
-		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getYaw(ClientData.getTickDelta(true)) % 360.0F : 0.0F;
+		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getYaw(tickDelta) % 360.0F : 0.0F;
 	}
 	public static float getCurrentHealth(float tickDelta) {
 		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getHealth() : 20.0F;

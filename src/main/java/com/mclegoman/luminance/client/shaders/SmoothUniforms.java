@@ -7,83 +7,71 @@
 
 package com.mclegoman.luminance.client.shaders;
 
-import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.events.Events;
 import net.minecraft.entity.effect.StatusEffects;
 
 public class SmoothUniforms extends Uniforms {
-	private static float tickDelta;
-	public static float prevViewDistance = getViewDistance(tickDelta);
-	public static float viewDistance = getViewDistance(tickDelta);
-	public static float prevFov = getFov(tickDelta);
-	public static float fov = getFov(tickDelta);
-	public static float prevTime = getTime(tickDelta);
-	public static float time = getTime(tickDelta);
-	public static float[] prevEyePosition = getEyePosition(tickDelta);
-	public static float[] eyePosition = getEyePosition(tickDelta);
-	public static float[] prevPosition = getPosition(tickDelta);
-	public static float[] position = getPosition(tickDelta);
-	public static float prevPitch = getPitch(tickDelta);
-	public static float pitch = getPitch(tickDelta);
-	public static float prevYaw = getYaw(tickDelta);
-	public static float yaw = getYaw(tickDelta);
-	public static float prevCurrentHealth = getCurrentHealth(tickDelta);
-	public static float currentHealth = getCurrentHealth(tickDelta);
-	public static float prevMaxHealth = getMaxHealth(tickDelta);
-	public static float maxHealth = getMaxHealth(tickDelta);
-	public static float prevCurrentAbsorption = getCurrentAbsorption(tickDelta);
-	public static float currentAbsorption = getCurrentAbsorption(tickDelta);
-	public static float prevMaxAbsorption = getMaxAbsorption(tickDelta);
-	public static float maxAbsorption = getMaxAbsorption(tickDelta);
-	public static float prevCurrentHurtTime = getCurrentHurtTime(tickDelta);
-	public static float currentHurtTime = getCurrentHurtTime(tickDelta);
-	public static float prevMaxHurtTime = getMaxHurtTime(tickDelta);
-	public static float maxHurtTime = getMaxHurtTime(tickDelta);
-	public static float prevCurrentAir = getCurrentAir(tickDelta);
-	public static float currentAir = getCurrentAir(tickDelta);
-	public static float prevMaxAir = getMaxAir(tickDelta);
-	public static float maxAir = getMaxAir(tickDelta);
-	public static float prevIsSprinting = getIsSprinting(tickDelta);
-	public static float isSprinting = getIsSprinting(tickDelta);
-	public static float prevIsSwimming = getIsSwimming(tickDelta);
-	public static float isSwimming = getIsSwimming(tickDelta);
-	public static float prevIsSneaking = getIsSneaking(tickDelta);
-	public static float isSneaking = getIsSneaking(tickDelta);
-	public static float prevIsCrawling = getIsCrawling(tickDelta);
-	public static float isCrawling = getIsCrawling(tickDelta);
-	public static float prevIsInvisible = getIsInvisible(tickDelta);
-	public static float isInvisible = getIsInvisible(tickDelta);
+	public static float prevViewDistance = getViewDistance(0.0F);
+	public static float viewDistance = getViewDistance(0.0F);
+	public static float prevFov = getFov(0.0F);
+	public static float fov = getFov(0.0F);
+	public static float[] prevEyePosition = getEyePosition(0.0F);
+	public static float[] eyePosition = getEyePosition(0.0F);
+	public static float[] prevPosition = getPosition(0.0F);
+	public static float[] position = getPosition(0.0F);
+	public static float prevPitch = getPitch(0.0F);
+	public static float pitch = getPitch(0.0F);
+	public static float prevYaw = getYaw(0.0F);
+	public static float yaw = getYaw(0.0F);
+	public static float prevCurrentHealth = getCurrentHealth(0.0F);
+	public static float currentHealth = getCurrentHealth(0.0F);
+	public static float prevMaxHealth = getMaxHealth(0.0F);
+	public static float maxHealth = getMaxHealth(0.0F);
+	public static float prevCurrentAbsorption = getCurrentAbsorption(0.0F);
+	public static float currentAbsorption = getCurrentAbsorption(0.0F);
+	public static float prevMaxAbsorption = getMaxAbsorption(0.0F);
+	public static float maxAbsorption = getMaxAbsorption(0.0F);
+	public static float prevCurrentHurtTime = getCurrentHurtTime(0.0F);
+	public static float currentHurtTime = getCurrentHurtTime(0.0F);
+	public static float prevMaxHurtTime = getMaxHurtTime(0.0F);
+	public static float maxHurtTime = getMaxHurtTime(0.0F);
+	public static float prevCurrentAir = getCurrentAir(0.0F);
+	public static float currentAir = getCurrentAir(0.0F);
+	public static float prevMaxAir = getMaxAir(0.0F);
+	public static float maxAir = getMaxAir(0.0F);
+	public static float prevIsSprinting = getIsSprinting(0.0F);
+	public static float isSprinting = getIsSprinting(0.0F);
+	public static float prevIsSwimming = getIsSwimming(0.0F);
+	public static float isSwimming = getIsSwimming(0.0F);
+	public static float prevIsSneaking = getIsSneaking(0.0F);
+	public static float isSneaking = getIsSneaking(0.0F);
+	public static float prevIsCrawling = getIsCrawling(0.0F);
+	public static float isCrawling = getIsCrawling(0.0F);
+	public static float prevIsInvisible = getIsInvisible(0.0F);
+	public static float isInvisible = getIsInvisible(0.0F);
 	public static float prevIsWithered = getHasEffect(StatusEffects.WITHER);
 	public static float isWithered = getHasEffect(StatusEffects.WITHER);
 	public static float prevIsPoisoned = getHasEffect(StatusEffects.POISON);
 	public static float isPoisoned = getHasEffect(StatusEffects.POISON);
-	public static float prevIsBurning = getIsBurning(tickDelta);
-	public static float isBurning = getIsBurning(tickDelta);
-	public static float prevIsOnGround = getIsOnGround(tickDelta);
-	public static float isOnGround = getIsOnGround(tickDelta);
-	public static float prevIsOnLadder = getIsOnLadder(tickDelta);
-	public static float isOnLadder = getIsOnLadder(tickDelta);
-	public static float prevIsRiding = getIsRiding(tickDelta);
-	public static float isRiding = getIsRiding(tickDelta);
-	public static float prevHasPassengers = getHasPassengers(tickDelta);
-	public static float hasPassengers = getHasPassengers(tickDelta);
-	public static float prevBiomeTemperature = getBiomeTemperature(tickDelta);
-	public static float biomeTemperature = getBiomeTemperature(tickDelta);
-	public static float prevAlpha = getAlpha(tickDelta);
-	public static float alpha = getAlpha(tickDelta);
+	public static float prevIsBurning = getIsBurning(0.0F);
+	public static float isBurning = getIsBurning(0.0F);
+	public static float prevIsOnGround = getIsOnGround(0.0F);
+	public static float isOnGround = getIsOnGround(0.0F);
+	public static float prevIsOnLadder = getIsOnLadder(0.0F);
+	public static float isOnLadder = getIsOnLadder(0.0F);
+	public static float prevIsRiding = getIsRiding(0.0F);
+	public static float isRiding = getIsRiding(0.0F);
+	public static float prevHasPassengers = getHasPassengers(0.0F);
+	public static float hasPassengers = getHasPassengers(0.0F);
+	public static float prevBiomeTemperature = getBiomeTemperature(0.0F);
+	public static float biomeTemperature = getBiomeTemperature(0.0F);
+	public static float prevAlpha = getAlpha(0.0F);
+	public static float alpha = getAlpha(0.0F);
 	public static void tick(float tickDelta) {
-		SmoothUniforms.tickDelta = tickDelta;
 		prevViewDistance = viewDistance;
 		viewDistance = (prevViewDistance + getViewDistance(tickDelta)) * 0.5F;
 		prevFov = fov;
 		fov = (prevFov + getFov(tickDelta)) * 0.5F;
-		if (getTime(tickDelta) < 0.01F) {
-			prevTime = getTime(tickDelta);
-			time = getTime(tickDelta);
-		} else {
-			prevTime = time;
-			time = (prevTime + getTime(tickDelta)) * 0.5F;
-		}
 		prevEyePosition = eyePosition;
 		float[] currentEyePosition = getEyePosition(tickDelta);
 		eyePosition = new float[]{((prevEyePosition[0] + currentEyePosition[0]) * 0.5F), ((prevEyePosition[1] + currentEyePosition[1]) * 0.5F), ((prevEyePosition[2] + currentEyePosition[2]) * 0.5F)};
@@ -142,7 +130,6 @@ public class SmoothUniforms extends Uniforms {
 	public static void init() {
 		Events.ShaderUniform.registerFloat("lu", "viewDistanceSmooth", (tickDelta) -> Shaders.getSmooth(tickDelta, prevViewDistance, viewDistance));
 		Events.ShaderUniform.registerFloat("lu", "fovSmooth", (tickDelta) -> Shaders.getSmooth(tickDelta, prevFov, fov));
-		Events.ShaderUniform.registerFloat("lu", "timeSmooth", SmoothUniforms::getSmoothTime);
 		Events.ShaderUniform.registerFloats("lu", "eyePositionSmooth", (tickDelta) -> Shaders.getSmooth(tickDelta, prevEyePosition, eyePosition));
 		Events.ShaderUniform.registerFloats("lu", "positionSmooth", (tickDelta) -> Shaders.getSmooth(tickDelta, prevPosition, position));
 		Events.ShaderUniform.registerFloat("lu", "pitchSmooth", (tickDelta) -> Shaders.getSmooth(tickDelta, prevPitch, pitch));
@@ -169,9 +156,5 @@ public class SmoothUniforms extends Uniforms {
 		Events.ShaderUniform.registerFloat("lu", "hasPassengersSmooth", (tickDelta) -> Shaders.getSmooth(tickDelta, prevHasPassengers, hasPassengers));
 		Events.ShaderUniform.registerFloat("lu", "biomeTemperatureSmooth", (tickDelta) -> Shaders.getSmooth(tickDelta, prevBiomeTemperature, biomeTemperature));
 		Events.ShaderUniform.registerFloat("lu", "alphaSmooth", (tickDelta) -> Shaders.getSmooth(tickDelta, prevAlpha, alpha));
-	}
-	public static float getSmoothTime(float tickDelta) {
-		if (getTime(tickDelta) <= 1.0F) return getTime(tickDelta);
-		return Shaders.getSmooth(tickDelta, prevTime, time);
 	}
 }
