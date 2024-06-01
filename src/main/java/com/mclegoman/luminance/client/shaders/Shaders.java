@@ -51,7 +51,7 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType().call() == Shader.RenderType.GAME) && (shader.getSecond().getDisableGameRendertype() && (!shader.getSecond().getUseDepth() || (shader.getSecond().getUseDepth() && CompatHelper.isIrisShadersEnabled()))))) render(id, shader);
+						if ((shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.getSecond().getDisableGameRendertype() || shader.getSecond().getUseDepth())) && (!shader.getSecond().getUseDepth() || CompatHelper.isIrisShadersEnabled())) render(id, shader);
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 					}
@@ -65,7 +65,7 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || ((shader.getSecond().getRenderType().call() == Shader.RenderType.GAME) && (shader.getSecond().getDisableGameRendertype() && (shader.getSecond().getUseDepth() && !CompatHelper.isIrisShadersEnabled())))) render(id, shader);
+						if (shader.getSecond().getUseDepth() && !CompatHelper.isIrisShadersEnabled()) render(id, shader);
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 					}
@@ -78,9 +78,7 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.GAME)) {
-							if (!shader.getSecond().getUseDepth() && !shader.getSecond().getDisableGameRendertype()) render(id, shader);
-						}
+						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.getSecond().getDisableGameRendertype() && !shader.getSecond().getUseDepth()) render(id, shader);
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}:{}", id.getFirst(), id.getSecond(), error));
 					}
