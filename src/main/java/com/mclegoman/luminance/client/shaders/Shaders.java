@@ -148,7 +148,7 @@ public class Shaders {
 		int index = getShaderIndex(namespace, name);
 		return ShaderDataloader.isValidIndex(index) ? get(index) : null;
 	}
-	public static Shader get(ShaderRegistry shaderData, Callable<Shader.RenderType> renderType, Boolean shouldRender) {
+	public static Shader get(ShaderRegistry shaderData, Callable<Shader.RenderType> renderType, Callable<Boolean> shouldRender) {
 		return new Shader(shaderData, renderType, shouldRender);
 	}
 	public static Shader get(ShaderRegistry shaderData, Callable<Shader.RenderType> renderType) {

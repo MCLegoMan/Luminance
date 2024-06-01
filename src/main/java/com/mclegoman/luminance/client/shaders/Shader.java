@@ -25,16 +25,16 @@ public class Shader {
 	private boolean useDepth;
 	private Identifier shaderId;
 	private Callable<RenderType> renderType;
-	private Boolean shouldRender;
+	private Callable<Boolean> shouldRender;
 	private ShaderRegistry shaderData;
-	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType, Boolean shouldRender) {
+	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType, Callable<Boolean> shouldRender) {
 		setUseDepth(false);
 		setRenderType(renderType);
 		setShouldRender(shouldRender);
 		setShaderData(shaderData);
 	}
 	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType) {
-		this(shaderData, renderType, true);
+		this(shaderData, renderType, () -> true);
 	}
 	public PostEffectProcessor getPostProcessor() {
 		return postProcessor;
@@ -75,9 +75,13 @@ public class Shader {
 		return getShaderData().getDisableGameRendertype();
 	}
 	public Boolean getShouldRender() {
-		return this.shouldRender;
+		try {
+			return this.shouldRender.call();
+		} catch (Exception error) {
+			return false;
+		}
 	}
-	public void setShouldRender(Boolean shouldRender) {
+	public void setShouldRender(Callable<Boolean> shouldRender) {
 		setUseDepth(false);
 		this.shouldRender = shouldRender;
 	}
