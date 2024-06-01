@@ -8,13 +8,13 @@ out vec4 fragColor;
 
 uniform vec2 InSize;
 uniform float lu_alphaSmooth;
-uniform float lu_timeSmooth;
+uniform float lu_time;
 uniform float xAmount;
 uniform float yAmount;
 uniform float speed;
 
 void main() {
     vec4 color = texture(DiffuseSampler, texCoord);
-    vec4 overlay = texture(OverlaySampler, fract(vec2(texCoord.x, -texCoord.y) + (vec2(xAmount, yAmount) * (lu_timeSmooth * speed))));
+    vec4 overlay = texture(OverlaySampler, fract(vec2(texCoord.x, -texCoord.y) + (vec2(xAmount, yAmount) * ((vec2(lu_time * InSize.x, lu_time * InSize.y) * speed)))));
     fragColor = vec4(mix(color.rgb, mix(color.rgb, overlay.rgb, overlay.a), lu_alphaSmooth), 1.0);
 }
