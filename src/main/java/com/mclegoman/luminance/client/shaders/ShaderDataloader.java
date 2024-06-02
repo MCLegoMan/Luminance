@@ -118,6 +118,15 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterShaderDataRegistered event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 				}
 			});
+			Events.ShaderRender.registry.forEach((id, shaders) -> {
+				if (shaders != null) shaders.forEach(shader -> {
+					try {
+						if (shader.getSecond() != null) shader.getSecond().reload();
+					} catch (Exception error) {
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to reload shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+					}
+				});
+			});
 			isReloading = false;
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to apply shaders dataloader: {}", error));

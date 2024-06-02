@@ -28,10 +28,7 @@ public class Shader {
 	private Callable<Boolean> shouldRender;
 	private ShaderRegistry shaderData;
 	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType, Callable<Boolean> shouldRender) {
-		setUseDepth(false);
-		setRenderType(renderType);
-		setShouldRender(shouldRender);
-		setShaderData(shaderData);
+		reload(shaderData, renderType, shouldRender);
 	}
 	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType) {
 		this(shaderData, renderType, () -> true);
@@ -96,5 +93,14 @@ public class Shader {
 	public enum RenderType {
 		WORLD,
 		GAME
+	}
+	public void reload() {
+		reload(shaderData, renderType, shouldRender);
+	}
+	public void reload(ShaderRegistry shaderData, Callable<RenderType> renderType, Callable<Boolean> shouldRender) {
+		setUseDepth(false);
+		setRenderType(renderType);
+		setShouldRender(shouldRender);
+		setShaderData(shaderData);
 	}
 }
