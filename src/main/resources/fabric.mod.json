@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "luminance",
+  "version": "${version}",
+  "name": "Luminance",
+  "description": "Luminance is a library mod that is primarily designed to help other mods with shaders.",
+  "authors": [
+    "MCLegoMan"
+  ],
+  "contact": {
+    "homepage": "https://mclegoman.com/Luminance",
+    "sources": "https://github.com/MCLegoMan/Luminance",
+    "issues": "https://github.com/MCLegoMan/Luminance/issues"
+  },
+  "license": [
+    "LGPL-3.0-or-later"
+  ],
+  "icon": "assets/luminance/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.mclegoman.luminance.client.LuminanceClient"
+    ],
+    "modmenu": [
+	    "com.mclegoman.luminance.compat.ModMenuCompat"
+    ]
+  },
+  "mixins": [
+    "mclegoman-luminance.mixins.json"
+  ],
+  "depends": {
+    "minecraft": [
+      "~1.21"
+    ],
+    "fabric-resource-loader-v0": "*",
+    "fabric-key-binding-api-v1": "*",
+    "fabric-lifecycle-events-v1": "*",
+    "java": ">=21"
+  },
+  "custom": {
+    "catalogue": {
+      "configFactory": "com.mclegoman.luminance.compat.CatalogueCompat"
+    }
+  }
+}
