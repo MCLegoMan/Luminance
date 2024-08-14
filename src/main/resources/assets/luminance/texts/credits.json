@@ -1,6 +1,19 @@
 {
 	"sections": [
 		{
+			"text": "A library mod that helps other mods with shaders.",
+			"centered": true,
+			"sections": [
+				{
+					"text": "Licence: LGPL-3.0-or-later",
+					"centered": true
+				}
+			]
+		},
+		{
+			"spaced": true
+		},
+		{
 			"sections": [
 				{
 					"text": "Lead Developer",
@@ -19,7 +32,7 @@
 					"formatting": "white",
 					"sections": [
 						{
-							"text": "  Nettakrim",
+							"text": "  Nettakrim:",
 							"sections": [
 								{
 									"text": "    Vanilla Shader Fixes"
@@ -47,26 +60,6 @@
 			"formatting": "gold",
 			"centered": true,
 			"sections": [
-				{
-					"spaced": true
-				},
-				{
-					"text": "  Luminance",
-					"formatting": "white",
-					"sections": [
-						{
-							"text": "  A library mod that helps other mods with shaders.",
-							"sections": [
-								{
-									"text": "    Author: MCLegoMan"
-								},
-								{
-									"text": "    Licence: LGPL-3.0-or-later"
-								}
-							]
-						}
-					]
-				},
 				{
 					"spaced": true
 				},
