@@ -27,18 +27,8 @@ public abstract class InGameHudMixin {
 	private void luminance$render(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
 		if (!ClientData.minecraft.gameRenderer.isRenderingPanorama()) {
 			DrawContext context = new DrawContext(ClientData.minecraft, this.buffers.getEntityVertexConsumers());
-			float h = MessageOverlay.remaining - ClientData.minecraft.getRenderTickCounter().getTickDelta(true);
-			int l = (int) (h * 255.0F / 20.0F);
-			if (l > 255) l = 255;
-			if (l > 10) {
-				context.getMatrices().push();
-				context.getMatrices().translate((float) (ClientData.minecraft.getWindow().getScaledWidth() / 2), 27, 0.0F);
-				int k = 16777215;
-				int m = l << 24 & -16777216;
-				int n = ClientData.minecraft.textRenderer.getWidth(MessageOverlay.message);
-				context.drawTextWithShadow(ClientData.minecraft.textRenderer, MessageOverlay.message, -n / 2, -4, k | m);
-				context.getMatrices().pop();
-			}
+			int time = (int) Math.min((MessageOverlay.remaining - ClientData.minecraft.getRenderTickCounter().getTickDelta(true)) * 255.0F / 20.0F, 255.0F);
+			if (time > 10) context.drawCenteredTextWithShadow(ClientData.minecraft.textRenderer, MessageOverlay.message, (int) (ClientData.minecraft.getWindow().getScaledWidth() / 2.0F), 23, 16777215 | (time << 24 & -16777216));
 		}
 	}
 }
