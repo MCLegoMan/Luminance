@@ -8,11 +8,11 @@
 package com.mclegoman.luminance.client.events;
 
 import com.mclegoman.luminance.client.shaders.ShaderRegistry;
-import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.ShaderProgram;
 
 public class Runnables {
 	public interface Shader {
-		default void run(JsonEffectShaderProgram program) {}
+		default void run(ShaderProgram program) {}
 	}
 	public interface ShaderData {
 		default void run(ShaderRegistry shaderData) {}

@@ -8,10 +8,13 @@
 package com.mclegoman.luminance.mixin.client.shaders;
 
 import com.mclegoman.luminance.client.events.Events;
-import com.mclegoman.luminance.client.util.MessageOverlay;
-import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectPass;
-import net.minecraft.text.Text;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.render.FrameGraphBuilder;
+import net.minecraft.client.util.Handle;
+import net.minecraft.util.Identifier;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,15 +22,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Map;
+
 @Mixin(priority = 100, value = PostEffectPass.class)
 public abstract class PostEffectPassMixin {
-	@Shadow @Final private JsonEffectShaderProgram program;
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/JsonEffectShaderProgram;enable()V"))
-	private void luminance$beforeRender(float time, CallbackInfo ci) {
+	@Shadow @Final private ShaderProgram program;
+	@Inject(method = "method_62255", at = @At("HEAD"))
+	private void luminance$beforeRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		Events.BeforeShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
-	@Inject(method = "render", at = @At(value = "TAIL"))
-	private void luminance$afterRender(float time, CallbackInfo ci) {
+	@Inject(method = "method_62255", at = @At("TAIL"))
+	private void luminance$afterRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		Events.AfterShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
 }

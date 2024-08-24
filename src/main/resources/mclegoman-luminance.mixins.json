@@ -9,9 +9,6 @@
 		"client.shaders.GameRendererMixin",
 		"client.shaders.MouseMixin",
 		"client.shaders.PostEffectPassMixin",
-		"client.shaders.ShaderNamespaceFix",
-		"client.shaders.ShaderTextureNamespaceFix",
-		"client.shaders.WorldRendererMixin",
 		"compat.modmenu.FabricModMixin",
 		"compat.modmenu.ModsScreenMixin",
 		"client.shaders.PostEffectProcessorMixin"

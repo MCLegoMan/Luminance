@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version "1.6-SNAPSHOT"
+	id "fabric-loom" version "1.7-SNAPSHOT"
 	id "com.github.breadmoirai.github-release" version "2.4.1"
 	id "com.modrinth.minotaur" version "2.+"
 	id "maven-publish"
@@ -44,8 +44,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
 
 	// Compatibility
-	modImplementation "maven.modrinth:sodium:${project.sodium}"
-	modImplementation "maven.modrinth:iris:${project.iris}"
+	//modImplementation "maven.modrinth:sodium:${project.sodium}"
+	//modImplementation "maven.modrinth:iris:${project.iris}"
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu}"
 	modImplementation fileTree(dir: 'libs', include: '*.jar')
 

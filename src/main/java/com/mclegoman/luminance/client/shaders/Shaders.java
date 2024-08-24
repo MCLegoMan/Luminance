@@ -22,7 +22,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.gl.Uniform;
 import net.minecraft.resource.ResourceType;
@@ -41,7 +41,7 @@ public class Shaders {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ShaderDataloader());
 		Uniforms.init();
 		Events.BeforeShaderRender.register(new Couple<>(Data.version.getID(), "main"), new Runnables.Shader() {
-			public void run(JsonEffectShaderProgram program) {
+			public void run(ShaderProgram program) {
 				Events.ShaderUniform.registryFloat.forEach((uniform, callable) -> setFloat(program, uniform.getFirst(), uniform.getSecond(), callable));
 				Events.ShaderUniform.registryFloatArray.forEach((uniform, callable) -> setFloatArray(program, uniform.getFirst(), uniform.getSecond(), callable));
 				Events.ShaderUniform.registryVector3f.forEach((uniform, callable) -> setVector3f(program, uniform.getFirst(), uniform.getSecond(), callable));
@@ -92,16 +92,16 @@ public class Shaders {
 				Events.ShaderRender.registry.forEach((id, shaders) -> {
 					if (shaders != null) shaders.forEach(shader -> {
 						try {
-							if (shader.getSecond() != null && shader.getSecond().getPostProcessor() != null) shader.getSecond().getPostProcessor().setupDimensions(width, height);
+							//if (shader.getSecond() != null && shader.getSecond().getPostProcessor() != null) shader.getSecond().getPostProcessor().setupDimensions(width, height);
 						} catch (Exception error) {
 							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to resize shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 						}
 					});
 				});
 				if (Shaders.depthFramebuffer == null) {
-					Shaders.depthFramebuffer = new SimpleFramebuffer(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
+					Shaders.depthFramebuffer = new SimpleFramebuffer(width, height, true);
 				} else {
-					Shaders.depthFramebuffer.resize(width, height, MinecraftClient.IS_SYSTEM_MAC);
+					Shaders.depthFramebuffer.resize(width, height);
 				}
 			}
 		});
@@ -109,7 +109,7 @@ public class Shaders {
 	private static void render(Couple<String, String> id, Couple<String, Shader> shader) {
 		try {
 			if (shader.getSecond().getShouldRender()) {
-				if (shader.getSecond().getPostProcessor() == null || !Objects.equals(shader.getSecond().getPostProcessor().getName(), shader.getSecond().getShaderId().toString())) {
+				if (shader.getSecond().getPostProcessor() == null) {// || !Objects.equals(shader.getSecond().getPostProcessor().getName(), shader.getSecond().getShaderId().toString())) {
 					try {
 						shader.getSecond().setPostProcessor();
 					} catch (Exception error) {
@@ -128,9 +128,9 @@ public class Shaders {
 			if (shader.getSecond().getPostProcessor() != null) {
 				RenderSystem.enableBlend();
 				RenderSystem.defaultBlendFunc();
-				shader.getSecond().getPostProcessor().render(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
+				//shader.getSecond().getPostProcessor().render(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
 				RenderSystem.disableBlend();
-				ClientData.minecraft.getFramebuffer().beginWrite(true);
+				ClientData.minecraft.getFramebuffer().beginWrite(false);
 			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getId(), error));
@@ -215,41 +215,41 @@ public class Shaders {
 		}
 		return new float[]{};
 	}
-	public static Uniform getUniform(JsonEffectShaderProgram program, String prefix, String uniformName) {
-		return program.getUniformByNameOrDummy(getUniformName(prefix, uniformName));
+	public static Uniform getUniform(ShaderProgram program, String prefix, String uniformName) {
+		return program.getUniform(getUniformName(prefix, uniformName));
 	}
 	public static String getUniformName(String prefix, String uniformName) {
 		return prefix + "_" + uniformName;
 	}
-	public static void setFloat(JsonEffectShaderProgram program, String prefix, String uniformName, Callables.ShaderRender<Float> callable) {
+	public static void setFloat(ShaderProgram program, String prefix, String uniformName, Callables.ShaderRender<Float> callable) {
 		try {
 			set(program, prefix, uniformName, callable.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
-	public static void setFloatArray(JsonEffectShaderProgram program, String prefix, String uniformName,  Callables.ShaderRender<float[]> callable) {
+	public static void setFloatArray(ShaderProgram program, String prefix, String uniformName,  Callables.ShaderRender<float[]> callable) {
 		try {
 			set(program, prefix, uniformName, callable.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
-	public static void setVector3f(JsonEffectShaderProgram program, String prefix, String uniformName,  Callables.ShaderRender<Vector3f> callable) {
+	public static void setVector3f(ShaderProgram program, String prefix, String uniformName,  Callables.ShaderRender<Vector3f> callable) {
 		try {
 			set(program, prefix, uniformName, callable.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true)));
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
-	public static void set(JsonEffectShaderProgram program, String prefix, String uniformName, float... values) {
+	public static void set(ShaderProgram program, String prefix, String uniformName, float... values) {
 		try {
 			getUniform(program, prefix, uniformName).set(values);
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
-	public static void set(JsonEffectShaderProgram program, String prefix, String uniformName, Vector3f values) {
+	public static void set(ShaderProgram program, String prefix, String uniformName, Vector3f values) {
 		try {
 			getUniform(program, prefix, uniformName).set(values);
 		} catch (Exception error) {

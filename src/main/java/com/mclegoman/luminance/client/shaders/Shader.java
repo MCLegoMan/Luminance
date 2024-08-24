@@ -41,11 +41,11 @@ public class Shader {
 	}
 	public void setPostProcessor(TextureManager textureManager, ResourceManager resourceManager, Framebuffer framebuffer, int width, int height) {
 		try {
-			this.postProcessor = new PostEffectProcessor(textureManager, resourceManager, framebuffer, shaderId);
-			this.postProcessor.setupDimensions(width, height);
+			//this.postProcessor = new PostEffectProcessor(textureManager, resourceManager, framebuffer, shaderId);
+			//this.postProcessor.setupDimensions(width, height);
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set post processor: {}", error));
-			if (this.postProcessor != null) this.postProcessor.close();
+			//if (this.postProcessor != null) this.postProcessor.close();
 		}
 	}
 	public boolean getUseDepth() {

@@ -15,7 +15,6 @@ import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.minecraft.client.gl.ShaderStage;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -29,7 +28,7 @@ import java.util.Map;
 public class ShaderDataloader extends JsonDataLoader implements IdentifiableResourceReloadListener {
 	protected static boolean isReloading;
 	public static final List<ShaderRegistry> registry = new ArrayList<>();
-	public static final String resourceLocation = "shaders/shaders";
+	public static final String resourceLocation = "luminance";
 	public ShaderDataloader() {
 		super(new Gson(), resourceLocation);
 	}
@@ -138,20 +137,20 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 	}
 	protected static void releaseShaders() {
 		try {
-			List<ShaderStage.Type> shaderTypes = new ArrayList<>();
-			shaderTypes.add(ShaderStage.Type.VERTEX);
-			shaderTypes.add(ShaderStage.Type.FRAGMENT);
-			for (ShaderStage.Type type : shaderTypes) {
-				List<Map.Entry<String, ShaderStage>> loadedShaders = type.getLoadedShaders().entrySet().stream().toList();
-				for (int index = loadedShaders.size() - 1; index > -1; index--) {
-					Map.Entry<String, ShaderStage> loadedShader = loadedShaders.get(index);
-					String name = loadedShader.getKey();
-					if (name.startsWith("rendertype_")) continue;
-					if (name.startsWith("position_")) continue;
-					if (name.equals("position") || name.equals("particle")) continue;
-					loadedShader.getValue().release();
-				}
-			}
+//			List<ShaderStage.Type> shaderTypes = new ArrayList<>();
+//			shaderTypes.add(ShaderStage.Type.VERTEX);
+//			shaderTypes.add(ShaderStage.Type.FRAGMENT);
+//			for (ShaderStage.Type type : shaderTypes) {
+//				List<Map.Entry<String, ShaderStage>> loadedShaders = type.getLoadedShaders().entrySet().stream().toList();
+//				for (int index = loadedShaders.size() - 1; index > -1; index--) {
+//					Map.Entry<String, ShaderStage> loadedShader = loadedShaders.get(index);
+//					String name = loadedShader.getKey();
+//					if (name.startsWith("rendertype_")) continue;
+//					if (name.startsWith("position_")) continue;
+//					if (name.equals("position") || name.equals("particle")) continue;
+//					loadedShader.getValue().release();
+//				}
+//			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to release shaders: {}", error));
 		}
