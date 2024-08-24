@@ -8,8 +8,6 @@ Luminance is a library mod that is primarily designed to help other mods with sh
   - Luminance comes with a bunch of these by default, but you can add your own too!
 - **Adds shaders that have been used in previous minecraft versions.**
   - _Requires [Perspective](https://modrinth.com/mod/mclegoman-perspective) or [Souper Secret Settings](https://modrinth.com/mod/souper-secret-settings)._
-- **Fixes Shader Namespace Bugs.**  
-  - Minecraft doesn't use namespaces for shaders and shader textures, Luminance fixes that.  
 - **Compatibility**  
   - Luminance takes care of rendering shaders, so you don't have to!  
   - You can check if Iris Shaders are enabled using Luminance.  
@@ -51,6 +49,15 @@ include(modImplementation "maven.modrinth:luminance:${project.luminance}")
 luminance = 1.0.0-alpha.3+1.20.5
 ```
 4. Reload gradle and you're ready to use Luminance!
+
+## Plans  
+- [x] Shader registration through resource packs.  
+- [ ] Shader rendering.  
+- [x] Dynamic Shader Uniforms  
+- [ ] Fabric, Quilt, and NeoForge support.
+  - [x] Fabric  
+  - [ ] Quilt (Native)  
+  - [ ] NeoForge  
 
 ## Also check out  
 [Our Modrinth Page](https://modrinth.com/mod/luminance)  
