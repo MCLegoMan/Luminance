@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "phosphor",
+  "post_effect": "minecraft:phosphor",
   "disable_game_rendertype": true,
   "translatable": true,
   "custom": {

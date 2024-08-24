@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "bloom",
+  "post_effect": "minecraft:bloom",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

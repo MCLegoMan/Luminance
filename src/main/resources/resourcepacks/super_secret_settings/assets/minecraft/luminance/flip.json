@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "flip",
+  "post_effect": "minecraft:flip",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

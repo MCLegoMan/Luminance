@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "art",
+  "post_effect": "minecraft:art",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

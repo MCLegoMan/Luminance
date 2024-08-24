@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "wobble",
+  "post_effect": "minecraft:wobble",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

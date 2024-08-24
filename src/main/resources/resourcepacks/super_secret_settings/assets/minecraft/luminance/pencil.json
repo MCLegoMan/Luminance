@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "pencil",
+  "post_effect": "minecraft:pencil",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

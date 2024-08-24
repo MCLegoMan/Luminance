@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "blobs",
+  "post_effect": "minecraft:blobs",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

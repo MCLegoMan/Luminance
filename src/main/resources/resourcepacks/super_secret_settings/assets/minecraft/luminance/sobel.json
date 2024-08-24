@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "sobel",
+  "post_effect": "minecraft:sobel",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": false,

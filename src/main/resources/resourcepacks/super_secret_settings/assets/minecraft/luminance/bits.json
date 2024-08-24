@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "bits",
+  "post_effect": "minecraft:bits",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

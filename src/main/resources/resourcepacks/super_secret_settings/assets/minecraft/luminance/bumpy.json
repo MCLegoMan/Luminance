@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "bumpy",
+  "post_effect": "minecraft:bumpy",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": false,

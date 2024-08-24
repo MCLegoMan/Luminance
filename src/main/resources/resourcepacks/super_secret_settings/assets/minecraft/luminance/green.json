@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "green",
+  "post_effect": "minecraft:green",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

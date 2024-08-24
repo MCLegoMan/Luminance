@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "color_convolve",
+  "post_effect": "minecraft:color_convolve",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": false,

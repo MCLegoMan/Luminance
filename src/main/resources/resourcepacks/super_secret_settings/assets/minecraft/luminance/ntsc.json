@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "ntsc",
+  "post_effect": "minecraft:ntsc",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,
