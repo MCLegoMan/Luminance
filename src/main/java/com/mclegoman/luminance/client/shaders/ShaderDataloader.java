@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
+import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.JsonDataLoader;
@@ -42,16 +43,17 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 			}
 		});
 	}
-	private void add(String namespace, String shaderName, boolean translatable, boolean disableGameRendertype, JsonObject custom, ResourceManager manager) {
+	private ShaderRegistry getShaderData(String namespace, String key, boolean translatable, boolean disableGameRendertype, JsonObject custom) {
+		return new ShaderRegistry.Builder(namespace, key).translatable(translatable).disableGameRendertype(disableGameRendertype).custom(custom).build();
+	}
+	private void add(ShaderRegistry shaderData, ResourceManager manager) {
 		try {
-			String id = namespace.toLowerCase() + ":" + shaderName.toLowerCase();
-			manager.getResourceOrThrow(Shaders.getPostShader(id));
-			ShaderRegistry shaderData = new ShaderRegistry(namespace.toLowerCase(), shaderName.toLowerCase(), translatable, disableGameRendertype, custom);
+			manager.getResourceOrThrow(shaderData.getPostEffect());
 			boolean alreadyRegistered = false;
 			for (ShaderRegistry data : registry) {
-				if (data.getId().equals(id)) {
+				if (data.getNamespace().equals(shaderData.getNamespace()) && data.getKey().equals(shaderData.getKey())) {
 					alreadyRegistered = true;
-					Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to add \"{}\" shader to registry: This shader has already been registered!", id));
+					Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to add \"{}:{}\" shader to registry: This shader has already been registered!", shaderData.getNamespace(), shaderData.getKey()));
 					break;
 				}
 			}
@@ -66,8 +68,8 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 	public static boolean isValidIndex(int index) {
 		return index <= getShaderAmount() && index >= 0;
 	}
-	private void remove(String namespace, String name) {
-		registry.removeIf((shader) -> shader.getNamespace().equals(namespace) && shader.getName().equals(name));
+	private void remove(ShaderRegistry shaderData) {
+		registry.removeIf((shader) -> (shader.getNamespace().equals(shaderData.getNamespace()) && shader.getKey().equals(shaderData.getKey())));
 	}
 	@Override
 	public void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
@@ -79,28 +81,26 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 			prepared.forEach((identifier, jsonElement) -> {
 				try {
 					JsonObject reader = jsonElement.getAsJsonObject();
-					String namespace = JsonHelper.getString(reader, "namespace", Data.version.getID());
-					// Please use "name", we check for "shader" for backwards compatibility with older Perspective packs.
-					String name = JsonHelper.hasString(reader, "shader") ? JsonHelper.getString(reader, "shader") : JsonHelper.getString(reader, "name");
+					Identifier post_effect = IdentifierHelper.identifierFromString(JsonHelper.getString(reader, "post_effect", identifier.getNamespace() + ":" + identifier.getPath()));
 					boolean enabled = JsonHelper.getBoolean(reader, "enabled", true);
 					boolean translatable = JsonHelper.getBoolean(reader, "translatable", false);
-					// Please use "disable_game_rendertype", we check for "disable_screen_mode" for backwards compatibility with older Perspective packs.
 					boolean disableGameRenderType = JsonHelper.hasBoolean(reader, "disable_screen_mode") ? JsonHelper.getBoolean(reader, "disable_screen_mode") : JsonHelper.getBoolean(reader, "disable_game_rendertype", false);
 					JsonObject customData = JsonHelper.getObject(reader, "customData", new JsonObject());
+					ShaderRegistry shaderData = getShaderData(post_effect.getNamespace(), post_effect.getPath(), translatable, disableGameRenderType, customData);
 					if (enabled) {
-						add(namespace, name, translatable, disableGameRenderType, customData, manager);
+						add(shaderData, manager);
 						Events.OnShaderDataRegistered.registry.forEach((id, runnable) -> {
 							try {
-								runnable.run(new ShaderRegistry(namespace, name, translatable, disableGameRenderType, customData));
+								runnable.run(shaderData);
 							} catch (Exception error) {
 								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataRegistered event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 							}
 						});
 					} else {
-						remove(namespace, name);
+						remove(shaderData);
 						Events.OnShaderDataRemoved.registry.forEach((id, runnable) -> {
 							try {
-								runnable.run(new ShaderRegistry(namespace, name, translatable, disableGameRenderType, customData));
+								runnable.run(shaderData);
 							} catch (Exception error) {
 								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataRemoved event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
 							}

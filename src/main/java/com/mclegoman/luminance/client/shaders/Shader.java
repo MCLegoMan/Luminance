@@ -88,7 +88,7 @@ public class Shader {
 	public void setShaderData(ShaderRegistry shaderData) {
 		setUseDepth(false);
 		this.shaderData = shaderData;
-		setShaderId(Shaders.getPostShader(this.shaderData.getId()));
+		setShaderId(this.shaderData.getPostEffect());
 	}
 	public enum RenderType {
 		WORLD,

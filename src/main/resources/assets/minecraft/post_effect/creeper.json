@@ -1,14 +1,18 @@
 {
-    "targets": [
-        "0",
-        "1",
-        "2"
-    ],
+    "targets": {
+        "swap": {},
+        "merge": {}
+    },
     "passes": [
         {
-            "name": "color_convolve",
-            "intarget": "minecraft:main",
-            "outtarget": "0",
+            "program": "minecraft:post/color_convolve",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap",
             "uniforms": [
                 {
                     "name": "RedMatrix",
@@ -25,9 +29,14 @@
             ]
         },
         {
-            "name": "bits",
-            "intarget": "0",
-            "outtarget": "1",
+            "program": "minecraft:post/bits",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "minecraft:main",
             "uniforms": [
                 {
                     "name": "Resolution",
@@ -40,20 +49,20 @@
             ]
         },
         {
-            "name": "luminance:merge",
-            "intarget": "1",
-            "outtarget": "2",
-            "auxtargets": [
+            "program": "luminance:post/merge",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
                 }
+            ],
+            "output": "minecraft:main",
+            "uniforms": [
             ]
-        },
-        {
-            "name": "minecraft:blit",
-            "intarget": "2",
-            "outtarget": "minecraft:main"
         }
     ]
 }

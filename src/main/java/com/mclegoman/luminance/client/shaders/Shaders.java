@@ -113,14 +113,14 @@ public class Shaders {
 					try {
 						shader.getSecond().setPostProcessor();
 					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}\" post processor: {}", shader.getSecond().getShaderData().getId(), error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}:{}\" post processor: {}", shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
 						Events.ShaderRender.Shaders.remove(id, shader.getFirst());
 					}
 				}
 				render(shader);
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getId(), error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
 		}
 	}
 	private static void render(Couple<String, Shader> shader) {
@@ -133,14 +133,11 @@ public class Shaders {
 				ClientData.minecraft.getFramebuffer().beginWrite(false);
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getId(), error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
 		}
 	}
 	public static ShaderRegistry get(int shaderIndex) {
 		return ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : null;
-	}
-	public static ShaderRegistry get(String id) {
-		return get(getShaderIndex(id));
 	}
 	public static ShaderRegistry get(String namespace, String name) {
 		int index = getShaderIndex(namespace, name);
@@ -152,27 +149,13 @@ public class Shaders {
 	public static Shader get(ShaderRegistry shaderData, Callable<Shader.RenderType> renderType) {
 		return new Shader(shaderData, renderType);
 	}
-	public static Identifier getPostShader(String id) {
-		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id);
-		String shader = IdentifierHelper.getStringPart(IdentifierHelper.Type.KEY, id);
-		return getPostShader(namespace, shader);
+	public static Identifier getPostShader(Identifier post_effect) {
+		return Identifier.of(post_effect.getNamespace().toLowerCase(), ("post_effect/" + post_effect.getPath() + ".json"));
 	}
-	public static Identifier getPostShader(String namespace, String name) {
-		if (namespace != null && name != null) {
-			name = name.replace("\"", "").toLowerCase();
-			return Identifier.of(namespace.toLowerCase(), ("shaders/post/" + name + ".json"));
-		}
-		return null;
-	}
-	public static int getShaderIndex(String id) {
-		String namespace = IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id);
-		String name = IdentifierHelper.getStringPart(IdentifierHelper.Type.KEY, id);
-		return getShaderIndex(namespace, name);
-	}
-	public static int getShaderIndex(String namespace, String name) {
-		if (namespace != null && name != null) {
+	public static int getShaderIndex(String namespace, String key) {
+		if (namespace != null && key != null) {
 			for (ShaderRegistry data : ShaderDataloader.registry) {
-				if (data.getNamespace().equals(namespace) && data.getName().equals(name)) return ShaderDataloader.registry.indexOf(data);
+				if (data.getNamespace().equals(namespace) && data.getKey().equals(key)) return ShaderDataloader.registry.indexOf(data);
 			}
 		}
 		return -1;
@@ -191,7 +174,7 @@ public class Shaders {
 	}
 	public static Text getShaderName(int shaderIndex, boolean shouldShowNamespace) {
 		ShaderRegistry shader = get(shaderIndex);
-		if (shader != null) return Translation.getShaderTranslation(shader.getNamespace(), shader.getName(), shader.getTranslatable(), shouldShowNamespace);
+		if (shader != null) return Translation.getShaderTranslation(shader.getNamespace(), shader.getKey(), shader.getTranslatable(), shouldShowNamespace);
 		return Translation.getErrorTranslation(Data.version.getID());
 	}
 	public static Text getShaderName(int shaderIndex) {
@@ -201,7 +184,7 @@ public class Shaders {
 		// If the shader registry contains at least one shader with the name, the first detected instance will be used.
 		if (!id.contains(":")) {
 			for (ShaderRegistry registry : ShaderDataloader.registry) {
-				if (registry.getName().equalsIgnoreCase(id)) return registry.getNamespace();
+				if (registry.getKey().equalsIgnoreCase(id)) return registry.getNamespace();
 			}
 		}
 		return IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id);
@@ -244,14 +227,20 @@ public class Shaders {
 	}
 	public static void set(ShaderProgram program, String prefix, String uniformName, float... values) {
 		try {
-			getUniform(program, prefix, uniformName).set(values);
+			if (program != null) {
+				Uniform uniform = getUniform(program, prefix, uniformName);
+				if (uniform != null) uniform.set(values);
+			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}
 	}
 	public static void set(ShaderProgram program, String prefix, String uniformName, Vector3f values) {
 		try {
-			getUniform(program, prefix, uniformName).set(values);
+			if (program != null) {
+				Uniform uniform = getUniform(program, prefix, uniformName);
+				if (uniform != null) uniform.set(values);
+			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader uniform: {}_{}: {}", prefix, uniformName, error));
 		}

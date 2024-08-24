@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "box_blur",
+  "post_effect": "minecraft:box_blur",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

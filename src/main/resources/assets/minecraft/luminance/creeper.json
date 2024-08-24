@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "creeper",
+  "post_effect": "minecraft:creeper",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,

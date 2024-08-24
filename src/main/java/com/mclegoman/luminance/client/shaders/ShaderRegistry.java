@@ -8,28 +8,57 @@
 package com.mclegoman.luminance.client.shaders;
 
 import com.google.gson.JsonObject;
+import com.mclegoman.luminance.common.util.IdentifierHelper;
+import net.minecraft.util.Identifier;
 
 public class ShaderRegistry {
-	private final String namespace;
-	private final String name;
+	private final String id;
 	private final boolean translatable;
 	private final boolean disableGameRendertype;
 	private final JsonObject custom;
-	public ShaderRegistry(String namespace, String name, boolean translatable, boolean disableGameRendertype, JsonObject custom) {
-		this.namespace = namespace;
-		this.name = name;
+	private ShaderRegistry(String namespace, String key, boolean translatable, boolean disableGameRendertype, JsonObject custom) {
+		this.id = namespace + ":" + key;
 		this.translatable = translatable;
 		this.disableGameRendertype = disableGameRendertype;
 		this.custom = custom;
 	}
-	public String getId() {
-		return this.namespace + ":" + this.name;
+	public static class Builder {
+		private final String namespace;
+		private final String path;
+		private boolean translatable;
+		private boolean disableGameRendertype;
+		private JsonObject custom;
+		public Builder(String namespace, String path) {
+			this.namespace = namespace;
+			this.path = path;
+			this.translatable = false;
+			this.disableGameRendertype = false;
+			this.custom = new JsonObject();
+		}
+		public Builder translatable(boolean translatable) {
+			this.translatable = translatable;
+			return this;
+		}
+		public Builder disableGameRendertype(boolean disableGameRendertype) {
+			this.disableGameRendertype = disableGameRendertype;
+			return this;
+		}
+		public Builder custom(JsonObject custom) {
+			this.custom = custom;
+			return this;
+		}
+		public ShaderRegistry build() {
+			return new ShaderRegistry(this.namespace, this.path, this.translatable, this.disableGameRendertype, this.custom);
+		}
 	}
 	public String getNamespace() {
-		return this.namespace;
+		return IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, this.id);
 	}
-	public String getName() {
-		return this.name;
+	public String getKey() {
+		return IdentifierHelper.getStringPart(IdentifierHelper.Type.KEY, this.id);
+	}
+	public Identifier getPostEffect() {
+		return Shaders.getPostShader(IdentifierHelper.identifierFromString(this.id));
 	}
 	public boolean getTranslatable() {
 		return this.translatable;

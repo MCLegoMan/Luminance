@@ -1,6 +1,5 @@
 {
-  "namespace": "minecraft",
-  "name": "spider",
+  "post_effect": "minecraft:spider",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": true,
