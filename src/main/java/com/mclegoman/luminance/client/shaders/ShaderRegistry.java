@@ -22,6 +22,9 @@ public class ShaderRegistry {
 		this.disableGameRendertype = disableGameRendertype;
 		this.custom = custom;
 	}
+	public static Builder builder(String namespace, String path) {
+		return new Builder(namespace, path);
+	}
 	public static class Builder {
 		private final String namespace;
 		private final String path;
