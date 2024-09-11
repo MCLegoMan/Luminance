@@ -5,24 +5,37 @@
     ],
     "passes": [
         {
-            "name": "minecraft:scan_pincushion",
-            "intarget": "minecraft:main",
+            "program": "minecraft:scan_pincushion",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                }
+            ],
             "outtarget": "merge"
         },
         {
-            "name": "luminance:merge",
-            "intarget": "merge",
-            "outtarget": "swap",
-            "auxtargets": [
+            "program": "luminance:merge",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "outtarget": "swap"
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "swap",
+            "program": "minecraft:blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
             "outtarget": "minecraft:main"
         }
     ]

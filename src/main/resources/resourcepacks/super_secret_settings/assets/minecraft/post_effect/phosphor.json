@@ -6,15 +6,18 @@
     ],
     "passes": [
         {
-            "name": "minecraft:phosphor",
-            "intarget": "minecraft:main",
-            "outtarget": "merge",
-            "auxtargets": [
+            "program": "minecraft:phosphor",
+            "inputs": [
                 {
-                    "name": "PrevSampler",
-                    "id": "previous"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Prev",
+                    "target": "previous"
                 }
             ],
+            "output": "merge",
             "uniforms": [
                 {
                     "name": "Phosphor",
@@ -23,25 +26,39 @@
             ]
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "swap",
-            "outtarget": "previous"
-        },
-        {
-            "name": "luminance:merge",
-            "intarget": "merge",
-            "outtarget": "swap",
-            "auxtargets": [
+            "program": "minecraft:blit",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "swap"
                 }
-            ]
+            ],
+            "output": "previous"
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "swap",
-            "outtarget": "minecraft:main"
+            "program": "luminance:merge",
+
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap"
+        },
+        {
+            "program": "minecraft:blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "minecraft:main"
         }
     ]
 }

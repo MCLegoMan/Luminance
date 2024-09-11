@@ -8,35 +8,58 @@
     ],
     "passes": [
         {
-            "name": "minecraft:ntsc_encode",
-            "intarget": "minecraft:main",
-            "outtarget": "swap"
-        },
-        {
-            "name": "minecraft:ntsc_decode",
-            "intarget": "swap",
-            "outtarget": "swap2",
-            "auxtargets": [
+            "program": "minecraft:ntsc_encode",
+            "inputs": [
                 {
-                    "name": "BaseSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "swap"
         },
         {
-            "name": "minecraft:color_convolve",
-            "intarget": "swap2",
-            "outtarget": "swap"
+            "program": "minecraft:ntsc_decode",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                },
+                {
+                    "sampler_name": "Base",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap2"
         },
         {
-            "name": "minecraft:deconverge",
-            "intarget": "swap",
-            "outtarget": "merge"
+            "program": "minecraft:color_convolve",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap2"
+                }
+            ],
+            "output": "swap"
         },
         {
-            "name": "minecraft:box_blur",
-            "intarget": "minecraft:main",
-            "outtarget": "swap",
+            "program": "minecraft:deconverge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "merge"
+        },
+        {
+            "program": "minecraft:box_blur",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap",
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -49,9 +72,14 @@
             ]
         },
         {
-            "name": "minecraft:box_blur",
-            "intarget": "swap",
-            "outtarget": "merge",
+            "program": "minecraft:box_blur",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "merge",
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -64,20 +92,28 @@
             ]
         },
         {
-            "name": "minecraft:scan_pincushion",
-            "intarget": "minecraft:main",
-            "outtarget": "swap"
-        },
-        {
-            "name": "minecraft:phosphor",
-            "intarget": "swap",
-            "outtarget": "merge",
-            "auxtargets": [
+            "program": "minecraft:scan_pincushion",
+            "inputs": [
                 {
-                    "name": "PrevSampler",
-                    "id": "previous"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
             ],
+            "output": "swap"
+        },
+        {
+            "program": "minecraft:phosphor",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                },
+                {
+                    "sampler_name": "Prev",
+                    "target": "previous"
+                }
+            ],
+            "output": "merge",
             "uniforms": [
                 {
                     "name": "Phosphor",
@@ -86,30 +122,48 @@
             ]
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "minecraft:main",
-            "outtarget": "previous"
-        },
-        {
-            "name": "minecraft:blit",
-            "intarget": "swap",
-            "outtarget": "merge"
-        },
-        {
-            "name": "luminance:merge",
-            "intarget": "merge",
-            "outtarget": "final",
-            "auxtargets": [
+            "program": "minecraft:blit",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "previous"
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "final",
-            "outtarget": "minecraft:main"
+            "program": "minecraft:blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "merge"
+        },
+        {
+            "program": "luminance:merge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "final"
+        },
+        {
+            "program": "minecraft:blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "final"
+                }
+            ],
+            "output": "minecraft:main"
         }
     ]
 }

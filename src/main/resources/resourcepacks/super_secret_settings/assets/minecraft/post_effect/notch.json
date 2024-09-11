@@ -5,34 +5,45 @@
     ],
     "passes": [
         {
-            "name": "minecraft:notch",
-            "intarget": "minecraft:main",
-            "outtarget": "merge",
-            "auxtargets": [
+            "program": "minecraft:notch",
+            "inputs": [
                 {
-                    "name": "DitherSampler",
-                    "id": "dither",
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Dither",
+                    "location": "dither",
                     "width": 4,
                     "height": 4,
                     "bilinear": false
                 }
-            ]
+            ],
+            "output": "merge"
         },
         {
-            "name": "luminance:merge",
-            "intarget": "merge",
-            "outtarget": "swap",
-            "auxtargets": [
+            "program": "luminance:merge",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "swap"
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "swap",
-            "outtarget": "minecraft:main"
+            "program": "minecraft:blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:swap"
+                }
+            ],
+            "output": "minecraft:main"
         }
     ]
 }

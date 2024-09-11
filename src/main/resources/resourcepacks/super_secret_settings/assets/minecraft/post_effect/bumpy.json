@@ -5,25 +5,38 @@
     ],
     "passes": [
         {
-            "name": "minecraft:bumpy",
-            "intarget": "minecraft:main",
-            "outtarget": "merge"
-        },
-        {
-            "name": "luminance:merge",
-            "intarget": "merge",
-            "outtarget": "swap",
-            "auxtargets": [
+            "program": "minecraft:bumpy",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "merge"
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "swap",
-            "outtarget": "minecraft:main"
+            "program": "luminance:merge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap"
+        },
+        {
+            "program": "minecraft:blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "minecraft:main"
         }
     ]
 }

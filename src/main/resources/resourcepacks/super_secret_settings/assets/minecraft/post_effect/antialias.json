@@ -5,25 +5,34 @@
     ],
     "passes": [
         {
-            "name": "minecraft:antialias",
-            "intarget": "minecraft:main",
-            "outtarget": "merge"
-        },
-        {
-            "name": "luminance:merge",
-            "intarget": "merge",
-            "outtarget": "swap",
-            "auxtargets": [
+            "program": "minecraft:antialias",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "merge"
         },
         {
-            "name": "minecraft:blit",
+            "program": "luminance:merge",
+            "intarget": "merge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap"
+        },
+        {
+            "program": "minecraft:blit",
             "intarget": "swap",
-            "outtarget": "minecraft:main"
+            "output": "minecraft:main"
         }
     ]
 }
