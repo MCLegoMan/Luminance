@@ -1,9 +1,9 @@
 {
-    "targets": [
-        "merge",
-        "swap",
-        "previous"
-    ],
+    "targets": {
+        "merge": {},
+        "swap": {},
+        "previous": {}
+    },
     "passes": [
         {
             "program": "minecraft:phosphor",

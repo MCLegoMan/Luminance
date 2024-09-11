@@ -1,11 +1,11 @@
 {
-    "targets": [
-        "bloom_1",
-        "bloom_2",
-        "highlights_1",
-        "highlights_2",
-        "swap"
-    ],
+    "targets": {
+        "bloom_1": {},
+        "bloom_2": {},
+        "highlights_1": {},
+        "highlights_2": {},
+        "swap": {}
+    },
     "passes": [
         {
             "program": "minecraft:brightness_threshold",

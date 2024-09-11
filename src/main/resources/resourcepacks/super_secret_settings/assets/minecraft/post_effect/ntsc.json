@@ -1,11 +1,11 @@
 {
-    "targets": [
-        "swap",
-        "swap2",
-        "previous",
-        "merge",
-        "final"
-    ],
+    "targets": {
+        "swap": {},
+        "swap2": {},
+        "previous": {},
+        "merge": {},
+        "final": {}
+    },
     "passes": [
         {
             "program": "minecraft:ntsc_encode",
