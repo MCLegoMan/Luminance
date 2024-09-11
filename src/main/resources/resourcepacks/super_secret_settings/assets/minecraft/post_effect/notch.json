@@ -5,7 +5,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:notch",
+            "program": "minecraft:post/notch",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -22,7 +22,7 @@
             "output": "merge"
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -36,7 +36,7 @@
             "output": "swap"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",

@@ -5,7 +5,7 @@
 	},
 	"passes": [
 		{
-			"name": "minecraft:color_convolve",
+			"program": "minecraft:post/color_convolve",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -29,7 +29,7 @@
 			]
 		},
 		{
-			"name": "luminance:merge",
+			"program": "luminance:post/merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -43,7 +43,7 @@
 			"output": "swap"
 		},
 		{
-			"name": "minecraft:blit",
+			"program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",

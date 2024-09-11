@@ -8,7 +8,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:ntsc_encode",
+            "program": "minecraft:post/ntsc_encode",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -18,7 +18,7 @@
             "output": "swap"
         },
         {
-            "program": "minecraft:ntsc_decode",
+            "program": "minecraft:post/ntsc_decode",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -32,7 +32,7 @@
             "output": "swap2"
         },
         {
-            "program": "minecraft:color_convolve",
+            "program": "minecraft:post/color_convolve",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -42,7 +42,7 @@
             "output": "swap"
         },
         {
-            "program": "minecraft:deconverge",
+            "program": "minecraft:post/deconverge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -52,7 +52,7 @@
             "output": "merge"
         },
         {
-            "program": "minecraft:box_blur",
+            "program": "minecraft:post/box_blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -72,7 +72,7 @@
             ]
         },
         {
-            "program": "minecraft:box_blur",
+            "program": "minecraft:post/box_blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -92,7 +92,7 @@
             ]
         },
         {
-            "program": "minecraft:scan_pincushion",
+            "program": "minecraft:post/scan_pincushion",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -102,7 +102,7 @@
             "output": "swap"
         },
         {
-            "program": "minecraft:phosphor",
+            "program": "minecraft:post/phosphor",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -122,7 +122,7 @@
             ]
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -132,7 +132,7 @@
             "output": "previous"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -142,7 +142,7 @@
             "output": "merge"
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -156,7 +156,7 @@
             "output": "final"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",

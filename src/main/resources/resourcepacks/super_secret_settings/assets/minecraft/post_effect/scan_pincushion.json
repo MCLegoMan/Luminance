@@ -5,17 +5,17 @@
     },
     "passes": [
         {
-            "program": "minecraft:scan_pincushion",
+            "program": "minecraft:post/scan_pincushion",
             "inputs": [
                 {
                     "sampler_name": "In",
                     "target": "minecraft:main"
                 }
             ],
-            "outtarget": "merge"
+            "output": "merge"
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -26,17 +26,17 @@
                     "target": "minecraft:main"
                 }
             ],
-            "outtarget": "swap"
+            "output": "swap"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",
                     "target": "swap"
                 }
             ],
-            "outtarget": "minecraft:main"
+            "output": "minecraft:main"
         }
     ]
 }

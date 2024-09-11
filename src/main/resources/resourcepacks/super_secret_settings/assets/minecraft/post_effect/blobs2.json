@@ -5,7 +5,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:blobs2",
+            "program": "minecraft:post/blobs2",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -15,7 +15,7 @@
             "output": "merge"
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -29,7 +29,7 @@
             "output": "swap"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",

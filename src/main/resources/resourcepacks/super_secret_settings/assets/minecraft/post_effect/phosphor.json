@@ -6,7 +6,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:phosphor",
+            "program": "minecraft:post/phosphor",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -26,7 +26,7 @@
             ]
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -36,7 +36,7 @@
             "output": "previous"
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
 
             "inputs": [
                 {
@@ -51,7 +51,7 @@
             "output": "swap"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",

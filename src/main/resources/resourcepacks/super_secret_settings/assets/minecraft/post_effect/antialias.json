@@ -5,7 +5,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:antialias",
+            "program": "minecraft:post/antialias",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -15,7 +15,7 @@
             "output": "merge"
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
             "intarget": "merge",
             "inputs": [
                 {
@@ -30,7 +30,7 @@
             "output": "swap"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "intarget": "swap",
             "output": "minecraft:main"
         }

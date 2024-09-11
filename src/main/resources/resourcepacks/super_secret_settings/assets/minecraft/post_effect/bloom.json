@@ -8,7 +8,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:brightness_threshold",
+            "program": "minecraft:post/brightness_threshold",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -24,7 +24,7 @@
             ]
         },
         {
-            "program": "minecraft:brightness_threshold",
+            "program": "minecraft:post/brightness_threshold",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -40,7 +40,7 @@
             ]
         },
         {
-            "program": "minecraft:blur",
+            "program": "minecraft:post/blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -61,7 +61,7 @@
             ]
         },
         {
-            "program": "minecraft:blur",
+            "program": "minecraft:post/blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -82,7 +82,7 @@
             ]
         },
         {
-            "program": "minecraft:blur",
+            "program": "minecraft:post/blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -103,7 +103,7 @@
             ]
         },
         {
-            "program": "minecraft:blur",
+            "program": "minecraft:post/blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -124,7 +124,7 @@
             ]
         },
         {
-            "program": "minecraft:merge_bloom",
+            "program": "minecraft:post/merge_bloom",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -152,7 +152,7 @@
             ]
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -166,7 +166,7 @@
             "output": "swap"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "intarget": "swap",
             "output": "minecraft:main"
         }

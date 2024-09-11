@@ -1,86 +1,109 @@
 {
-    "targets": [
-        "largeBlur",
-        "smallBlur",
-        "temp",
-        "swap",
-        "swap2"
-    ],
+    "targets": {
+        "largeblur": {},
+        "smallblur": {},
+        "temp": {},
+        "swap": {},
+        "swap2": {}
+    },
     "passes": [
         {
-            "name": "box_blur",
-            "intarget": "minecraft:main",
-            "outtarget": "temp",
-            "use_linear_filter": true,
-            "uniforms": [
+            "program": "minecraft:post/box_blur",
+            "inputs": [
                 {
-                    "name": "BlurDir",
-                    "values": [ 1.0, 0.0 ]
-                },
-                {
-                    "name": "Radius",
-                    "values": [ 15.0 ]
-                }
-            ]
-        },
-        {
-            "name": "box_blur",
-            "intarget": "temp",
-            "outtarget": "largeBlur",
-            "use_linear_filter": true,
-            "uniforms": [
-                {
-                    "name": "BlurDir",
-                    "values": [ 0.0, 1.0 ]
-                },
-                {
-                    "name": "Radius",
-                    "values": [ 15.0 ]
-                }
-            ]
-        },
-        {
-            "name": "box_blur",
-            "intarget": "minecraft:main",
-            "outtarget": "temp",
-            "use_linear_filter": true,
-            "uniforms": [
-                {
-                    "name": "BlurDir",
-                    "values": [ 1.0, 0.0 ]
-                },
-                {
-                    "name": "Radius",
-                    "values": [ 7.0 ]
-                }
-            ]
-        },
-        {
-            "name": "box_blur",
-            "intarget": "temp",
-            "outtarget": "smallBlur",
-            "use_linear_filter": true,
-            "uniforms": [
-                {
-                    "name": "BlurDir",
-                    "values": [ 0.0, 1.0 ]
-                },
-                {
-                    "name": "Radius",
-                    "values": [ 7.0 ]
-                }
-            ]
-        },
-        {
-            "name": "spider",
-            "intarget": "minecraft:main",
-            "outtarget": "temp",
-            "auxtargets": [
-                {
-                    "name": "BlurSampler",
-                    "id": "largeBlur"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
             ],
+            "output": "temp",
+            "bilinear": true,
+            "uniforms": [
+                {
+                    "name": "BlurDir",
+                    "values": [ 1.0, 0.0 ]
+                },
+                {
+                    "name": "Radius",
+                    "values": [ 15.0 ]
+                }
+            ]
+        },
+        {
+            "program": "minecraft:post/box_blur",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "temp"
+                }
+            ],
+            "output": "largeblur",
+            "bilinear": true,
+            "uniforms": [
+                {
+                    "name": "BlurDir",
+                    "values": [ 0.0, 1.0 ]
+                },
+                {
+                    "name": "Radius",
+                    "values": [ 15.0 ]
+                }
+            ]
+        },
+        {
+            "program": "minecraft:post/box_blur",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "temp",
+            "bilinear": true,
+            "uniforms": [
+                {
+                    "name": "BlurDir",
+                    "values": [ 1.0, 0.0 ]
+                },
+                {
+                    "name": "Radius",
+                    "values": [ 7.0 ]
+                }
+            ]
+        },
+        {
+            "program": "minecraft:post/box_blur",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "temp"
+                }
+            ],
+            "output": "smallblur",
+            "bilinear": true,
+            "uniforms": [
+                {
+                    "name": "BlurDir",
+                    "values": [ 0.0, 1.0 ]
+                },
+                {
+                    "name": "Radius",
+                    "values": [ 7.0 ]
+                }
+            ]
+        },
+        {
+            "program": "minecraft:post/spider",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Blur",
+                    "target": "largeblur"
+                }
+            ],
+            "output": "temp",
             "uniforms": [
                 {
                     "name": "InScale",
@@ -101,15 +124,18 @@
             ]
         },
         {
-            "name": "spider",
-            "intarget": "smallBlur",
-            "outtarget": "swap",
-            "auxtargets": [
+            "program": "minecraft:post/spider",
+            "inputs": [
                 {
-                    "name": "BlurSampler",
-                    "id": "temp"
+                    "sampler_name": "In",
+                    "target": "smallblur"
+                },
+                {
+                    "sampler_name": "Blur",
+                    "target": "temp"
                 }
             ],
+            "output": "swap",
             "uniforms": [
                 {
                     "name": "InScale",
@@ -134,15 +160,18 @@
             ]
         },
         {
-            "name": "spider",
-            "intarget": "smallBlur",
-            "outtarget": "temp",
-            "auxtargets": [
+            "program": "minecraft:post/spider",
+            "inputs": [
                 {
-                    "name": "BlurSampler",
-                    "id": "swap"
+                    "sampler_name": "In",
+                    "target": "smallblur"
+                },
+                {
+                    "sampler_name": "BlurSampler",
+                    "target": "swap"
                 }
             ],
+            "output": "temp",
             "uniforms": [
                 {
                     "name": "InScale",
@@ -167,15 +196,18 @@
             ]
         },
         {
-            "name": "spider",
-            "intarget": "smallBlur",
-            "outtarget": "swap",
-            "auxtargets": [
+            "program": "minecraft:post/spider",
+            "inputs": [
                 {
-                    "name": "BlurSampler",
-                    "id": "temp"
+                    "sampler_name": "In",
+                    "target": "smallblur"
+                },
+                {
+                    "sampler_name": "Blur",
+                    "target": "temp"
                 }
             ],
+            "output": "swap",
             "uniforms": [
                 {
                     "name": "InScale",
@@ -196,15 +228,18 @@
             ]
         },
         {
-            "name": "spider",
-            "intarget": "smallBlur",
-            "outtarget": "temp",
-            "auxtargets": [
+            "program": "minecraft:post/spider",
+            "inputs": [
                 {
-                    "name": "BlurSampler",
-                    "id": "swap"
+                    "sampler_name": "In",
+                    "target": "smallblur"
+                },
+                {
+                    "sampler_name": "Blur",
+                    "target": "swap"
                 }
             ],
+            "output": "temp",
             "uniforms": [
                 {
                     "name": "InScale",
@@ -221,20 +256,28 @@
             ]
         },
         {
-            "name": "luminance:merge",
-            "intarget": "temp",
-            "outtarget": "swap2",
-            "auxtargets": [
+            "program": "luminance:post/merge",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "temp"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "swap2"
         },
         {
-            "name": "blit",
-            "intarget": "swap2",
-            "outtarget": "minecraft:main",
+            "program": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap2"
+                }
+            ],
+            "output": "minecraft:main",
             "uniforms": [
                 {
                     "name": "ColorModulate",

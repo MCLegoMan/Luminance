@@ -5,7 +5,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:color_convolve",
+            "program": "minecraft:post/color_convolve",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -29,7 +29,7 @@
             ]
         },
         {
-            "program": "minecraft:bits",
+            "program": "minecraft:post/bits",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -39,7 +39,7 @@
             "output": "minecraft:main"
         },
         {
-            "program": "minecraft:scan_pincushion",
+            "program": "minecraft:post/scan_pincushion",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -49,7 +49,7 @@
             "output": "merge"
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -65,7 +65,7 @@
             ]
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",

@@ -6,7 +6,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:blobs2",
+            "program": "minecraft:post/blobs2",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -16,7 +16,7 @@
             "output": "0"
         },
         {
-            "program": "minecraft:outline_watercolor",
+            "program": "minecraft:post/outline_watercolor",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -26,7 +26,7 @@
             "output": "minecraft:main"
         },
         {
-            "program": "minecraft:box_blur",
+            "program": "minecraft:post/box_blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -46,7 +46,7 @@
             ]
         },
         {
-            "program": "minecraft:box_blur",
+            "program": "minecraft:post/box_blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -66,7 +66,7 @@
             ]
         },
         {
-            "program": "minecraft:outline_combine",
+            "program": "minecraft:post/outline_combine",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -77,10 +77,10 @@
                     "target": "minecraft:main"
                 }
             ],
-            "outputs": "1"
+            "output": "1"
         },
         {
-            "program": "luminance:merge",
+            "program": "luminance:post/merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -94,7 +94,7 @@
             "output": "2"
         },
         {
-            "program": "minecraft:blit",
+            "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",
