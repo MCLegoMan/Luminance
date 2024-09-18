@@ -10,21 +10,15 @@ package com.mclegoman.luminance.client.shaders.uniforms;
 import com.mclegoman.luminance.client.events.Callables;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 public class LuminanceUniform implements Uniform {
-	private final Identifier identifier;
 	private final Callables.ShaderRender<Float> callable;
 	private float previous;
 	private float current;
 	private float smooth;
-	public LuminanceUniform(Identifier identifier, Callables.ShaderRender<Float> callable) {
-		this.identifier = identifier;
+	public LuminanceUniform(Callables.ShaderRender<Float> callable) {
 		this.callable = callable;
-	}
-	public Identifier getId() {
-		return this.identifier;
 	}
 	public float get() {
 		return this.current;

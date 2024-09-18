@@ -7,10 +7,7 @@
 
 package com.mclegoman.luminance.client.shaders.uniforms;
 
-import net.minecraft.util.Identifier;
-
 public interface Uniform {
-	Identifier getId();
 	float get();
 	float getPrev();
 	float getDelta();
