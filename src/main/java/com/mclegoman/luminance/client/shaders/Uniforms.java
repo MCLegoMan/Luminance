@@ -67,6 +67,7 @@ public class Uniforms {
 			Events.ShaderUniform.registerFloat("lu", "biomeTemperature", Uniforms::getBiomeTemperature);
 			Events.ShaderUniform.registerFloat("lu", "alpha", Uniforms::getAlpha);
 			Events.ShaderUniform.registerFloat("lu", "perspective", Uniforms::getPerspective);
+			Events.ShaderUniform.registerFloat("lu", "selectedSlot", Uniforms::getSelectedSlot);
 			SmoothUniforms.init();
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to initialize uniforms: {}", error));
@@ -205,5 +206,8 @@ public class Uniforms {
 			return perspective.equals(Perspective.THIRD_PERSON_FRONT) ? 3.0F : (perspective.equals(Perspective.THIRD_PERSON_BACK) ? 2.0F : (perspective.equals(Perspective.FIRST_PERSON) ? 1.0F : 0.0F));
 		}
 		return 1.0F;
+	}
+	public static float getSelectedSlot(float tickDelta) {
+		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getInventory().selectedSlot : 0.0F;
 	}
 }
