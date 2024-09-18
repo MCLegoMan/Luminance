@@ -28,7 +28,7 @@
 					"spaced": true
 				},
 				{
-					"text": "Contributors",
+					"text": "Developers",
 					"formatting": "white",
 					"sections": [
 						{
@@ -38,13 +38,19 @@
 									"text": "    Vanilla Shader Fixes"
 								},
 								{
-									"text": "    Shader Namespace Fix"
+									"text": "    Updating Shaders"
 								},
 								{
-									"text": "    Shader Texture Namespace Fix"
-								},
-								{
-									"text": "    Depth Shader Support"
+									"text": "    Deprecated",
+									"formatting": "italic",
+									"sections": [
+										{
+											"text": "      Shader Namespace Fixes"
+										},
+										{
+											"text": "      Depth Shader Support"
+										}
+									]
 								}
 							]
 						}
