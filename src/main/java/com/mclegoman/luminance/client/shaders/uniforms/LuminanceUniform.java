@@ -38,9 +38,6 @@ public class LuminanceUniform implements Uniform {
 	public float getSmooth() {
 		return this.smooth;
 	}
-	public Callables.ShaderRender<Float> getCallable() {
-		return this.callable;
-	}
 	public void update(float delta) {
 		try {
 			this.previous = this.current;

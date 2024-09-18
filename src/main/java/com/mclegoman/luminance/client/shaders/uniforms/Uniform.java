@@ -7,7 +7,6 @@
 
 package com.mclegoman.luminance.client.shaders.uniforms;
 
-import com.mclegoman.luminance.client.events.Callables;
 import net.minecraft.util.Identifier;
 
 public interface Uniform {
@@ -16,6 +15,5 @@ public interface Uniform {
 	float getPrev();
 	float getDelta();
 	float getSmooth();
-	Callables.ShaderRender<Float> getCallable();
 	void update(float tickDelta);
 }
