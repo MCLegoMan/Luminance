@@ -5,7 +5,7 @@ plugins {
 	id "maven-publish"
 }
 group = project.maven_group
-version = ("${project.mod_version}+${project.mc_version.replace("/", "-")}") + (project.isDirty == "true" ? "+dirty." + System.currentTimeSeconds() : "")
+version = String.valueOf(project.mod_version + (project.isDirty == "true" ? "+dirty." + System.currentTimeSeconds() : "")) + "+" + project.mc_version
 
 base {
 	archivesName = project.archive_name
