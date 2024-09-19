@@ -48,12 +48,12 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 	}
 	private void add(ShaderRegistry shaderData, ResourceManager manager) {
 		try {
-			manager.getResourceOrThrow(shaderData.getPostEffect());
+			manager.getResourceOrThrow(shaderData.getPostEffect(true));
 			boolean alreadyRegistered = false;
 			for (ShaderRegistry data : registry) {
-				if (data.getNamespace().equals(shaderData.getNamespace()) && data.getKey().equals(shaderData.getKey())) {
+				if (data.getID().equals(shaderData.getID())) {
 					alreadyRegistered = true;
-					Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to add \"{}:{}\" shader to registry: This shader has already been registered!", shaderData.getNamespace(), shaderData.getKey()));
+					Data.version.sendToLog(LogType.WARN, Translation.getString("Failed to add \"{}\" shader to registry: This shader has already been registered!", shaderData.getID()));
 					break;
 				}
 			}
@@ -69,7 +69,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		return index <= getShaderAmount() && index >= 0;
 	}
 	private void remove(ShaderRegistry shaderData) {
-		registry.removeIf((shader) -> (shader.getNamespace().equals(shaderData.getNamespace()) && shader.getKey().equals(shaderData.getKey())));
+		registry.removeIf((shader) -> (shader.getID().equals(shaderData.getID())));
 	}
 	@Override
 	public void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
@@ -135,7 +135,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		return Identifier.of(Data.version.getID(), resourceLocation);
 	}
 	protected static void releaseShaders() {
-		try {
+//		try {
 //			List<ShaderStage.Type> shaderTypes = new ArrayList<>();
 //			shaderTypes.add(ShaderStage.Type.VERTEX);
 //			shaderTypes.add(ShaderStage.Type.FRAGMENT);
@@ -150,8 +150,8 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 //					loadedShader.getValue().release();
 //				}
 //			}
-		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to release shaders: {}", error));
-		}
+//		} catch (Exception error) {
+//			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to release shaders: {}", error));
+//		}
 	}
 }

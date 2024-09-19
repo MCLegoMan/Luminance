@@ -52,14 +52,11 @@ public class ShaderRegistry {
 			return new ShaderRegistry(this.id, this.translatable, this.disableGameRendertype, this.custom);
 		}
 	}
-	public String getNamespace() {
-		return IdentifierHelper.getIdentifierPart(IdentifierHelper.Type.NAMESPACE, this.id);
+	public Identifier getID() {
+		return this.id;
 	}
-	public String getKey() {
-		return IdentifierHelper.getIdentifierPart(IdentifierHelper.Type.KEY, this.id);
-	}
-	public Identifier getPostEffect() {
-		return Shaders.getPostShader(this.id);
+	public Identifier getPostEffect(boolean full) {
+		return Shaders.getPostShader(this.id, full);
 	}
 	public boolean getTranslatable() {
 		return this.translatable;

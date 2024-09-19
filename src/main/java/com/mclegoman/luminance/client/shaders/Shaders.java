@@ -23,6 +23,8 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.gl.*;
 import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.client.render.FrameGraphBuilder;
+import net.minecraft.client.util.ObjectAllocator;
+import net.minecraft.client.util.Pool;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -35,6 +37,7 @@ import java.util.concurrent.Callable;
 public class Shaders {
 	public static Framebuffer depthFramebuffer;
 	private static boolean uniformError = false;
+	private static Pool pool = new Pool(3);
 	public static void init() {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ShaderDataloader());
 		Uniforms.init();
@@ -112,7 +115,7 @@ public class Shaders {
 				Events.ShaderRender.registry.forEach((id, shaders) -> {
 					if (shaders != null) shaders.forEach(shader -> {
 						try {
-							if (shader.getSecond() != null && shader.getSecond().getPostProcessor() != null) shader.getSecond().getFramebuffer().resize(width, height);
+							pool.close();
 						} catch (Exception error) {
 							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to resize shader with id: {}:", id, error));
 						}
@@ -130,11 +133,11 @@ public class Shaders {
 		try {
 			if (shader.getSecond() != null) {
 				if (shader.getSecond().getShouldRender()) {
-					if (shader.getSecond().getPostProcessor() == null) {// || !Objects.equals(shader.getSecond().getPostProcessor().getName(), shader.getSecond().getShaderId().toString())) {
+					if (shader.getSecond().getPostProcessor() == null) {
 						try {
 							shader.getSecond().setPostProcessor();
 						} catch (Exception error) {
-							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}:{}\" post processor: {}", shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
+							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}:{}:{}\" post processor: {}", id, shader.getFirst(), shader.getSecond().getShaderData().getID(), error));
 							Events.ShaderRender.Shaders.remove(id, shader.getFirst());
 						}
 					}
@@ -142,32 +145,31 @@ public class Shaders {
 						if (shader.getSecond().getPostProcessor() != null) {
 							RenderSystem.enableBlend();
 							RenderSystem.defaultBlendFunc();
-
-							DefaultFramebufferSet framebufferSet = new DefaultFramebufferSet();
-
-							int i = ClientData.minecraft.getFramebuffer().textureWidth;
-							int j = ClientData.minecraft.getFramebuffer().textureHeight;
-							FrameGraphBuilder frameGraphBuilder = new FrameGraphBuilder();
-							framebufferSet.mainFramebuffer = frameGraphBuilder.createObjectNode("main", ClientData.minecraft.getFramebuffer());
-							shader.getSecond().getPostProcessor().render(frameGraphBuilder, i, j, framebufferSet);
-
+							if (pool == null) pool = new Pool(3);
+							render(shader.getSecond().getPostProcessor(), ClientData.minecraft.getFramebuffer(), pool);
 							RenderSystem.disableBlend();
 							ClientData.minecraft.getFramebuffer().beginWrite(false);
 						}
 					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}: {}", id, shader.getFirst(), shader.getSecond().getShaderData().getID(), error));
 					}
 				}
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}: {}", id, shader.getFirst(), shader.getSecond().getShaderData().getID(), error));
 		}
+	}
+	public static void render(PostEffectProcessor processor, Framebuffer framebuffer, ObjectAllocator objectAllocator) {
+		FrameGraphBuilder frameGraphBuilder = new FrameGraphBuilder();
+		PostEffectProcessor.FramebufferSet framebufferSet = PostEffectProcessor.FramebufferSet.singleton(Identifier.ofVanilla("main"), frameGraphBuilder.createObjectNode("main", framebuffer));
+		processor.render(frameGraphBuilder, framebuffer.textureWidth, framebuffer.textureHeight, framebufferSet);
+		frameGraphBuilder.run(objectAllocator);
 	}
 	public static ShaderRegistry get(int shaderIndex) {
 		return ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : null;
 	}
-	public static ShaderRegistry get(String namespace, String name) {
-		int index = getShaderIndex(namespace, name);
+	public static ShaderRegistry get(Identifier id) {
+		int index = getShaderIndex(id);
 		return ShaderDataloader.isValidIndex(index) ? get(index) : null;
 	}
 	public static Shader get(ShaderRegistry shaderData, Callable<Shader.RenderType> renderType, Callable<Boolean> shouldRender) {
@@ -176,13 +178,13 @@ public class Shaders {
 	public static Shader get(ShaderRegistry shaderData, Callable<Shader.RenderType> renderType) {
 		return new Shader(shaderData, renderType);
 	}
-	public static Identifier getPostShader(Identifier post_effect) {
-		return Identifier.of(post_effect.getNamespace().toLowerCase(), ("post_effect/" + post_effect.getPath() + ".json"));
+	public static Identifier getPostShader(Identifier post_effect, boolean full) {
+		return Identifier.of(post_effect.getNamespace(), ((full ? "post_effect/" : "") + post_effect.getPath() + (full ? ".json" : "")));
 	}
-	public static int getShaderIndex(String namespace, String key) {
-		if (namespace != null && key != null) {
+	public static int getShaderIndex(Identifier id) {
+		if (id != null) {
 			for (ShaderRegistry data : ShaderDataloader.registry) {
-				if (data.getNamespace().equals(namespace) && data.getKey().equals(key)) return ShaderDataloader.registry.indexOf(data);
+				if (data.getID().equals(id)) return ShaderDataloader.registry.indexOf(data);
 			}
 		}
 		return -1;
@@ -201,20 +203,20 @@ public class Shaders {
 	}
 	public static Text getShaderName(int shaderIndex, boolean shouldShowNamespace) {
 		ShaderRegistry shader = get(shaderIndex);
-		if (shader != null) return Translation.getShaderTranslation(shader.getNamespace(), shader.getKey(), shader.getTranslatable(), shouldShowNamespace);
+		if (shader != null) return Translation.getShaderTranslation(shader.getID(), shader.getTranslatable(), shouldShowNamespace);
 		return Translation.getErrorTranslation(Data.version.getID());
 	}
 	public static Text getShaderName(int shaderIndex) {
 		return getShaderName(shaderIndex, true);
 	}
-	public static String guessPostShaderNamespace(String id) {
+	public static Identifier guessPostShader(String id) {
 		// If the shader registry contains at least one shader with the name, the first detected instance will be used.
 		if (!id.contains(":")) {
 			for (ShaderRegistry registry : ShaderDataloader.registry) {
-				if (registry.getKey().equalsIgnoreCase(id)) return registry.getNamespace();
+				if (registry.getID().getPath().equalsIgnoreCase(id)) return registry.getID();
 			}
 		}
-		return IdentifierHelper.getStringPart(IdentifierHelper.Type.NAMESPACE, id);
+		return Identifier.of(id);
 	}
 	public static float getSmooth(float tickDelta, float prev, float current) {
 		return MathHelper.lerp(tickDelta, prev, current);

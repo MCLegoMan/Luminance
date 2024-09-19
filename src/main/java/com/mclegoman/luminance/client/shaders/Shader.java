@@ -11,9 +11,7 @@ import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
-import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectProcessor;
-import net.minecraft.client.gl.SimpleFramebufferFactory;
 import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.util.Identifier;
 
@@ -26,7 +24,6 @@ public class Shader {
 	private Callable<RenderType> renderType;
 	private Callable<Boolean> shouldRender;
 	private ShaderRegistry shaderData;
-	private Framebuffer framebuffer;
 	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType, Callable<Boolean> shouldRender) {
 		reload(shaderData, renderType, shouldRender);
 	}
@@ -36,12 +33,9 @@ public class Shader {
 	public PostEffectProcessor getPostProcessor() {
 		return this.postProcessor;
 	}
-	public Framebuffer getFramebuffer() {
-		return this.framebuffer;
-	}
 	public void setPostProcessor() {
 		try {
-			this.postProcessor = ClientData.minecraft.getShaderLoader().loadPostEffect(shaderId, DefaultFramebufferSet.STAGES);
+			this.postProcessor = ClientData.minecraft.getShaderLoader().loadPostEffect(this.shaderId, DefaultFramebufferSet.STAGES);
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set post processor: {}", error));
 			if (this.postProcessor != null) this.postProcessor = null;
@@ -87,10 +81,7 @@ public class Shader {
 	public void setShaderData(ShaderRegistry shaderData) {
 		setUseDepth(false);
 		this.shaderData = shaderData;
-		setShaderId(this.shaderData.getPostEffect());
-	}
-	public void setFramebuffer() {
-		framebuffer = new SimpleFramebufferFactory(ClientData.minecraft.getFramebuffer().textureWidth, ClientData.minecraft.getFramebuffer().textureHeight, true).create();
+		setShaderId(this.shaderData.getPostEffect(false));
 	}
 	public enum RenderType {
 		WORLD,
