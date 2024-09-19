@@ -21,18 +21,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(priority = 100, value = ModBadgeRenderer.class)
+@Mixin(priority = 100, value = ModBadgeRenderer.class, remap = false)
 public abstract class ModsScreenMixin {
-	@Shadow(remap = false) protected int badgeX;
-	@Shadow(remap = false) protected int badgeMax;
-	@Shadow(remap = false) protected int badgeY;
-	@Shadow(remap = false) protected Mod mod;
-	@Inject(method = "draw", at = @At("RETURN"), remap = false)
-	private void luminance$draw(DrawContext DrawContext, int mouseX, int mouseY, CallbackInfo ci) {
+	@Shadow protected int badgeX;
+	@Shadow protected int badgeMax;
+	@Shadow protected int badgeY;
+	@Shadow protected Mod mod;
+	@Inject(method = "draw", at = @At("RETURN"))
+	private void luminance$draw(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
 		if (CompatHelper.getLuminanceModMenuBadge(this.mod.getId())) {
 			int width = ClientData.minecraft.textRenderer.getWidth(Translation.getTranslation(Data.version.getID(), "name")) + 6;
 			if (badgeX + width < badgeMax) {
-				DrawingUtil.drawBadge(DrawContext, badgeX, badgeY, width, Translation.getTranslation(Data.version.getID(), "name").asOrderedText(), 0xFFFF8F8F, 0xFFB73A3A, 0xFFFFFF);
+				DrawingUtil.drawBadge(context, badgeX, badgeY, width, Translation.getTranslation(Data.version.getID(), "name").asOrderedText(), 0xFFFF8F8F, 0xFFB73A3A, 0xFFFFFF);
 				badgeX += width + 3;
 			}
 		}
