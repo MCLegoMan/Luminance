@@ -15,6 +15,7 @@ import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.option.GraphicsMode;
 import net.minecraft.client.render.*;
+import net.minecraft.client.util.ObjectAllocator;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(priority = 100, value = WorldRenderer.class)
 public abstract class WorldRendererMixin {
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/PostEffectProcessor;render(F)V", ordinal = 0), method = "render")
-	public void luminance$saveDepthOutlines(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
+	public void luminance$saveDepthOutlines(ObjectAllocator objectAllocator, RenderTickCounter tickCounter, boolean bl, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
 		Shaders.depthFramebuffer.copyDepthFrom(ClientData.minecraft.getFramebuffer());
 		ClientData.minecraft.getFramebuffer().beginWrite(false);
 	}
@@ -32,17 +33,17 @@ public abstract class WorldRendererMixin {
 			@At(value = "INVOKE", target = "Lnet/minecraft/client/gl/PostEffectProcessor;render(F)V", ordinal = 1),
 			@At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;renderWorldBorder(Lnet/minecraft/client/render/Camera;)V", ordinal = 1)
 	}, method = "render")
-	public void luminance$saveDepth(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
+	public void luminance$saveDepth(ObjectAllocator objectAllocator, RenderTickCounter tickCounter, boolean bl, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
 		Shaders.depthFramebuffer.copyDepthFrom(ClientData.minecraft.getFramebuffer());
 		if (ClientData.minecraft.options.getGraphicsMode().getValue().getId() <= GraphicsMode.FANCY.getId()) ClientData.minecraft.getFramebuffer().beginWrite(false);
 	}
 	@Inject(method = "render", at = @At("HEAD"))
-	private void luminance$beforeRender(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
+	private void luminance$beforeRender(ObjectAllocator objectAllocator, RenderTickCounter tickCounter, boolean bl, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
 		Events.BeforeWorldRender.registry.forEach(((id, runnable) -> {
 			try {
 				runnable.run();
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute BeforeWorldRender event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute BeforeWorldRender event with id: {}:{}:", id, error));
 			}
 		}));
 	}
@@ -50,22 +51,22 @@ public abstract class WorldRendererMixin {
 			@At(value = "INVOKE", target = "Lnet/minecraft/client/gl/PostEffectProcessor;render(F)V", ordinal = 1, shift = At.Shift.AFTER),
 			@At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;renderWorldBorder(Lnet/minecraft/client/render/Camera;)V", ordinal = 1, shift = At.Shift.AFTER)
 	}, method = "render")
-	private void luminance$afterWorldBorder(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
+	private void luminance$afterWorldBorder(ObjectAllocator objectAllocator, RenderTickCounter tickCounter, boolean bl, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
 		Events.AfterWorldBorder.registry.forEach(((id, runnable) -> {
 			try {
 				runnable.run();
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterWorldBorder event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterWorldBorder event with id: {}:{}:", id, error));
 			}
 		}));
 	}
 	@Inject(method = "render", at = @At("TAIL"))
-	private void luminance$afterRender(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
+	private void luminance$afterRender(ObjectAllocator objectAllocator, RenderTickCounter tickCounter, boolean bl, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
 		Events.AfterWorldRender.registry.forEach(((id, runnable) -> {
 			try {
 				runnable.run();
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterWorldRender event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterWorldRender event with id: {}:{}:", id, error));
 			}
 		}));
 	}

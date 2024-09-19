@@ -39,7 +39,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 			try {
 				runnable.run();
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataReset event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataReset event with id: {}:{}:", id, error));
 			}
 		});
 	}
@@ -93,7 +93,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 							try {
 								runnable.run(shaderData);
 							} catch (Exception error) {
-								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataRegistered event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataRegistered event with id: {}:{}:", id, error));
 							}
 						});
 					} else {
@@ -102,7 +102,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 							try {
 								runnable.run(shaderData);
 							} catch (Exception error) {
-								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataRemoved event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute OnShaderDataRemoved event with id: {}:{}:", id, error));
 							}
 						});
 					}
@@ -114,7 +114,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 				try {
 					runnable.run();
 				} catch (Exception error) {
-					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterShaderDataRegistered event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterShaderDataRegistered event with id: {}:{}:", id, error));
 				}
 			});
 			Events.ShaderRender.registry.forEach((id, shaders) -> {
@@ -122,7 +122,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 					try {
 						if (shader.getSecond() != null) shader.getSecond().reload();
 					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to reload shader with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to reload shader with id: {}:{}:", id, error));
 					}
 				});
 			});

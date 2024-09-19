@@ -11,6 +11,9 @@ public interface Uniform {
 	float get();
 	float getPrev();
 	float getDelta();
-	float getSmooth();
-	void update(float tickDelta);
+	float getSmooth(float tickDelta);
+	float getSmoothPrev();
+	float getSmoothDelta();
+	void tick(float tickDelta);
+	void call(float tickDelta);
 }

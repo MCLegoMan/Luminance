@@ -20,13 +20,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(priority = 100, value = GameRenderer.class)
 public abstract class GameRendererMixin {
+	@Inject(method = "render", at = @At("HEAD"))
+	private void luminance$beforeGameRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
+		Events.BeforeGameRender.registry.forEach(((id, runnable) -> {
+			try {
+				runnable.run();
+			} catch (Exception error) {
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterGameRender event with id: {}:{}:", id, error));
+			}
+		}));
+	}
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;beginWrite(Z)V"))
 	private void luminance$afterHandRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
 		Events.AfterHandRender.registry.forEach(((id, runnable) -> {
 			try {
 				runnable.run();
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterHandRender event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterHandRender event with id: {}:{}:", id, error));
 			}
 		}));
 	}
@@ -36,7 +46,7 @@ public abstract class GameRendererMixin {
 			try {
 				runnable.run();
 			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterGameRender event with id: {}:{}:", id.getFirst(), id.getSecond(), error));
+				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterGameRender event with id: {}:{}:", id, error));
 			}
 		}));
 	}

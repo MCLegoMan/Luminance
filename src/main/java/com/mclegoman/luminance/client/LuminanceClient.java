@@ -7,6 +7,7 @@
 
 package com.mclegoman.luminance.client;
 
+import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.shaders.Shaders;
 import com.mclegoman.luminance.client.temp.ShaderTime;
