@@ -1,6 +1,15 @@
+/*
+    Luminance
+    Contributor(s): MCLegoMan
+    Github: https://github.com/MCLegoMan/Luminance
+    Licence: GNU LGPLv3
+*/
+
 package com.mclegoman.luminance.client.util;
 
 import com.mclegoman.luminance.common.data.Data;
+
+// The reason why we have our own Identifier, is because Minecraft's can't use capitals.
 
 public record LuminanceIdentifier(String namespace, String path) {
 	public LuminanceIdentifier(String namespace, String path) {
