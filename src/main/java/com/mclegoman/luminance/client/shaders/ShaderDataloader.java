@@ -12,11 +12,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.translation.Translation;
+import com.mclegoman.luminance.client.util.JsonDataLoader;
 import com.mclegoman.luminance.common.data.Data;
+import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -43,8 +44,8 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 			}
 		});
 	}
-	private ShaderRegistry getShaderData(String namespace, String key, boolean translatable, boolean disableGameRendertype, JsonObject custom) {
-		return new ShaderRegistry.Builder(namespace, key).translatable(translatable).disableGameRendertype(disableGameRendertype).custom(custom).build();
+	private ShaderRegistry getShaderData(Identifier id, boolean translatable, boolean disableGameRendertype, JsonObject custom) {
+		return ShaderRegistry.builder(id).translatable(translatable).disableGameRendertype(disableGameRendertype).custom(custom).build();
 	}
 	private void add(ShaderRegistry shaderData, ResourceManager manager) {
 		try {
@@ -77,7 +78,6 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 			isReloading = true;
 			releaseShaders();
 			reset();
-			// TODO: Add backwards compatibility layer for soup layout, note it will be a very basic version of it.
 			prepared.forEach((identifier, jsonElement) -> {
 				try {
 					JsonObject reader = jsonElement.getAsJsonObject();
@@ -86,8 +86,9 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 					boolean translatable = JsonHelper.getBoolean(reader, "translatable", false);
 					boolean disableGameRenderType = JsonHelper.hasBoolean(reader, "disable_screen_mode") ? JsonHelper.getBoolean(reader, "disable_screen_mode") : JsonHelper.getBoolean(reader, "disable_game_rendertype", false);
 					JsonObject customData = JsonHelper.getObject(reader, "customData", new JsonObject());
-					ShaderRegistry shaderData = getShaderData(post_effect.getNamespace(), post_effect.getPath(), translatable, disableGameRenderType, customData);
+					ShaderRegistry shaderData = getShaderData(post_effect, translatable, disableGameRenderType, customData);
 					if (enabled) {
+						Data.version.sendToLog(LogType.INFO, "REGISTERING SHADER!");
 						add(shaderData, manager);
 						Events.OnShaderDataRegistered.registry.forEach((id, runnable) -> {
 							try {
@@ -130,6 +131,9 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to apply shaders dataloader: {}", error));
 		}
+
+		// TODO: Remove once testing has been successful.
+		//Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Couple<>("test", new Shader(ShaderDataloader.registry.get(ShaderDataloader.getShaderAmount() - 1), () -> Shader.RenderType.WORLD, () -> true))));
 	}
 	@Override
 	public Identifier getFabricId() {

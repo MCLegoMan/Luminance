@@ -40,20 +40,12 @@ public class LuminanceUniform implements Uniform {
 		return this.smooth - this.prevSmooth;
 	}
 	public void tick(float delta) {
-		try {
-			this.prevSmooth = this.smooth;
-			this.smooth = (this.prevSmooth + this.current) * 0.5F;
-		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, error.getLocalizedMessage());
-		}
+		this.prevSmooth = this.smooth;
+		this.smooth = (this.prevSmooth + this.current) * 0.5F;
 	}
-	public void call(float delta) {
-		try {
-			this.prev = this.current;
-			this.current = this.callable.call(delta);
-			this.smooth = MathHelper.lerp(delta, this.prevSmooth, this.current);
-		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, error.getLocalizedMessage());
-		}
+	public void call(float delta) throws Exception {
+		this.prev = this.current;
+		this.current = this.callable.call(delta);
+		this.smooth = MathHelper.lerp(delta, this.prevSmooth, this.current);
 	}
 }

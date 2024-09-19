@@ -22,6 +22,12 @@ public class IdentifierHelper {
 			case KEY -> identifierFromString(identifier).getPath();
 		};
 	}
+	public static String getIdentifierPart(Type type, Identifier identifier) {
+		return switch (type) {
+			case NAMESPACE -> identifier.getNamespace();
+			case KEY -> identifier.getPath();
+		};
+	}
 	public enum Type {
 		NAMESPACE,
 		KEY

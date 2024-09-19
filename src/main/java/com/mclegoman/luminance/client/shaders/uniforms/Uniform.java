@@ -15,5 +15,5 @@ public interface Uniform {
 	float getSmoothPrev();
 	float getSmoothDelta();
 	void tick(float tickDelta);
-	void call(float tickDelta);
+	void call(float tickDelta) throws Exception;
 }

@@ -12,6 +12,7 @@ import com.mclegoman.luminance.client.shaders.Shader;
 import com.mclegoman.luminance.client.shaders.uniforms.LuminanceUniform;
 import com.mclegoman.luminance.client.shaders.uniforms.Uniform;
 import com.mclegoman.luminance.client.translation.Translation;
+import com.mclegoman.luminance.client.util.LuminanceIdentifier;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.LogType;
@@ -24,9 +25,6 @@ public class Events {
 	public static class OnShaderDataReset {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnable get(Identifier id) {
@@ -42,9 +40,6 @@ public class Events {
 	public static class OnShaderDataRegistered {
 		public static final Map<Identifier, Runnables.ShaderData> registry = new HashMap<>();
 		public static void register(Identifier id, Runnables.ShaderData runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnables.ShaderData runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnables.ShaderData get(Identifier id) {
@@ -60,9 +55,6 @@ public class Events {
 	public static class OnShaderDataRemoved {
 		public static final Map<Identifier, Runnables.ShaderData> registry = new HashMap<>();
 		public static void register(Identifier id, Runnables.ShaderData runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnables.ShaderData runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnables.ShaderData get(Identifier id) {
@@ -78,9 +70,6 @@ public class Events {
 	public static class AfterShaderDataRegistered {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnable get(Identifier id) {
@@ -96,9 +85,6 @@ public class Events {
 	public static class BeforeWorldRender {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnable get(Identifier id) {
@@ -114,9 +100,6 @@ public class Events {
 	public static class AfterWorldBorder {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnable get(Identifier id) {
@@ -132,9 +115,6 @@ public class Events {
 	public static class AfterWorldRender {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnable get(Identifier id) {
@@ -150,9 +130,6 @@ public class Events {
 	public static class AfterHandRender {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnable get(Identifier id) {
@@ -168,9 +145,6 @@ public class Events {
 	public static class BeforeGameRender {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnable get(Identifier id) {
@@ -186,9 +160,6 @@ public class Events {
 	public static class AfterGameRender {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnable get(Identifier id) {
@@ -204,9 +175,6 @@ public class Events {
 	public static class OnResized {
 		public static final Map<Identifier, Runnables.OnResized> registry = new HashMap<>();
 		public static void register(Identifier id, Runnables.OnResized runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnables.OnResized runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnables.OnResized get(Identifier id) {
@@ -222,9 +190,6 @@ public class Events {
 	public static class BeforeShaderRender {
 		public static final Map<Identifier, Runnables.Shader> registry = new HashMap<>();
 		public static void register(Identifier id, Runnables.Shader runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnables.Shader runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnables.Shader get(Identifier id) {
@@ -240,9 +205,6 @@ public class Events {
 	public static class AfterShaderRender {
 		public static final Map<Identifier, Runnables.Shader> registry = new HashMap<>();
 		public static void register(Identifier id, Runnables.Shader runnable) {
-			add(id, runnable);
-		}
-		public static void add(Identifier id, Runnables.Shader runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
 		public static Runnables.Shader get(Identifier id) {
@@ -256,32 +218,26 @@ public class Events {
 		}
 	}
 	public static class ShaderUniform {
-		public static final Map<Identifier, Uniform> registry = new HashMap<>();
-		public static void register(Identifier id, Uniform uniform) {
+		public static final Map<LuminanceIdentifier, Uniform> registry = new HashMap<>();
+		public static void register(LuminanceIdentifier id, Uniform uniform) {
 			if (!registry.containsKey(id)) registry.put(id, uniform);
 		}
-		public static void register(Identifier id, Callables.ShaderRender<Float> callable) {
+		public static void register(LuminanceIdentifier id, Callables.ShaderRender<Float> callable) {
 			if (!registry.containsKey(id)) registry.put(id, new LuminanceUniform(callable));
 		}
-		public static void modify(Identifier id, Uniform uniform) {
+		public static void modify(LuminanceIdentifier id, Uniform uniform) {
 			if (registry.containsKey(id)) registry.replace(id, uniform);
 		}
-		public static void remove(Identifier id) {
+		public static void remove(LuminanceIdentifier id) {
 			registry.remove(id);
 		}
 	}
 	public static class ShaderRender {
 		public static final Map<Identifier, List<Couple<String, Shader>>> registry = new HashMap<>();
 		public static void register(Identifier id, List<Couple<String, Shader>> shaders) {
-			add(id, shaders);
-		}
-		public static void register(Identifier id) {
-			add(id, null);
-		}
-		public static void add(Identifier id, List<Couple<String, Shader>> shaders) {
 			if (!registry.containsKey(id)) registry.put(id, shaders);
 		}
-		public static void add(Identifier id) {
+		public static void register(Identifier id) {
 			if (!registry.containsKey(id)) registry.put(id, null);
 		}
 		public static List<Couple<String, Shader>> get(Identifier id) {
@@ -298,7 +254,7 @@ public class Events {
 		}
 		public static class Shaders {
 			// Using these functions is optional, but makes it easier for mod developers to add shaders to their shader list.
-			public static boolean add(Identifier registryId, String shaderName, Shader shader) {
+			public static boolean register(Identifier registryId, String shaderName, Shader shader) {
 				if (ShaderRender.exists(registryId)) {
 					List<Couple<String, Shader>> shaders = ShaderRender.get(registryId);
 					if (shaders == null) shaders = new ArrayList<>();
@@ -346,7 +302,7 @@ public class Events {
 			public static boolean set(Identifier registryId, String shaderName, Shader shader) {
 				try {
 					if (!ShaderRender.exists(registryId)) ShaderRender.register(registryId, new ArrayList<>());
-					return !exists(registryId, shaderName) ? add(registryId, shaderName, shader) : modify(registryId, shaderName, shader);
+					return !exists(registryId, shaderName) ? register(registryId, shaderName, shader) : modify(registryId, shaderName, shader);
 				} catch (Exception error) {
 					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set shader: {}:{}: {}", registryId, shaderName, error));
 				}

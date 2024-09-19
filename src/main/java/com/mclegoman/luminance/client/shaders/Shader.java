@@ -13,20 +13,20 @@ import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectProcessor;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.resource.ResourceManager;
+import net.minecraft.client.gl.SimpleFramebufferFactory;
+import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.Callable;
 
 public class Shader {
-	// TODO: Add Depth and Shader Framebuffers.
 	private PostEffectProcessor postProcessor;
 	private boolean useDepth;
 	private Identifier shaderId;
 	private Callable<RenderType> renderType;
 	private Callable<Boolean> shouldRender;
 	private ShaderRegistry shaderData;
+	private Framebuffer framebuffer;
 	public Shader(ShaderRegistry shaderData, Callable<RenderType> renderType, Callable<Boolean> shouldRender) {
 		reload(shaderData, renderType, shouldRender);
 	}
@@ -34,18 +34,17 @@ public class Shader {
 		this(shaderData, renderType, () -> true);
 	}
 	public PostEffectProcessor getPostProcessor() {
-		return postProcessor;
+		return this.postProcessor;
+	}
+	public Framebuffer getFramebuffer() {
+		return this.framebuffer;
 	}
 	public void setPostProcessor() {
-		setPostProcessor(ClientData.minecraft.getTextureManager(), ClientData.minecraft.getResourceManager(), ClientData.minecraft.getFramebuffer(), ClientData.minecraft.getWindow().getFramebufferWidth(), ClientData.minecraft.getWindow().getFramebufferHeight());
-	}
-	public void setPostProcessor(TextureManager textureManager, ResourceManager resourceManager, Framebuffer framebuffer, int width, int height) {
 		try {
-			//this.postProcessor = new PostEffectProcessor(textureManager, resourceManager, framebuffer, shaderId);
-			//this.postProcessor.setupDimensions(width, height);
+			this.postProcessor = ClientData.minecraft.getShaderLoader().loadPostEffect(shaderId, DefaultFramebufferSet.STAGES);
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set post processor: {}", error));
-			//if (this.postProcessor != null) this.postProcessor.close();
+			if (this.postProcessor != null) this.postProcessor = null;
 		}
 	}
 	public boolean getUseDepth() {
@@ -89,6 +88,9 @@ public class Shader {
 		setUseDepth(false);
 		this.shaderData = shaderData;
 		setShaderId(this.shaderData.getPostEffect());
+	}
+	public void setFramebuffer() {
+		framebuffer = new SimpleFramebufferFactory(ClientData.minecraft.getFramebuffer().textureWidth, ClientData.minecraft.getFramebuffer().textureHeight, true).create();
 	}
 	public enum RenderType {
 		WORLD,

@@ -20,10 +20,9 @@ import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.gl.SimpleFramebuffer;
-import net.minecraft.client.gl.Uniform;
+import net.minecraft.client.gl.*;
+import net.minecraft.client.render.DefaultFramebufferSet;
+import net.minecraft.client.render.FrameGraphBuilder;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -35,19 +34,38 @@ import java.util.concurrent.Callable;
 
 public class Shaders {
 	public static Framebuffer depthFramebuffer;
+	private static boolean uniformError = false;
 	public static void init() {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ShaderDataloader());
 		Uniforms.init();
-		Events.BeforeGameRender.register(Identifier.of(Data.version.getID(), "main"), () -> {
-			Events.ShaderUniform.registry.forEach((id, uniform) -> {
-				uniform.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
-			});
+		Events.BeforeShaderRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.Shader() {
+			@Override
+			public void run(ShaderProgram program) {
+				Events.ShaderUniform.registry.forEach((id, uniform) -> {
+					try {
+						uniform.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
+						program.getUniformOrDefault(id.toUnderscoreSeparatedString()).set(uniform.get());
+						program.getUniformOrDefault(id.toUnderscoreSeparatedString() + "_prev").set(uniform.getPrev());
+						program.getUniformOrDefault(id.toUnderscoreSeparatedString() + "_delta").set(uniform.getDelta());
+						program.getUniformOrDefault(id.toUnderscoreSeparatedString() + "_smooth").set(uniform.getSmooth(ClientData.minecraft.getRenderTickCounter().getTickDelta(true)));
+						program.getUniformOrDefault(id.toUnderscoreSeparatedString() + "_smoothPrev").set(uniform.getSmoothPrev());
+						program.getUniformOrDefault(id.toUnderscoreSeparatedString() + "_smoothDelta").set(uniform.getSmoothDelta());
+						uniformError = false;
+					} catch (Exception error) {
+						if (!uniformError) Data.version.sendToLog(LogType.WARN, error.getLocalizedMessage());
+						uniformError = true;
+					}
+				});
+			}
 		});
-		Events.AfterHandRender.add(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
+		Events.AfterHandRender.register(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if ((shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.getSecond().getDisableGameRendertype() || shader.getSecond().getUseDepth())) && (!shader.getSecond().getUseDepth() || CompatHelper.isIrisShadersEnabled())) render(id, shader);
+						if (shader.getSecond() != null) {
+							if ((shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.getSecond().getDisableGameRendertype() || shader.getSecond().getUseDepth())) && (!shader.getSecond().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
+								render(id, shader);
+						}
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}", id, error));
 					}
@@ -57,11 +75,14 @@ public class Shaders {
 			}
 		}));
 		// This renders the shader in the world if it has depth. We really should try to render the hand in-depth, but this works for now.
-		Events.AfterWorldBorder.add(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
+		Events.AfterWorldBorder.register(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond().getUseDepth() && !CompatHelper.isIrisShadersEnabled()) render(id, shader);
+						if (shader.getSecond() != null) {
+							if (shader.getSecond().getUseDepth() && !CompatHelper.isIrisShadersEnabled())
+								render(id, shader);
+						}
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}", id, error));
 					}
@@ -70,11 +91,14 @@ public class Shaders {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}", id, error));
 			}
 		}));
-		Events.AfterGameRender.add(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
+		Events.AfterGameRender.register(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.getSecond().getDisableGameRendertype() && !shader.getSecond().getUseDepth()) render(id, shader);
+						if (shader.getSecond() != null) {
+							if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.getSecond().getDisableGameRendertype() && !shader.getSecond().getUseDepth())
+								render(id, shader);
+						}
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}", id, error));
 					}
@@ -88,7 +112,7 @@ public class Shaders {
 				Events.ShaderRender.registry.forEach((id, shaders) -> {
 					if (shaders != null) shaders.forEach(shader -> {
 						try {
-							//if (shader.getSecond() != null && shader.getSecond().getPostProcessor() != null) shader.getSecond().getPostProcessor().setupDimensions(width, height);
+							if (shader.getSecond() != null && shader.getSecond().getPostProcessor() != null) shader.getSecond().getFramebuffer().resize(width, height);
 						} catch (Exception error) {
 							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to resize shader with id: {}:", id, error));
 						}
@@ -104,29 +128,36 @@ public class Shaders {
 	}
 	private static void render(Identifier id, Couple<String, Shader> shader) {
 		try {
-			if (shader.getSecond().getShouldRender()) {
-				if (shader.getSecond().getPostProcessor() == null) {// || !Objects.equals(shader.getSecond().getPostProcessor().getName(), shader.getSecond().getShaderId().toString())) {
+			if (shader.getSecond() != null) {
+				if (shader.getSecond().getShouldRender()) {
+					if (shader.getSecond().getPostProcessor() == null) {// || !Objects.equals(shader.getSecond().getPostProcessor().getName(), shader.getSecond().getShaderId().toString())) {
+						try {
+							shader.getSecond().setPostProcessor();
+						} catch (Exception error) {
+							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}:{}\" post processor: {}", shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
+							Events.ShaderRender.Shaders.remove(id, shader.getFirst());
+						}
+					}
 					try {
-						shader.getSecond().setPostProcessor();
+						if (shader.getSecond().getPostProcessor() != null) {
+							RenderSystem.enableBlend();
+							RenderSystem.defaultBlendFunc();
+
+							DefaultFramebufferSet framebufferSet = new DefaultFramebufferSet();
+
+							int i = ClientData.minecraft.getFramebuffer().textureWidth;
+							int j = ClientData.minecraft.getFramebuffer().textureHeight;
+							FrameGraphBuilder frameGraphBuilder = new FrameGraphBuilder();
+							framebufferSet.mainFramebuffer = frameGraphBuilder.createObjectNode("main", ClientData.minecraft.getFramebuffer());
+							shader.getSecond().getPostProcessor().render(frameGraphBuilder, i, j, framebufferSet);
+
+							RenderSystem.disableBlend();
+							ClientData.minecraft.getFramebuffer().beginWrite(false);
+						}
 					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}:{}\" post processor: {}", shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
-						Events.ShaderRender.Shaders.remove(id, shader.getFirst());
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
 					}
 				}
-				render(shader);
-			}
-		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));
-		}
-	}
-	private static void render(Couple<String, Shader> shader) {
-		try {
-			if (shader.getSecond().getPostProcessor() != null) {
-				RenderSystem.enableBlend();
-				RenderSystem.defaultBlendFunc();
-				//shader.getSecond().getPostProcessor().render(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
-				RenderSystem.disableBlend();
-				ClientData.minecraft.getFramebuffer().beginWrite(false);
 			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}:{}\" shader: {}", shader.getFirst(), shader.getSecond(), shader.getSecond().getShaderData().getNamespace(), shader.getSecond().getShaderData().getKey(), error));

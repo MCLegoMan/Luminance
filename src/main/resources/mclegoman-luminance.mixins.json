@@ -9,9 +9,10 @@
 		"client.shaders.GameRendererMixin",
 		"client.shaders.MouseMixin",
 		"client.shaders.PostEffectPassMixin",
+		"client.shaders.WorldBorderRenderingMixin",
+		"client.shaders.WorldRendererMixin",
 		"compat.modmenu.FabricModMixin",
-		"compat.modmenu.ModsScreenMixin",
-		"client.shaders.PostEffectProcessorMixin"
+		"compat.modmenu.ModsScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -27,11 +27,11 @@ import java.util.Map;
 @Mixin(priority = 100, value = PostEffectPass.class)
 public abstract class PostEffectPassMixin {
 	@Shadow @Final private ShaderProgram program;
-	@Inject(method = "method_62255", at = @At("HEAD"))
+	@Inject(method = "render", at = @At("HEAD"))
 	private void luminance$beforeRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		Events.BeforeShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
-	@Inject(method = "method_62255", at = @At("TAIL"))
+	@Inject(method = "render", at = @At("TAIL"))
 	private void luminance$afterRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		Events.AfterShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
