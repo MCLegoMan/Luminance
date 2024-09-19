@@ -20,10 +20,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(priority = 100, value = FabricMod.class)
+@Mixin(priority = 100, value = FabricMod.class, remap = false)
 public abstract class FabricModMixin {
-	@Shadow(remap = false) @Final protected ModMetadata metadata;
-	@Inject(method = "getIcon", at = @At("RETURN"), remap = false, cancellable = true)
+	@Shadow @Final protected ModMetadata metadata;
+	@Inject(method = "getIcon", at = @At("RETURN"), cancellable = true)
 	private void luminance$getIcon(FabricIconHandler iconHandler, int i, CallbackInfoReturnable<NativeImageBackedTexture> cir) {
 		if (CompatHelper.shouldOverrideModMenuIcon(metadata.getId())) {
 			String iconPath = CompatHelper.getOverrideModMenuIcon(this.metadata.getId());
