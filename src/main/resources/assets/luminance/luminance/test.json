@@ -1,0 +1,15 @@
+{
+  "post_effect": "luminance:test",
+  "enabled": true,
+  "translatable": false,
+  "disable_game_rendertype": true,
+  "custom": {
+    "perspective": {
+      "entity_links": []
+    },
+    "souper_secret_settings": {
+      "disable_soup": false,
+      "entity_links": []
+    }
+  }
+}

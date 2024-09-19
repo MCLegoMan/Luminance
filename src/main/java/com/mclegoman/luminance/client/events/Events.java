@@ -97,7 +97,7 @@ public class Events {
 			registry.remove(id);
 		}
 	}
-	public static class AfterWorldBorder {
+	public static class AfterWeatherRender {
 		public static final Map<Identifier, Runnable> registry = new HashMap<>();
 		public static void register(Identifier id, Runnable runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);

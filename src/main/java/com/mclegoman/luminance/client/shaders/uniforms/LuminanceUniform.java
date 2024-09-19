@@ -8,8 +8,6 @@
 package com.mclegoman.luminance.client.shaders.uniforms;
 
 import com.mclegoman.luminance.client.events.Callables;
-import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.util.math.MathHelper;
 
 public class LuminanceUniform implements Uniform {

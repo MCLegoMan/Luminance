@@ -13,18 +13,14 @@ import com.mclegoman.luminance.client.events.Callables;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.events.Runnables;
 import com.mclegoman.luminance.client.translation.Translation;
+import com.mclegoman.luminance.client.util.Accessors;
 import com.mclegoman.luminance.client.util.CompatHelper;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.Couple;
-import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.gl.*;
-import net.minecraft.client.render.DefaultFramebufferSet;
-import net.minecraft.client.render.FrameGraphBuilder;
-import net.minecraft.client.util.ObjectAllocator;
-import net.minecraft.client.util.Pool;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -35,9 +31,6 @@ import org.joml.Vector3f;
 import java.util.concurrent.Callable;
 
 public class Shaders {
-	public static Framebuffer depthFramebuffer;
-	private static boolean uniformError = false;
-	private static Pool pool = new Pool(3);
 	public static void init() {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ShaderDataloader());
 		Uniforms.init();
@@ -53,10 +46,8 @@ public class Shaders {
 						program.getUniformOrDefault(id.toUnderscoreSeparatedString() + "_smooth").set(uniform.getSmooth(ClientData.minecraft.getRenderTickCounter().getTickDelta(true)));
 						program.getUniformOrDefault(id.toUnderscoreSeparatedString() + "_smoothPrev").set(uniform.getSmoothPrev());
 						program.getUniformOrDefault(id.toUnderscoreSeparatedString() + "_smoothDelta").set(uniform.getSmoothDelta());
-						uniformError = false;
 					} catch (Exception error) {
-						if (!uniformError) Data.version.sendToLog(LogType.WARN, error.getLocalizedMessage());
-						uniformError = true;
+						Data.version.sendToLog(LogType.WARN, error.getLocalizedMessage());
 					}
 				});
 			}
@@ -78,7 +69,7 @@ public class Shaders {
 			}
 		}));
 		// This renders the shader in the world if it has depth. We really should try to render the hand in-depth, but this works for now.
-		Events.AfterWorldBorder.register(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
+		Events.AfterWeatherRender.register(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
@@ -110,28 +101,10 @@ public class Shaders {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}", id, error));
 			}
 		}));
-		Events.OnResized.register(Identifier.of(Data.version.getID(), "main"), new Runnables.OnResized() {
-			public void run(int width, int height) {
-				Events.ShaderRender.registry.forEach((id, shaders) -> {
-					if (shaders != null) shaders.forEach(shader -> {
-						try {
-							pool.close();
-						} catch (Exception error) {
-							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to resize shader with id: {}:", id, error));
-						}
-					});
-				});
-				if (Shaders.depthFramebuffer == null) {
-					Shaders.depthFramebuffer = new SimpleFramebuffer(width, height, true);
-				} else {
-					Shaders.depthFramebuffer.resize(width, height);
-				}
-			}
-		});
 	}
 	private static void render(Identifier id, Couple<String, Shader> shader) {
 		try {
-			if (shader.getSecond() != null) {
+			if (shader != null && shader.getSecond() != null) {
 				if (shader.getSecond().getShouldRender()) {
 					if (shader.getSecond().getPostProcessor() == null) {
 						try {
@@ -141,29 +114,28 @@ public class Shaders {
 							Events.ShaderRender.Shaders.remove(id, shader.getFirst());
 						}
 					}
-					try {
-						if (shader.getSecond().getPostProcessor() != null) {
-							RenderSystem.enableBlend();
-							RenderSystem.defaultBlendFunc();
-							if (pool == null) pool = new Pool(3);
-							render(shader.getSecond().getPostProcessor(), ClientData.minecraft.getFramebuffer(), pool);
-							RenderSystem.disableBlend();
-							ClientData.minecraft.getFramebuffer().beginWrite(false);
-						}
-					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}: {}", id, shader.getFirst(), shader.getSecond().getShaderData().getID(), error));
-					}
+					if (shader.getSecond().getPostProcessor() != null) render(shader.getSecond().getPostProcessor());
 				}
 			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}: {}", id, shader.getFirst(), shader.getSecond().getShaderData().getID(), error));
 		}
 	}
-	public static void render(PostEffectProcessor processor, Framebuffer framebuffer, ObjectAllocator objectAllocator) {
-		FrameGraphBuilder frameGraphBuilder = new FrameGraphBuilder();
-		PostEffectProcessor.FramebufferSet framebufferSet = PostEffectProcessor.FramebufferSet.singleton(Identifier.ofVanilla("main"), frameGraphBuilder.createObjectNode("main", framebuffer));
-		processor.render(frameGraphBuilder, framebuffer.textureWidth, framebuffer.textureHeight, framebufferSet);
-		frameGraphBuilder.run(objectAllocator);
+	public static void render(PostEffectProcessor processor) {
+		try {
+			if (processor != null) {
+				try {
+					RenderSystem.enableBlend();
+					RenderSystem.defaultBlendFunc();
+					processor.render(ClientData.minecraft.getFramebuffer(), Accessors.getGameRenderer().getPool());
+					RenderSystem.disableBlend();
+				} catch (Exception error) {
+					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render processor: {}", error.getLocalizedMessage()));
+				}
+			}
+		} catch (Exception error) {
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render post effect processor: {}", error.getLocalizedMessage()));
+		}
 	}
 	public static ShaderRegistry get(int shaderIndex) {
 		return ShaderDataloader.isValidIndex(shaderIndex) ? ShaderDataloader.registry.get(shaderIndex) : null;

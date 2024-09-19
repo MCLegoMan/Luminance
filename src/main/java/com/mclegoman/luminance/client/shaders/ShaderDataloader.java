@@ -14,6 +14,7 @@ import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.JsonDataLoader;
 import com.mclegoman.luminance.common.data.Data;
+import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
@@ -129,6 +130,8 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to apply shaders dataloader: {}", error));
 		}
+		Events.ShaderRender.register(Identifier.of(Data.version.getID(), "test"), new ArrayList<>());
+		Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Couple<>("one", new Shader(Shaders.get(Identifier.of("luminance", "test")), () -> Shader.RenderType.WORLD, () -> true))));
 	}
 	@Override
 	public Identifier getFabricId() {
