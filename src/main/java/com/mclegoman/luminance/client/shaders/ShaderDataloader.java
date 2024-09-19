@@ -131,9 +131,6 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to apply shaders dataloader: {}", error));
 		}
-
-		// TODO: Remove once testing has been successful.
-		//Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Couple<>("test", new Shader(ShaderDataloader.registry.get(ShaderDataloader.getShaderAmount() - 1), () -> Shader.RenderType.WORLD, () -> true))));
 	}
 	@Override
 	public Identifier getFabricId() {
