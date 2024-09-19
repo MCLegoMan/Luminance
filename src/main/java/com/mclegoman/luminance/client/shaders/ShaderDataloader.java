@@ -14,7 +14,6 @@ import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.JsonDataLoader;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
