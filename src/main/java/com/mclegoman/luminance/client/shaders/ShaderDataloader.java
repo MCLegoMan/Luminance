@@ -88,7 +88,6 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 					JsonObject customData = JsonHelper.getObject(reader, "customData", new JsonObject());
 					ShaderRegistry shaderData = getShaderData(post_effect, translatable, disableGameRenderType, customData);
 					if (enabled) {
-						Data.version.sendToLog(LogType.INFO, "REGISTERING SHADER!");
 						add(shaderData, manager);
 						Events.OnShaderDataRegistered.registry.forEach((id, runnable) -> {
 							try {
