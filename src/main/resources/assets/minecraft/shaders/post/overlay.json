@@ -1,15 +1,9 @@
 {
-    "blend": {
-        "func": "add",
-        "srcrgb": "one",
-        "dstrgb": "zero"
-    },
-    "vertex": "minecraft:blit",
-    "fragment": "minecraft:overlay",
-    "attributes": [ "Position" ],
+    "vertex": "minecraft:post/blit",
+    "fragment": "minecraft:post/overlay",
     "samplers": [
         { "name": "OverlaySampler" },
-        { "name": "DiffuseSampler" }
+        { "name": "InSampler" }
     ],
     "uniforms": [
         { "name": "ProjMat",     "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },

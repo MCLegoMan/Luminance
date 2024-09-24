@@ -1,6 +1,6 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 uniform sampler2D OverlaySampler;
 
 uniform vec2 InSize;
@@ -18,7 +18,7 @@ void main(){
     vec2 mosaicInSize = InSize / MosaicSize;
     vec2 fractPix = fract(texCoord * mosaicInSize) / mosaicInSize;
 
-    vec4 baseTexel = texture(DiffuseSampler, texCoord - fractPix);
+    vec4 baseTexel = texture(InSampler, texCoord - fractPix);
     float red = dot(baseTexel.rgb, RedMatrix);
     float green = dot(baseTexel.rgb, GreenMatrix);
     float blue = dot(baseTexel.rgb, BlueMatrix);

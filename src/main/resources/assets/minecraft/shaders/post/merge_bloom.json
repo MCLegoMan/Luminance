@@ -1,14 +1,8 @@
 {
-    "blend": {
-        "func": "add",
-        "srcrgb": "one",
-        "dstrgb": "zero"
-    },
-    "vertex": "minecraft:screenquad",
-    "fragment": "minecraft:merge_bloom",
-    "attributes": [ "Position" ],
+    "vertex": "minecraft:post/screenquad",
+    "fragment": "minecraft:post/merge_bloom",
     "samplers": [
-        { "name": "DiffuseSampler" },
+        { "name": "InSampler" },
         { "name": "BloomSampler" },
         { "name": "HighlightsSampler" }
     ],

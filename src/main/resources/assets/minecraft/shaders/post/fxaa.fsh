@@ -1,6 +1,6 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 uniform vec2 OutSize;
 
 uniform float VxOffset;
@@ -68,6 +68,6 @@ vec3 FxaaPixelShader(
 }
 
 void main() {
-    vec4 baseTexel = texture(DiffuseSampler, posPos.xy);
-    fragColor = vec4(FxaaPixelShader(posPos, DiffuseSampler, 1.0 / OutSize), 1.0);
+    vec4 baseTexel = texture(InSampler, posPos.xy);
+    fragColor = vec4(FxaaPixelShader(posPos, InSampler, 1.0 / OutSize), 1.0);
 }

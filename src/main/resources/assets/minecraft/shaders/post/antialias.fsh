@@ -1,6 +1,6 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 
 in vec2 texCoord;
 in vec2 oneTexel;
@@ -8,15 +8,15 @@ in vec2 oneTexel;
 out vec4 fragColor;
 
 void main(){
-    vec4 c  = texture (DiffuseSampler, texCoord);
-    vec4 u1 = texture (DiffuseSampler, texCoord + vec2 (              0.0, -oneTexel.y      ));
-    vec4 u2 = texture (DiffuseSampler, texCoord + vec2 (              0.0, -oneTexel.y * 2.0));
-    vec4 d1 = texture (DiffuseSampler, texCoord + vec2 (              0.0,  oneTexel.y      ));
-    vec4 d2 = texture (DiffuseSampler, texCoord + vec2 (              0.0,  oneTexel.y * 2.0));
-    vec4 l1 = texture (DiffuseSampler, texCoord + vec2 (-oneTexel.x,                     0.0));
-    vec4 l2 = texture (DiffuseSampler, texCoord + vec2 (-oneTexel.x * 2.0,               0.0));
-    vec4 r1 = texture (DiffuseSampler, texCoord + vec2 ( oneTexel.x,                     0.0));
-    vec4 r2 = texture (DiffuseSampler, texCoord + vec2 ( oneTexel.x * 2.0,               0.0));
+    vec4 c  = texture (InSampler, texCoord);
+    vec4 u1 = texture (InSampler, texCoord + vec2 (              0.0, -oneTexel.y      ));
+    vec4 u2 = texture (InSampler, texCoord + vec2 (              0.0, -oneTexel.y * 2.0));
+    vec4 d1 = texture (InSampler, texCoord + vec2 (              0.0,  oneTexel.y      ));
+    vec4 d2 = texture (InSampler, texCoord + vec2 (              0.0,  oneTexel.y * 2.0));
+    vec4 l1 = texture (InSampler, texCoord + vec2 (-oneTexel.x,                     0.0));
+    vec4 l2 = texture (InSampler, texCoord + vec2 (-oneTexel.x * 2.0,               0.0));
+    vec4 r1 = texture (InSampler, texCoord + vec2 ( oneTexel.x,                     0.0));
+    vec4 r2 = texture (InSampler, texCoord + vec2 ( oneTexel.x * 2.0,               0.0));
 
     vec4 v1 = mix (c, mix (l1, l2, 0.667), 0.75);
     vec4 v2 = mix (c, mix (r1, r2, 0.667), 0.75);

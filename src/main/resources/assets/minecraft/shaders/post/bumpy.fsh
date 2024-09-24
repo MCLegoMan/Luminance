@@ -1,6 +1,6 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 
 in vec2 texCoord;
 in vec2 oneTexel;
@@ -8,11 +8,11 @@ in vec2 oneTexel;
 out vec4 fragColor;
 
 void main(){
-    vec4 c = texture(DiffuseSampler, texCoord);
-    vec4 u = texture(DiffuseSampler, texCoord + vec2(        0.0, -oneTexel.y));
-    vec4 d = texture(DiffuseSampler, texCoord + vec2(        0.0,  oneTexel.y));
-    vec4 l = texture(DiffuseSampler, texCoord + vec2(-oneTexel.x,         0.0));
-    vec4 r = texture(DiffuseSampler, texCoord + vec2( oneTexel.x,         0.0));
+    vec4 c = texture(InSampler, texCoord);
+    vec4 u = texture(InSampler, texCoord + vec2(        0.0, -oneTexel.y));
+    vec4 d = texture(InSampler, texCoord + vec2(        0.0,  oneTexel.y));
+    vec4 l = texture(InSampler, texCoord + vec2(-oneTexel.x,         0.0));
+    vec4 r = texture(InSampler, texCoord + vec2( oneTexel.x,         0.0));
 
     vec4 nc = normalize(c);
     vec4 nu = normalize(u);

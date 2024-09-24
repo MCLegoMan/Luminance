@@ -1,6 +1,6 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 
 in vec2 texCoord;
 in vec2 oneTexel;
@@ -34,10 +34,10 @@ void main() {
     vec4 Cx = vec4(C0.x, C1.x, C2.x, C3.x);
     vec4 Cy = vec4(C0.y, C1.y, C2.y, C3.y);
     
-    vec4 Texel0 = texture(DiffuseSampler, C0);
-    vec4 Texel1 = texture(DiffuseSampler, C1);
-    vec4 Texel2 = texture(DiffuseSampler, C2);
-    vec4 Texel3 = texture(DiffuseSampler, C3);
+    vec4 Texel0 = texture(InSampler, C0);
+    vec4 Texel1 = texture(InSampler, C1);
+    vec4 Texel2 = texture(InSampler, C2);
+    vec4 Texel3 = texture(InSampler, C3);
 
     // Calculate the expected time of the sample.
     vec4 T = A2 * Cy * vec4(InSize.y) + B + Cx;

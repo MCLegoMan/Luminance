@@ -1,6 +1,6 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 
 in vec2 texCoord;
 in vec2 oneTexel;
@@ -21,10 +21,10 @@ void main() {
     CoordX += ConvergeX * oneTexel.x - (RadialConvergeX - 1.0) * 0.5;
     CoordY += ConvergeY * oneTexel.y - (RadialConvergeY - 1.0) * 0.5;
 
-    float RedValue   = texture(DiffuseSampler, vec2(CoordX.x, CoordY.x)).r;
-    float GreenValue = texture(DiffuseSampler, vec2(CoordX.y, CoordY.y)).g;
-    float BlueValue  = texture(DiffuseSampler, vec2(CoordX.z, CoordY.z)).b;
-    float AlphaValue  = texture(DiffuseSampler, texCoord).a;
+    float RedValue   = texture(InSampler, vec2(CoordX.x, CoordY.x)).r;
+    float GreenValue = texture(InSampler, vec2(CoordX.y, CoordY.y)).g;
+    float BlueValue  = texture(InSampler, vec2(CoordX.z, CoordY.z)).b;
+    float AlphaValue  = texture(InSampler, texCoord).a;
 
     fragColor = vec4(RedValue, GreenValue, BlueValue, 1.0);
 }
