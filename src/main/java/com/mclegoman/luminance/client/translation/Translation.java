@@ -22,22 +22,22 @@ public class Translation {
 		return getText(string, isTranslatable).formatted(formattings);
 	}
 	public static MutableText getText(String string, boolean isTranslatable, Object[] variables) {
-		return isTranslatable ? Text.translatable(string, variables) : Text.literal(getString(string, "%s", variables));
+		return isTranslatable ? Text.translatable(string, variables) : Text.literal(getString(string, variables));
 	}
 	public static MutableText getText(String string, boolean isTranslatable, Object[] variables, Formatting[] formattings) {
 		return getText(string, isTranslatable, variables).formatted(formattings);
 	}
-	public static MutableText getText(Couple<String, Boolean> data) {
-		return getText(data.getFirst(), data.getSecond());
+	public static MutableText getText(Data data) {
+		return getText(data.key(), data.translatable());
 	}
-	public static MutableText getText(Couple<String, Boolean> data, Formatting[] formattings) {
-		return getText(data.getFirst(), data.getSecond(), formattings);
+	public static MutableText getText(Data data, Formatting[] formattings) {
+		return getText(data.key(), data.translatable(), formattings);
 	}
-	public static MutableText getText(Couple<String, Boolean> data, Object[] variables) {
-		return getText(data.getFirst(), data.getSecond(), variables);
+	public static MutableText getText(Data data, Object[] variables) {
+		return getText(data.key(), data.translatable(), variables);
 	}
-	public static MutableText getText(Couple<String, Boolean> data, Object[] variables, Formatting[] formattings) {
-		return getText(data.getFirst(), data.getSecond(), variables, formattings);
+	public static MutableText getText(Data data, Object[] variables, Formatting[] formattings) {
+		return getText(data.key(), data.translatable(), variables, formattings);
 	}
 	public static MutableText getCombinedText(MutableText... texts) {
 		MutableText outputText = getText("", false);
@@ -135,5 +135,26 @@ public class Translation {
 	}
 	public static MutableText getItemTranslation(String namespace, String key) {
 		return getTranslation("item", namespace, key);
+	}
+	public static Data data(String key, boolean translatable) {
+		return new Data(key, translatable);
+	}
+	public record Data(String key, boolean translatable) {
+	}
+	@Deprecated
+	public static MutableText getText(Couple<String, Boolean> data) {
+		return getText(new Data(data.getFirst(), data.getSecond()));
+	}
+	@Deprecated
+	public static MutableText getText(Couple<String, Boolean> data, Formatting[] formattings) {
+		return getText(new Data(data.getFirst(), data.getSecond()), formattings);
+	}
+	@Deprecated
+	public static MutableText getText(Couple<String, Boolean> data, Object[] variables) {
+		return getText(new Data(data.getFirst(), data.getSecond()), variables);
+	}
+	@Deprecated
+	public static MutableText getText(Couple<String, Boolean> data, Object[] variables, Formatting[] formattings) {
+		return getText(new Data(data.getFirst(), data.getSecond()), variables, formattings);
 	}
 }

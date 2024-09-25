@@ -10,16 +10,14 @@ package com.mclegoman.luminance.client.shaders;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mclegoman.luminance.client.debug.Debug;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.JsonDataLoader;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.minecraft.client.gl.PostEffectPipeline;
-import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -135,7 +133,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 
 		// Test Shader: remove/comment out when shader rendering is finished.
 		Events.ShaderRender.register(Identifier.of(Data.version.getID(), "test"), new ArrayList<>());
-		Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Shader.Data(Identifier.of(Data.version.getID(), "test"), new Shader(Shaders.get(Identifier.of("luminance", "test")), () -> Shader.RenderType.WORLD, () -> true))));
+		Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Shader.Data(Identifier.of(Data.version.getID(), "test"), new Shader(Shaders.get(Identifier.of("luminance", "test")), () -> Shader.RenderType.WORLD, () -> Debug.debugShader))));
 	}
 	@Override
 	public Identifier getFabricId() {

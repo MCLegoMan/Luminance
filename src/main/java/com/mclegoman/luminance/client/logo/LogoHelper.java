@@ -10,7 +10,6 @@ package com.mclegoman.luminance.client.logo;
 import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
@@ -26,7 +25,7 @@ public class LogoHelper {
 	public static void renderDevelopmentOverlay(DrawContext context, int x, int y, int width, int height, boolean shouldRender) {
 		renderDevelopmentOverlay(context, x, y, width, height, shouldRender, 0, 0);
 	}
-	public static void createSplashText(DrawContext context, int width, int x, int y, TextRenderer textRenderer, Couple<String, Boolean> splashText, float rotation) {
+	public static void createSplashText(DrawContext context, int width, int x, int y, TextRenderer textRenderer, Translation.Data splashText, float rotation) {
 		if (splashText != null && !ClientData.minecraft.options.getHideSplashTexts().getValue()) {
 			context.getMatrices().push();
 			context.getMatrices().translate(x + width, y, 0.0F);

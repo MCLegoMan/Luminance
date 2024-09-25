@@ -85,13 +85,13 @@ public class Uniforms {
 		return ClientData.minecraft.getCurrentFps();
 	}
 	public static float getTime(float tickDelta) {
-		// Ideally, lu_time/lu_timeSmooth should be customizable from post/x.json, and if omitted, it would default to every 20 ticks (matching vanilla).
+		// Ideally, lu_time/lu_timeSmooth should be customizable from post_effect/x.json, and if omitted, it would default to every 20 ticks (matching vanilla).
 		// This would require Luminance to add a time variable for each pass, how big of a performance hit would this be?
 		// If omitted, we could use the vanilla variable to help with performance.
 
 		// Could we add something like this to the post/x.json and program/x.json files?
 		// options {
-		//     "lu_time": {
+		//     "luminance_time": {
 		//         "type": "int",
 		//         "value": 20,
 		//     }

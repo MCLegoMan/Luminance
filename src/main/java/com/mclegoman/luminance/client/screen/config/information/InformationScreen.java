@@ -11,7 +11,6 @@ import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.logo.LuminanceLogo;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmLinkScreen;
@@ -27,9 +26,9 @@ public class InformationScreen extends Screen {
 	private boolean refresh;
 	private boolean shouldClose;
 	private boolean shouldRenderSplashText;
-	private Couple<String, Boolean> splashText;
+	private Translation.Data splashText;
 	private final boolean isPride;
-	public InformationScreen(Screen parent, boolean refresh, Couple<String, Boolean> splashText, boolean isPride) {
+	public InformationScreen(Screen parent, boolean refresh, Translation.Data splashText, boolean isPride) {
 		super(Text.literal(""));
 		this.grid = new GridWidget();
 		this.parentScreen = parent;

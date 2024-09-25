@@ -8,8 +8,8 @@
 package com.mclegoman.luminance.client.logo;
 
 import com.mclegoman.luminance.client.data.ClientData;
+import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.DateHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -51,15 +51,15 @@ public class LuminanceLogo {
 	}
 	public static class Widget extends ClickableWidget {
 		private final boolean shouldRenderSplashText;
-		private final Couple<String, Boolean> splashText;
+		private final Translation.Data splashText;
 		private final boolean isPride;
-		public Widget(boolean shouldRenderSplashText, Couple<String, Boolean> splashText, boolean isPride) {
+		public Widget(boolean shouldRenderSplashText, Translation.Data splashText, boolean isPride) {
 			super(0, 0, 256, 64, Text.empty());
 			this.shouldRenderSplashText = shouldRenderSplashText;
 			this.splashText = splashText;
 			this.isPride = isPride;
 		}
-		public Widget(boolean shouldRenderSplashText, Couple<String, Boolean> splashText) {
+		public Widget(boolean shouldRenderSplashText, Translation.Data splashText) {
 			this (shouldRenderSplashText, splashText, DateHelper.isPride());
 		}
 		public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {

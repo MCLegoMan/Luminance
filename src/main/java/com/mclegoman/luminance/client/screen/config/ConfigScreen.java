@@ -8,12 +8,12 @@
 package com.mclegoman.luminance.client.screen.config;
 
 import com.mclegoman.luminance.client.data.ClientData;
+import com.mclegoman.luminance.client.debug.Debug;
 import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.logo.LuminanceLogo;
 import com.mclegoman.luminance.client.screen.config.information.InformationScreen;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mclegoman.luminance.config.ConfigHelper;
 import net.minecraft.client.gui.DrawContext;
@@ -32,9 +32,9 @@ public class ConfigScreen extends Screen {
 	private boolean shouldClose;
 	private boolean saveConfig;
 	private boolean shouldRenderSplashText;
-	private Couple<String, Boolean> splashText;
+	private Translation.Data splashText;
 	private final boolean isPride;
-	public ConfigScreen(Screen parent, boolean refresh, boolean saveConfig, Couple<String, Boolean> splashText, boolean isPride) {
+	public ConfigScreen(Screen parent, boolean refresh, boolean saveConfig, Translation.Data splashText, boolean isPride) {
 		super(Text.literal(""));
 		this.grid = new GridWidget();
 		this.parentScreen = parent;
@@ -46,10 +46,10 @@ public class ConfigScreen extends Screen {
 		}
 		this.isPride = isPride;
 	}
-	public ConfigScreen(Screen parent, boolean refresh, Couple<String, Boolean> splashText, boolean isPride) {
+	public ConfigScreen(Screen parent, boolean refresh, Translation.Data splashText, boolean isPride) {
 		this(parent, refresh, false, splashText, isPride);
 	}
-	public ConfigScreen(Screen parent, Couple<String, Boolean> splashText, boolean isPride) {
+	public ConfigScreen(Screen parent, Translation.Data splashText, boolean isPride) {
 		this(parent, false, false, splashText, isPride);
 	}
 	public ConfigScreen(Screen parent, boolean refresh, boolean saveConfig, boolean isPride) {
@@ -109,6 +109,13 @@ public class ConfigScreen extends Screen {
 			this.refresh = true;
 		}).build(), 1).setTooltip(Tooltip.of(Translation.getConfigTranslation(Data.version.getID(), "alpha.show_overlay", true)));
 		gridAdder.add(ButtonWidget.builder(Translation.getConfigTranslation(Data.version.getID(), "information"), button -> ClientData.minecraft.setScreen(new InformationScreen(ClientData.minecraft.currentScreen, false, splashText, isPride))).width(304).build(), 2);
+
+		// TODO: Remove once shader rendering is finished.
+		gridAdder.add(ButtonWidget.builder(Translation.getText("Debug Shader: {}", false, new Object[]{Debug.debugShader}), button -> {
+			Debug.debugShader = !Debug.debugShader;
+			this.refresh = true;
+		}).width(304).build(), 2);
+
 		return grid;
 	}
 	private GridWidget createFooter() {

@@ -8,7 +8,6 @@
 package com.mclegoman.luminance.client.shaders;
 
 import com.google.gson.JsonObject;
-import com.mclegoman.luminance.common.util.IdentifierHelper;
 import net.minecraft.util.Identifier;
 
 public class ShaderRegistry {
