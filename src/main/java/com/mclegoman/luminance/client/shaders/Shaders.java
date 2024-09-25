@@ -16,7 +16,6 @@ import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.Accessors;
 import com.mclegoman.luminance.client.util.CompatHelper;
 import com.mclegoman.luminance.common.data.Data;
-import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -56,8 +55,8 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond() != null) {
-							if ((shader.getSecond().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.getSecond().getDisableGameRendertype() || shader.getSecond().getUseDepth())) && (!shader.getSecond().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
+						if (shader.shader() != null) {
+							if ((shader.shader().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.shader().getDisableGameRendertype() || shader.shader().getUseDepth())) && (!shader.shader().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
 								render(id, shader);
 						}
 					} catch (Exception error) {
@@ -73,8 +72,8 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond() != null) {
-							if (shader.getSecond().getUseDepth() && !CompatHelper.isIrisShadersEnabled())
+						if (shader.shader() != null) {
+							if (shader.shader().getUseDepth() && !CompatHelper.isIrisShadersEnabled())
 								render(id, shader);
 						}
 					} catch (Exception error) {
@@ -89,8 +88,8 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond() != null) {
-							if (shader.getSecond().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.getSecond().getDisableGameRendertype() && !shader.getSecond().getUseDepth())
+						if (shader.shader() != null) {
+							if (shader.shader().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.shader().getDisableGameRendertype() && !shader.shader().getUseDepth())
 								render(id, shader);
 						}
 					} catch (Exception error) {
@@ -102,23 +101,23 @@ public class Shaders {
 			}
 		}));
 	}
-	private static void render(Identifier id, Couple<String, Shader> shader) {
+	private static void render(Identifier id, Shader.Data shader) {
 		try {
-			if (shader != null && shader.getSecond() != null) {
-				if (shader.getSecond().getShouldRender()) {
-					if (shader.getSecond().getPostProcessor() == null) {
+			if (shader != null && shader.shader() != null) {
+				if (shader.shader().getShouldRender()) {
+					if (shader.shader().getPostProcessor() == null) {
 						try {
-							shader.getSecond().setPostProcessor();
+							shader.shader().setPostProcessor();
 						} catch (Exception error) {
-							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}:{}:{}\" post processor: {}", id, shader.getFirst(), shader.getSecond().getShaderData().getID(), error));
-							Events.ShaderRender.Shaders.remove(id, shader.getFirst());
+							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}:{}:{}\" post processor: {}", id, shader.id(), shader.shader().getShaderData().getID(), error));
+							Events.ShaderRender.Shaders.remove(id, shader.id());
 						}
 					}
-					if (shader.getSecond().getPostProcessor() != null) render(shader.getSecond().getPostProcessor());
+					if (shader.shader().getPostProcessor() != null) render(shader.shader().getPostProcessor());
 				}
 			}
 		} catch (Exception error) {
-			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}: {}", id, shader.getFirst(), shader.getSecond().getShaderData().getID(), error));
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}: {}", id, shader.id(), shader.shader().getShaderData().getID(), error));
 		}
 	}
 	public static void render(PostEffectProcessor processor) {

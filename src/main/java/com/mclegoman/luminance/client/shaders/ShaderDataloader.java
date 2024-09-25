@@ -120,7 +120,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 			Events.ShaderRender.registry.forEach((id, shaders) -> {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.getSecond() != null) shader.getSecond().reload();
+						if (shader.shader() != null) shader.shader().reload();
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to reload shader with id: {}:{}:", id, error));
 					}
@@ -130,8 +130,10 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to apply shaders dataloader: {}", error));
 		}
+
+		// Test Shader: remove/comment out when shader rendering is finished.
 		Events.ShaderRender.register(Identifier.of(Data.version.getID(), "test"), new ArrayList<>());
-		Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Couple<>("one", new Shader(Shaders.get(Identifier.of("luminance", "test")), () -> Shader.RenderType.WORLD, () -> true))));
+		Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Shader.Data(Identifier.of(Data.version.getID(), "test"), new Shader(Shaders.get(Identifier.of("luminance", "test")), () -> Shader.RenderType.WORLD, () -> true))));
 	}
 	@Override
 	public Identifier getFabricId() {
