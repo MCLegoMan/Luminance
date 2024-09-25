@@ -18,6 +18,8 @@ import com.mclegoman.luminance.common.util.Couple;
 import com.mclegoman.luminance.common.util.IdentifierHelper;
 import com.mclegoman.luminance.common.util.LogType;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.minecraft.client.gl.PostEffectPipeline;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -140,7 +142,9 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 		return Identifier.of(Data.version.getID(), resourceLocation);
 	}
 	protected static void releaseShaders() {
-//		try {
+		try {
+			// TODO: Does this still need to be done in 1.21.2?
+			//  If so, we need to work out how to do it because EVERYTHING changed.
 //			List<ShaderStage.Type> shaderTypes = new ArrayList<>();
 //			shaderTypes.add(ShaderStage.Type.VERTEX);
 //			shaderTypes.add(ShaderStage.Type.FRAGMENT);
@@ -155,8 +159,8 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 //					loadedShader.getValue().release();
 //				}
 //			}
-//		} catch (Exception error) {
-//			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to release shaders: {}", error));
-//		}
+		} catch (Exception error) {
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to release shaders: {}", error));
+		}
 	}
 }
