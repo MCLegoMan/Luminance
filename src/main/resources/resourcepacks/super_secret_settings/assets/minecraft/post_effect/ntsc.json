@@ -1,10 +1,8 @@
 {
     "targets": {
         "swap": {},
-        "swap2": {},
         "previous": {},
-        "merge": {},
-        "final": {}
+        "merge": {}
     },
     "passes": [
         {
@@ -29,14 +27,14 @@
                     "target": "minecraft:main"
                 }
             ],
-            "output": "swap2"
+            "output": "merge"
         },
         {
             "program": "minecraft:post/color_convolve",
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "swap2"
+                    "target": "merge"
                 }
             ],
             "output": "swap"
@@ -56,7 +54,7 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "minecraft:main"
+                    "target": "merge"
                 }
             ],
             "output": "swap",
@@ -96,7 +94,7 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "minecraft:main"
+                    "target": "merge"
                 }
             ],
             "output": "swap"
@@ -126,20 +124,10 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "minecraft:main"
+                    "target": "merge"
                 }
             ],
             "output": "previous"
-        },
-        {
-            "program": "minecraft:post/blit",
-            "inputs": [
-                {
-                    "sampler_name": "In",
-                    "target": "swap"
-                }
-            ],
-            "output": "merge"
         },
         {
             "program": "luminance:post/merge",
@@ -153,14 +141,14 @@
                     "target": "minecraft:main"
                 }
             ],
-            "output": "final"
+            "output": "swap"
         },
         {
             "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "final"
+                    "target": "swap"
                 }
             ],
             "output": "minecraft:main"
