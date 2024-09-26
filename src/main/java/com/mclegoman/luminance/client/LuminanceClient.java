@@ -9,7 +9,6 @@ package com.mclegoman.luminance.client;
 
 import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.shaders.Shaders;
-import com.mclegoman.luminance.client.temp.ShaderTime;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.client.util.CompatHelper;
 import com.mclegoman.luminance.client.util.ResourcePacks;
@@ -30,8 +29,6 @@ public class LuminanceClient implements ClientModInitializer {
 			CompatHelper.init();
 			Shaders.init();
 			Tick.init();
-			// This is a temp fix!
-			ShaderTime.init();
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to run onInitializeClient: {}", error));
 		}

@@ -55,8 +55,8 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.shader() != null) {
-							if ((shader.shader().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.shader().getDisableGameRendertype() || shader.shader().getUseDepth())) && (!shader.shader().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
+						if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
+							if ((shader.shader().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.shader().getShaderData().getDisableGameRendertype() || shader.shader().getUseDepth())) && (!shader.shader().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
 								render(id, shader);
 						}
 					} catch (Exception error) {
@@ -72,7 +72,7 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.shader() != null) {
+						if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
 							if (shader.shader().getUseDepth() && !CompatHelper.isIrisShadersEnabled())
 								render(id, shader);
 						}
@@ -88,8 +88,8 @@ public class Shaders {
 			try {
 				if (shaders != null) shaders.forEach(shader -> {
 					try {
-						if (shader.shader() != null) {
-							if (shader.shader().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.shader().getDisableGameRendertype() && !shader.shader().getUseDepth())
+						if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
+							if (shader.shader().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.shader().getShaderData().getDisableGameRendertype() && !shader.shader().getUseDepth())
 								render(id, shader);
 						}
 					} catch (Exception error) {
@@ -103,7 +103,7 @@ public class Shaders {
 	}
 	private static void render(Identifier id, Shader.Data shader) {
 		try {
-			if (shader != null && shader.shader() != null) {
+			if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
 				if (shader.shader().getShouldRender()) {
 					if (shader.shader().getPostProcessor() == null) {
 						try {

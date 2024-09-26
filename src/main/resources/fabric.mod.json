@@ -5,10 +5,10 @@
   "name": "Luminance",
   "description": "Luminance is a library mod that is primarily designed to help other mods with shaders.",
   "authors": [
-    "MCLegoMan"
+    "MCLegoMan",
+    "Nettakrim"
   ],
   "contributors": [
-    "Nettakrim"
   ],
   "contact": {
     "homepage": "https://mclegoman.com/Luminance",

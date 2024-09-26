@@ -71,6 +71,9 @@ public class Uniforms {
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "alpha"), Uniforms::getAlpha);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "perspective"), Uniforms::getPerspective);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "selectedSlot"), Uniforms::getSelectedSlot);
+
+			// This is temporary until uniforms can be configurable.
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "timeSecond"), Uniforms::getTimeSecond);
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to initialize uniforms: {}", error));
 		}
@@ -211,5 +214,18 @@ public class Uniforms {
 	}
 	public static float getSelectedSlot(float tickDelta) {
 		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getInventory().selectedSlot : 0.0F;
+	}
+	// TODO: Make Time Uniform be configurable (or moreso, all uniforms).
+	private static float prevTimeSecondTickDelta = 0.0F;
+	private static float timeSecond = 0.0F;
+	public static float getTimeSecond(float tickDelta) {
+		// Ideally, this would be done through luminance_time using a config, but this works for now.
+		if (tickDelta < prevTimeSecondTickDelta) {
+			timeSecond += 1.0F - prevTimeSecondTickDelta;
+			timeSecond += tickDelta;
+		} else timeSecond += tickDelta - prevTimeSecondTickDelta;
+		prevTimeSecondTickDelta = tickDelta;
+		while (timeSecond > 20.0F) timeSecond = 0.0F;
+		return timeSecond / 20.0F;
 	}
 }

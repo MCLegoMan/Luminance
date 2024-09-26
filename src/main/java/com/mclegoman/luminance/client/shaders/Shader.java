@@ -63,9 +63,6 @@ public class Shader {
 		setUseDepth(false);
 		this.renderType = renderType;
 	}
-	public boolean getDisableGameRendertype() {
-		return getShaderData().getDisableGameRendertype();
-	}
 	public Boolean getShouldRender() {
 		try {
 			return this.shouldRender.call();
@@ -83,7 +80,7 @@ public class Shader {
 	public void setShaderData(ShaderRegistry shaderData) {
 		setUseDepth(false);
 		this.shaderData = shaderData;
-		setShaderId(this.shaderData.getPostEffect(false));
+		if (getShaderData() != null) setShaderId(getShaderData().getPostEffect(false));
 	}
 	public enum RenderType {
 		WORLD,
