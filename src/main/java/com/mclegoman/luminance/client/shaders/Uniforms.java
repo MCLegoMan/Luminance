@@ -75,6 +75,10 @@ public class Uniforms {
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "selectedSlot"), Uniforms::getSelectedSlot);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "score"), Uniforms::getScore);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "velocity"), Uniforms::getVelocity);
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "skyAngle"), Uniforms::getSkyAngle);
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "sunAngle"), Uniforms::getSunAngle);
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isDay"), Uniforms::getIsDay);
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "starBrightness"), Uniforms::getStarBrightness);
 
 			// This is temporary until uniforms can be configurable.
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "timeSecond"), Uniforms::getTimeSecond);
@@ -236,6 +240,19 @@ public class Uniforms {
 			return (float) Math.sqrt(x * x + y * y + z * z);
 		}
 		return 0.0F;
+	}
+	public static float getSkyAngle(float tickDelta) {
+		return ClientData.minecraft.world != null ? ClientData.minecraft.world.getSkyAngle(tickDelta) : 0.0F;
+	}
+	public static float getSunAngle(float tickDelta) {
+		float skyAngle = getSkyAngle(tickDelta);
+		return skyAngle < 0.75F ? skyAngle + 0.25F : skyAngle - 0.75F;
+	}
+	public static float getIsDay(float tickDelta) {
+		return (getSunAngle(tickDelta) <= 0.5) ? 1.0F : 0.0F;
+	}
+	public static float getStarBrightness(float tickDelta) {
+		return ClientData.minecraft.world != null ? ClientData.minecraft.world.getStarBrightness(tickDelta) : 0.0F;
 	}
 	// TODO: Make Time Uniform be configurable (or moreso, all uniforms).
 	private static float prevTimeSecondTickDelta = 0.0F;
