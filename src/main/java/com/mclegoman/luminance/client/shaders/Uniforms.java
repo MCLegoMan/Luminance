@@ -73,6 +73,7 @@ public class Uniforms {
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "perspective"), Uniforms::getPerspective);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "selectedSlot"), Uniforms::getSelectedSlot);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "score"), Uniforms::getScore);
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "velocity"), Uniforms::getVelocity);
 
 			// This is temporary until uniforms can be configurable.
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "timeSecond"), Uniforms::getTimeSecond);
@@ -222,6 +223,15 @@ public class Uniforms {
 	}
 	public static float getScore(float tickDelta) {
 		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getScore() : 0.0F;
+	}
+	public static float getVelocity(float tickDelta) {
+		if (ClientData.minecraft.player != null) {
+			float x = (float) (ClientData.minecraft.player.getX() - ClientData.minecraft.player.prevX);
+			float y = (float) (ClientData.minecraft.player.getY() - ClientData.minecraft.player.prevY);
+			float z = (float) (ClientData.minecraft.player.getZ() - ClientData.minecraft.player.prevZ);
+			return (float) Math.sqrt(x * x + y * y + z * z);
+		}
+		return 0.0F;
 	}
 	// TODO: Make Time Uniform be configurable (or moreso, all uniforms).
 	private static float prevTimeSecondTickDelta = 0.0F;
