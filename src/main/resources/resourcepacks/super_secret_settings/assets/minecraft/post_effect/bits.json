@@ -5,7 +5,7 @@
     },
     "passes": [
         {
-            "program": "minecraft:post/bits_fix",
+            "program": "minecraft:post/bits",
             "inputs": [
                 {
                     "sampler_name": "In",
