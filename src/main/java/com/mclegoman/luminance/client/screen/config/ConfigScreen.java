@@ -12,6 +12,7 @@ import com.mclegoman.luminance.client.debug.Debug;
 import com.mclegoman.luminance.client.keybindings.Keybindings;
 import com.mclegoman.luminance.client.logo.LuminanceLogo;
 import com.mclegoman.luminance.client.screen.config.information.InformationScreen;
+import com.mclegoman.luminance.client.shaders.Shader;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
@@ -114,7 +115,14 @@ public class ConfigScreen extends Screen {
 		gridAdder.add(ButtonWidget.builder(Translation.getText("Debug Shader: {}", false, new Object[]{Debug.debugShader}), button -> {
 			Debug.debugShader = !Debug.debugShader;
 			this.refresh = true;
-		}).width(304).build(), 2);
+		}).build());
+		gridAdder.add(ButtonWidget.builder(Translation.getText("Debug Render Type: {}", false, new Object[]{Debug.debugRenderType.toString()}), button -> {
+			switch (Debug.debugRenderType) {
+				case GAME -> Debug.debugRenderType = Shader.RenderType.WORLD;
+				case WORLD -> Debug.debugRenderType = Shader.RenderType.GAME;
+			}
+			this.refresh = true;
+		}).build());
 
 		return grid;
 	}

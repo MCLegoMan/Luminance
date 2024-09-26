@@ -1,25 +1,40 @@
 {
-  "targets": [
-    "0",
-    "1",
-    "2",
-    "3"
-  ],
+  "targets": {
+    "scanlines": {},
+    "aspect_ratio": {},
+    "merge": {},
+    "swap": {}
+  },
   "passes": [
     {
-      "name": "luminance:fisheye",
-      "intarget": "minecraft:main",
-      "outtarget": "0"
+      "program": "luminance:post/fisheye",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "minecraft:main"
+        }
+      ],
+      "output": "scanlines"
     },
     {
-      "name": "luminance:scanlines",
-      "intarget": "0",
-      "outtarget": "1"
+      "program": "luminance:post/scanlines",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "scanlines"
+        }
+      ],
+      "output": "aspect_ratio"
     },
     {
-      "name": "luminance:aspect_ratio",
-      "intarget": "1",
-      "outtarget": "2",
+      "program": "luminance:post/aspect_ratio",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "aspect_ratio"
+        }
+      ],
+      "output": "merge",
       "uniforms": [
         {
           "name": "AspectRatio",
@@ -32,20 +47,24 @@
       ]
     },
     {
-      "name": "luminance:merge",
-      "intarget": "2",
-      "outtarget": "3",
-      "auxtargets": [
+      "program": "luminance:post/merge",
+      "intarget": "merge",
+      "inputs": [
         {
-          "name": "MergeSampler",
-          "id": "minecraft:main"
+          "sampler_name": "In",
+          "target": "merge"
+        },
+        {
+          "sampler_name": "Merge",
+          "target": "minecraft:main"
         }
-      ]
+      ],
+      "output": "swap"
     },
     {
-      "name": "minecraft:blit",
-      "intarget": "3",
-      "outtarget": "minecraft:main"
+      "program": "minecraft:post/blit",
+      "intarget": "swap",
+      "output": "minecraft:main"
     }
   ]
 }

@@ -94,15 +94,15 @@ public class Events {
 			registry.remove(id);
 		}
 	}
-	public static class AfterWeatherRender {
-		public static final Map<Identifier, Runnable> registry = new HashMap<>();
-		public static void register(Identifier id, Runnable runnable) {
+	public static class AfterMainRender {
+		public static final Map<Identifier, Runnables.WorldRender> registry = new HashMap<>();
+		public static void register(Identifier id, Runnables.WorldRender runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static Runnable get(Identifier id) {
+		public static Runnables.WorldRender get(Identifier id) {
 			return registry.get(id);
 		}
-		public static void modify(Identifier id, Runnable runnable) {
+		public static void modify(Identifier id, Runnables.WorldRender runnable) {
 			registry.replace(id, runnable);
 		}
 		public static void remove(Identifier id) {
@@ -110,14 +110,14 @@ public class Events {
 		}
 	}
 	public static class AfterWorldRender {
-		public static final Map<Identifier, Runnable> registry = new HashMap<>();
-		public static void register(Identifier id, Runnable runnable) {
+		public static final Map<Identifier, Runnables.GameRender> registry = new HashMap<>();
+		public static void register(Identifier id, Runnables.GameRender runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static Runnable get(Identifier id) {
+		public static Runnables.GameRender get(Identifier id) {
 			return registry.get(id);
 		}
-		public static void modify(Identifier id, Runnable runnable) {
+		public static void modify(Identifier id, Runnables.GameRender runnable) {
 			registry.replace(id, runnable);
 		}
 		public static void remove(Identifier id) {
@@ -125,14 +125,14 @@ public class Events {
 		}
 	}
 	public static class AfterHandRender {
-		public static final Map<Identifier, Runnable> registry = new HashMap<>();
-		public static void register(Identifier id, Runnable runnable) {
+		public static final Map<Identifier, Runnables.GameRender> registry = new HashMap<>();
+		public static void register(Identifier id, Runnables.GameRender runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static Runnable get(Identifier id) {
+		public static Runnables.GameRender get(Identifier id) {
 			return registry.get(id);
 		}
-		public static void modify(Identifier id, Runnable runnable) {
+		public static void modify(Identifier id, Runnables.GameRender runnable) {
 			registry.replace(id, runnable);
 		}
 		public static void remove(Identifier id) {
@@ -155,14 +155,14 @@ public class Events {
 		}
 	}
 	public static class AfterGameRender {
-		public static final Map<Identifier, Runnable> registry = new HashMap<>();
-		public static void register(Identifier id, Runnable runnable) {
+		public static final Map<Identifier, Runnables.GameRender> registry = new HashMap<>();
+		public static void register(Identifier id, Runnables.GameRender runnable) {
 			if (!registry.containsKey(id)) registry.put(id, runnable);
 		}
-		public static Runnable get(Identifier id) {
+		public static Runnables.GameRender get(Identifier id) {
 			return registry.get(id);
 		}
-		public static void modify(Identifier id, Runnable runnable) {
+		public static void modify(Identifier id, Runnables.GameRender runnable) {
 			registry.replace(id, runnable);
 		}
 		public static void remove(Identifier id) {

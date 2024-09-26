@@ -7,19 +7,24 @@
 
 package com.mclegoman.luminance.mixin.client.shaders;
 
+import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.translation.Translation;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.client.util.Pool;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(priority = 100, value = GameRenderer.class)
 public abstract class GameRendererMixin {
+	@Shadow @Final private Pool pool;
 	@Inject(method = "render", at = @At("HEAD"))
 	private void luminance$beforeGameRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
 		Events.BeforeGameRender.registry.forEach(((id, runnable) -> {
@@ -34,7 +39,7 @@ public abstract class GameRendererMixin {
 	private void luminance$afterHandRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
 		Events.AfterHandRender.registry.forEach(((id, runnable) -> {
 			try {
-				runnable.run();
+				runnable.run(ClientData.minecraft.getFramebuffer(), this.pool);
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterHandRender event with id: {}:{}:", id, error));
 			}
@@ -44,7 +49,7 @@ public abstract class GameRendererMixin {
 	private void luminance$afterGameRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
 		Events.AfterGameRender.registry.forEach(((id, runnable) -> {
 			try {
-				runnable.run();
+				runnable.run(ClientData.minecraft.getFramebuffer(), this.pool);
 			} catch (Exception error) {
 				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterGameRender event with id: {}:{}:", id, error));
 			}

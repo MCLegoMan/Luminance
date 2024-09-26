@@ -5,18 +5,23 @@
   },
   "passes": [
     {
-      "program": "luminance:post/tiltshift",
+      "program": "minecraft:post/color_convolve",
       "inputs": [
         {
           "sampler_name": "In",
           "target": "minecraft:main"
         }
       ],
-      "output": "merge"
+      "output": "merge",
+      "uniforms": [
+        {
+          "name": "Saturation",
+          "values": [ 2.0 ]
+        }
+      ]
     },
     {
       "program": "luminance:post/merge",
-      "intarget": "merge",
       "inputs": [
         {
           "sampler_name": "In",
@@ -31,7 +36,12 @@
     },
     {
       "program": "minecraft:post/blit",
-      "intarget": "swap",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "swap"
+        }
+      ],
       "output": "minecraft:main"
     }
   ]

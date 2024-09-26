@@ -8,7 +8,11 @@
 package com.mclegoman.luminance.client.events;
 
 import com.mclegoman.luminance.client.shaders.ShaderRegistry;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.render.FrameGraphBuilder;
+import net.minecraft.client.util.ObjectAllocator;
 
 public class Runnables {
 	public interface Shader {
@@ -19,5 +23,11 @@ public class Runnables {
 	}
 	public interface OnResized {
 		default void run(int width, int height) {}
+	}
+	public interface WorldRender {
+		default void run(FrameGraphBuilder builder, int textureWidth, int textureHeight, PostEffectProcessor.FramebufferSet framebufferSet) {}
+	}
+	public interface GameRender {
+		default void run(Framebuffer framebuffer, ObjectAllocator objectAllocator) {}
 	}
 }

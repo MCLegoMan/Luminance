@@ -13,13 +13,14 @@ import com.mclegoman.luminance.client.events.Callables;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.events.Runnables;
 import com.mclegoman.luminance.client.translation.Translation;
-import com.mclegoman.luminance.client.util.Accessors;
 import com.mclegoman.luminance.client.util.CompatHelper;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.gl.*;
+import net.minecraft.client.render.FrameGraphBuilder;
+import net.minecraft.client.util.ObjectAllocator;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -51,57 +52,72 @@ public class Shaders {
 				});
 			}
 		});
-		Events.AfterHandRender.register(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
-			try {
-				if (shaders != null) shaders.forEach(shader -> {
+		Events.AfterHandRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.GameRender() {
+			@Override
+			public void run(Framebuffer framebuffer, ObjectAllocator objectAllocator) {
+				Events.ShaderRender.registry.forEach((id, shaders) -> {
 					try {
-						if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
-							if ((shader.shader().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.shader().getShaderData().getDisableGameRendertype() || shader.shader().getUseDepth())) && (!shader.shader().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
-								render(id, shader);
-						}
+						if (shaders != null) shaders.forEach(shader -> {
+							try {
+								if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
+									if ((shader.shader().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.shader().getShaderData().getDisableGameRendertype() || shader.shader().getUseDepth())) && (!shader.shader().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
+										renderUsingAllocator(id, shader, framebuffer, objectAllocator);
+								}
+							} catch (Exception error) {
+								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}", id, error));
+							}
+						});
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}", id, error));
 					}
 				});
-			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}", id, error));
 			}
-		}));
+		});
 		// This renders the shader in the world if it has depth. We really should try to render the hand in-depth, but this works for now.
-		Events.AfterWeatherRender.register(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
-			try {
-				if (shaders != null) shaders.forEach(shader -> {
+		Events.AfterMainRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.WorldRender() {
+			@Override
+			public void run(FrameGraphBuilder builder, int textureWidth, int textureHeight, PostEffectProcessor.FramebufferSet framebufferSet) {
+				Events.ShaderRender.registry.forEach((id, shaders) -> {
 					try {
-						if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
-							if (shader.shader().getUseDepth() && !CompatHelper.isIrisShadersEnabled())
-								render(id, shader);
-						}
+						if (shaders != null) shaders.forEach(shader -> {
+							try {
+								if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
+									if (shader.shader().getUseDepth() && !CompatHelper.isIrisShadersEnabled())
+										renderUsingFramebufferSet(id, shader, builder, textureWidth, textureHeight, framebufferSet);
+								}
+							} catch (Exception error) {
+								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterMainRender shader with id: {}:{}", id, error));
+							}
+						});
 					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}", id, error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterMainRender shader with id: {}:{}", id, error));
 					}
 				});
-			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWorldBorder shader with id: {}:{}", id, error));
 			}
-		}));
-		Events.AfterGameRender.register(Identifier.of(Data.version.getID(), "main"), () -> Events.ShaderRender.registry.forEach((id, shaders) -> {
-			try {
-				if (shaders != null) shaders.forEach(shader -> {
+		});
+		Events.AfterGameRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.GameRender() {
+			@Override
+			public void run(Framebuffer framebuffer, ObjectAllocator objectAllocator) {
+				Events.ShaderRender.registry.forEach((id, shaders) -> {
 					try {
-						if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
-							if (shader.shader().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.shader().getShaderData().getDisableGameRendertype() && !shader.shader().getUseDepth())
-								render(id, shader);
-						}
+						if (shaders != null) shaders.forEach(shader -> {
+							try {
+								if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
+									if (shader.shader().getRenderType().call().equals(Shader.RenderType.GAME) && !shader.shader().getShaderData().getDisableGameRendertype() && !shader.shader().getUseDepth())
+										renderUsingAllocator(id, shader, framebuffer, objectAllocator);
+								}
+							} catch (Exception error) {
+								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}", id, error));
+							}
+						});
 					} catch (Exception error) {
 						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}", id, error));
 					}
 				});
-			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterGameRender shader with id: {}:{}", id, error));
 			}
-		}));
+		});
 	}
-	private static void render(Identifier id, Shader.Data shader) {
+	private static void renderUsingFramebufferSet(Identifier id, Shader.Data shader, FrameGraphBuilder builder, int textureWidth, int textureHeight, PostEffectProcessor.FramebufferSet framebufferSet) {
 		try {
 			if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
 				if (shader.shader().getShouldRender()) {
@@ -113,20 +129,55 @@ public class Shaders {
 							Events.ShaderRender.Shaders.remove(id, shader.id());
 						}
 					}
-					if (shader.shader().getPostProcessor() != null) render(shader.shader().getPostProcessor());
+					if (shader.shader().getPostProcessor() != null) renderUsingFramebufferSet(shader.shader().getPostProcessor(), builder, textureWidth, textureHeight, framebufferSet);
 				}
 			}
 		} catch (Exception error) {
 			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}: {}", id, shader.id(), shader.shader().getShaderData().getID(), error));
 		}
 	}
-	public static void render(PostEffectProcessor processor) {
+	public static void renderUsingFramebufferSet(PostEffectProcessor processor, FrameGraphBuilder builder, int textureWidth, int textureHeight, PostEffectProcessor.FramebufferSet framebufferSet) {
 		try {
 			if (processor != null) {
 				try {
 					RenderSystem.enableBlend();
 					RenderSystem.defaultBlendFunc();
-					processor.render(ClientData.minecraft.getFramebuffer(), Accessors.getGameRenderer().getPool());
+					processor.render(builder, textureWidth, textureHeight, framebufferSet);
+					RenderSystem.disableBlend();
+				} catch (Exception error) {
+					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render processor: {}", error.getLocalizedMessage()));
+				}
+			}
+		} catch (Exception error) {
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render post effect processor: {}", error.getLocalizedMessage()));
+		}
+	}
+	private static void renderUsingAllocator(Identifier id, Shader.Data shader, Framebuffer framebuffer, ObjectAllocator objectAllocator) {
+		try {
+			if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
+				if (shader.shader().getShouldRender()) {
+					if (shader.shader().getPostProcessor() == null) {
+						try {
+							shader.shader().setPostProcessor();
+						} catch (Exception error) {
+							Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to set \"{}:{}:{}\" post processor: {}", id, shader.id(), shader.shader().getShaderData().getID(), error));
+							Events.ShaderRender.Shaders.remove(id, shader.id());
+						}
+					}
+					if (shader.shader().getPostProcessor() != null) renderUsingAllocator(shader.shader().getPostProcessor(), framebuffer, objectAllocator);
+				}
+			}
+		} catch (Exception error) {
+			Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render \"{}:{}\" shader: {}: {}", id, shader.id(), shader.shader().getShaderData().getID(), error));
+		}
+	}
+	public static void renderUsingAllocator(PostEffectProcessor processor, Framebuffer framebuffer, ObjectAllocator objectAllocator) {
+		try {
+			if (processor != null) {
+				try {
+					RenderSystem.enableBlend();
+					RenderSystem.defaultBlendFunc();
+					processor.render(framebuffer, objectAllocator);
 					RenderSystem.disableBlend();
 				} catch (Exception error) {
 					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render processor: {}", error.getLocalizedMessage()));

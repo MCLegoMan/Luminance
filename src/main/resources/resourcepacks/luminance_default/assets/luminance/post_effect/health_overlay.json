@@ -1,29 +1,38 @@
 {
-    "targets": [
-        "0",
-        "1"
-    ],
+    "targets": {
+        "merge": {},
+        "swap": {}
+    },
     "passes": [
         {
-            "name": "luminance:health_overlay",
-            "intarget": "minecraft:main",
-            "outtarget": "0"
-        },
-        {
-            "name": "luminance:merge",
-            "intarget": "0",
-            "outtarget": "1",
-            "auxtargets": [
+            "program": "luminance:post/health_overlay",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "merge"
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "1",
-            "outtarget": "minecraft:main"
+            "program": "luminance:post/merge",
+            "intarget": "merge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap"
+        },
+        {
+            "program": "minecraft:post/blit",
+            "intarget": "swap",
+            "output": "minecraft:main"
         }
     ]
 }

@@ -1,5 +1,5 @@
 {
-  "post_effect": "luminance:saturated",
+  "post_effect": "luminance:saturate",
   "enabled": true,
   "translatable": true,
   "disable_game_rendertype": false,
