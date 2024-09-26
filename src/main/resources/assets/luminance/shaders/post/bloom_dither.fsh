@@ -1,6 +1,6 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 uniform sampler2D DitherSampler;
 uniform sampler2D BloomSampler;
 uniform sampler2D HighlightsSampler;
@@ -19,7 +19,7 @@ void main() {
     vec2 halfSize = InSize * 0.5;
 
     vec2 steppedCoord = texCoord;
-    vec4 color = texture(DiffuseSampler, steppedCoord);
+    vec4 color = texture(InSampler, steppedCoord);
 
     steppedCoord.x = float(int(steppedCoord.x*halfSize.x)) / halfSize.x;
     steppedCoord.y = float(int(steppedCoord.y*halfSize.y)) / halfSize.y;

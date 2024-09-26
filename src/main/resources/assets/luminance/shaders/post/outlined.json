@@ -1,15 +1,9 @@
 {
-	"blend": {
-		"func": "add",
-		"srcrgb": "one",
-		"dstrgb": "1-srcalpha"
-	},
-	"vertex": "minecraft:sobel",
-	"fragment": "perspective:outlined",
-	"attributes": [ "Position" ],
+	"vertex": "minecraft:post/sobel",
+	"fragment": "luminance:post/outlined",
 	"samplers": [
-		{ "name": "DiffuseSampler" },
-		{ "name": "DiffuseDepthSampler" },
+		{ "name": "MainSampler" },
+		{ "name": "MainDepthSampler" },
 		{ "name": "TranslucentSampler" },
 		{ "name": "TranslucentDepthSampler" },
 		{ "name": "ItemEntitySampler" },
@@ -32,7 +26,7 @@
 		{ "name": "OutlineColor",          "type": "float",     "count": 3,  "values": [ 1.0, 1.0, 1.0 ] },
 		{ "name": "OutlinePow",          "type": "float",     "count": 3,  "values": [ 0.5, 0.5, 0.5 ] },
 		{ "name": "OutlineColorMultiplier",          "type": "float",     "count": 1,  "values": [ 1.0 ] },
-		{ "name": "lu_viewDistance",          "type": "float",     "count": 1,  "values": [ 12.0 ] },
-		{ "name": "lu_alphaSmooth",          "type": "float",     "count": 1,  "values": [ 1.0 ] }
+		{ "name": "luminance_viewDistance",          "type": "float",     "count": 1,  "values": [ 12.0 ] },
+		{ "name": "luminance_alpha_smooth",          "type": "float",     "count": 1,  "values": [ 1.0 ] }
 	]
 }

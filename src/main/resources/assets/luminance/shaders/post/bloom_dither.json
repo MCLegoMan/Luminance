@@ -1,14 +1,8 @@
 {
-    "blend": {
-        "func": "add",
-        "srcrgb": "one",
-        "dstrgb": "1-srcalpha"
-    },
-    "vertex": "minecraft:sobel",
-    "fragment": "perspective:bloom_dither",
-    "attributes": [ "Position" ],
+    "vertex": "minecraft:post/sobel",
+    "fragment": "luminance:post/bloom_dither",
     "samplers": [
-        { "name": "DiffuseSampler" },
+        { "name": "InSampler" },
         { "name": "DitherSampler" },
         { "name": "BloomSampler" },
         { "name": "HighlightsSampler" }

@@ -1,8 +1,8 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 uniform sampler2D DitherSampler;
-uniform sampler2D DiffuseDepthSampler;
+uniform sampler2D InDepthSampler;
 
 in vec2 texCoord;
 
@@ -10,14 +10,14 @@ uniform vec2 InSize;
 
 out vec4 fragColor;
 
-uniform float lu_viewDistance;
+uniform float luminance_viewDistance;
 
 void main() {
-    float depth = min(max(1.0 - (1.0 - texture(DiffuseDepthSampler, texCoord).r) * ((lu_viewDistance * 16) * (lu_viewDistance * 0.1)), 0.0), 1.0);
+    float depth = min(max(1.0 - (1.0 - texture(InDepthSampler, texCoord).r) * ((luminance_viewDistance * 16) * (luminance_viewDistance * 0.1)), 0.0), 1.0);
     vec2 halfSize = InSize * 0.5;
 
     vec2 steppedCoord = texCoord;
-    vec4 color = texture(DiffuseSampler, steppedCoord);
+    vec4 color = texture(InSampler, steppedCoord);
 
     steppedCoord.x = float(int(steppedCoord.x*halfSize.x)) / halfSize.x;
     steppedCoord.y = float(int(steppedCoord.y*halfSize.y)) / halfSize.y;

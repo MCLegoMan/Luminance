@@ -4,7 +4,7 @@ in vec2 texCoord;
 in vec2 oneTexel;
 out vec4 fragColor;
 
-uniform sampler2D DiffuseSampler;
+uniform sampler2D InSampler;
 
 uniform vec2 BlurDir;
 uniform float Radius;
@@ -17,10 +17,10 @@ void main() {
     vec4 blurred = vec4(0.0);
     float totalStrength = 0.0;
     for(float r = -Radius; r <= Radius; r += 1.0) {
-        vec4 sampleValue = texture(DiffuseSampler, texCoord + oneTexel * r * BlurDir);
+        vec4 sampleValue = texture(InSampler, texCoord + oneTexel * r * BlurDir);
         blurred += sampleValue * gaussian(r);
         totalStrength += gaussian(r);
     }
     blurred /= totalStrength;
-    fragColor = vec4(mix(texture(DiffuseSampler, texCoord).rgb, blurred.rgb, clamp((distance(texCoord, vec2(0.5)) * 4), 0.0, 1.0)), 1.0);
+    fragColor = vec4(mix(texture(InSampler, texCoord).rgb, blurred.rgb, clamp((distance(texCoord, vec2(0.5)) * 4), 0.0, 1.0)), 1.0);
 }

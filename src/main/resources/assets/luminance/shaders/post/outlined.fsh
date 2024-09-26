@@ -1,7 +1,7 @@
 #version 150
 
-uniform sampler2D DiffuseSampler;
-uniform sampler2D DiffuseDepthSampler;
+uniform sampler2D InSampler;
+uniform sampler2D InDepthSampler;
 uniform sampler2D TranslucentSampler;
 uniform sampler2D TranslucentDepthSampler;
 uniform sampler2D ItemEntitySampler;
@@ -24,8 +24,8 @@ uniform vec3 OutlinePow;
 uniform float OutlineColorMultiplier;
 uniform float Silhouette;
 uniform vec3 SilhouetteColor;
-uniform float lu_viewDistance;
-uniform float lu_alphaSmooth;
+uniform float luminance_viewDistance;
+uniform float luminance_alpha_smooth;
 
 vec4 color_layers[6];
 float depth_layers[6];
@@ -51,8 +51,8 @@ vec4 outline( vec4 color, sampler2D DepthSampler ) {
     }
 
     vec4 outputColor = vec4(mix(color.rgb, pow((pow(outlineColor, OutlinePow) * OutlineColorMultiplier) + Transparency, vec3(2.0)), amount), color.a);
-    float depth4 = min(max(1.0 - (1.0 - depth) * ((lu_viewDistance * 16) * 0.64), 0.0), 1.0);
-    return vec4(mix(color.rgb, mix(outputColor.rgb, color.rgb, smoothstep(0.9, 0.91, depth4)), lu_alphaSmooth), outputColor.a);
+    float depth4 = min(max(1.0 - (1.0 - depth) * ((luminance_viewDistance * 16) * 0.64), 0.0), 1.0);
+    return vec4(mix(color.rgb, mix(outputColor.rgb, color.rgb, _smoothstep(0.9, 0.91, depth4)), luminance_alpha_smooth), outputColor.a);
 }
 
 void try_insert( vec4 color, sampler2D DepthSampler ) {
@@ -61,7 +61,7 @@ void try_insert( vec4 color, sampler2D DepthSampler ) {
     }
     float depth = texture( DepthSampler, texCoord ).r;
 
-    if (Silhouette != 0) color = vec4(mix(color.rgb, SilhouetteColor, lu_alphaSmooth), 1.0);
+    if (Silhouette != 0) color = vec4(mix(color.rgb, SilhouetteColor, luminance_alpha_smooth), 1.0);
 
     color = outline(color, DepthSampler);
 
@@ -92,10 +92,10 @@ void main() {
     if (Silhouette != 0) {
         color = vec4(SilhouetteColor, 1.0);
     } else {
-        color = texture(DiffuseSampler, texCoord);
+        color = texture(InSampler, texCoord);
     }
-    color_layers[0] = vec4(mix(texture(DiffuseSampler, texCoord).rgb, outline(color, DiffuseDepthSampler).rgb, lu_alphaSmooth), 1.0);
-    depth_layers[0] = texture(DiffuseDepthSampler, texCoord).r;
+    color_layers[0] = vec4(mix(texture(InSampler, texCoord).rgb, outline(color, InDepthSampler).rgb, luminance_alpha_smooth), 1.0);
+    depth_layers[0] = texture(InDepthSampler, texCoord).r;
     active_layers = 1;
 
     try_insert( texture( TranslucentSampler, texCoord ), TranslucentDepthSampler );
