@@ -3,8 +3,7 @@
         "largeblur": {},
         "smallblur": {},
         "temp": {},
-        "swap": {},
-        "swap2": {}
+        "swap": {}
     },
     "passes": [
         {
@@ -12,11 +11,11 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "minecraft:main"
+                    "target": "minecraft:main",
+                    "bilinear": true
                 }
             ],
             "output": "temp",
-            "bilinear": true,
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -33,11 +32,11 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "temp"
+                    "target": "temp",
+                    "bilinear": true
                 }
             ],
             "output": "largeblur",
-            "bilinear": true,
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -54,11 +53,11 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "minecraft:main"
+                    "target": "minecraft:main",
+                    "bilinear": true
                 }
             ],
             "output": "temp",
-            "bilinear": true,
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -75,11 +74,11 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "temp"
+                    "target": "temp",
+                    "bilinear": true
                 }
             ],
             "output": "smallblur",
-            "bilinear": true,
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -267,14 +266,14 @@
                     "target": "minecraft:main"
                 }
             ],
-            "output": "swap2"
+            "output": "swap"
         },
         {
             "program": "minecraft:post/blit",
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "swap2"
+                    "target": "swap"
                 }
             ],
             "output": "minecraft:main",

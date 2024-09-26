@@ -44,11 +44,11 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "bloom_1"
+                    "target": "bloom_1",
+                    "bilinear": true
                 }
             ],
             "output": "bloom_2",
-            "bilinear": true,
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -65,11 +65,11 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "bloom_2"
+                    "target": "bloom_2",
+                    "bilinear": true
                 }
             ],
             "output": "bloom_1",
-            "bilinear": true,
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -86,11 +86,11 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "highlights_1"
+                    "target": "highlights_1",
+                    "bilinear": true
                 }
             ],
             "output": "highlights_2",
-            "bilinear": true,
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -107,11 +107,11 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "highlights_2"
+                    "target": "highlights_2",
+                    "bilinear": true
                 }
             ],
             "output": "highlights_1",
-            "bilinear": true,
             "uniforms": [
                 {
                     "name": "BlurDir",
