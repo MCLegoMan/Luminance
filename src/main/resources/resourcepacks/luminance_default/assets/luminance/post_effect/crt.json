@@ -7,17 +7,17 @@
   ],
   "passes": [
     {
-      "name": "perspective:fisheye",
+      "name": "luminance:fisheye",
       "intarget": "minecraft:main",
       "outtarget": "0"
     },
     {
-      "name": "perspective:scanlines",
+      "name": "luminance:scanlines",
       "intarget": "0",
       "outtarget": "1"
     },
     {
-      "name": "perspective:aspect_ratio",
+      "name": "luminance:aspect_ratio",
       "intarget": "1",
       "outtarget": "2",
       "uniforms": [

@@ -5,7 +5,7 @@
   ],
   "passes": [
     {
-      "name": "perspective:mirror",
+      "name": "luminance:mirror",
       "intarget": "minecraft:main",
       "outtarget": "0",
       "auxtargets": [

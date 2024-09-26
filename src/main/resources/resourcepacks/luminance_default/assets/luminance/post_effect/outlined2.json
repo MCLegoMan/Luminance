@@ -10,7 +10,7 @@
   ],
   "passes": [
     {
-      "name": "perspective:outlined",
+      "name": "luminance:outlined",
       "intarget": "minecraft:main",
       "outtarget": "0",
       "auxtargets": [

@@ -7,12 +7,12 @@
     ],
     "passes": [
         {
-            "name": "perspective:green",
+            "name": "luminance:green",
             "intarget": "minecraft:main",
             "outtarget": "0"
         },
         {
-            "name": "perspective:pixelated",
+            "name": "luminance:pixelated",
             "intarget": "0",
             "outtarget": "1",
             "uniforms": [

@@ -5,7 +5,7 @@
     ],
     "passes": [
         {
-            "name": "perspective:rainbow",
+            "name": "luminance:rainbow",
             "intarget": "minecraft:main",
             "outtarget": "0"
         },

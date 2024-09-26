@@ -5,7 +5,7 @@
     ],
     "passes": [
         {
-            "name": "perspective:health_overlay",
+            "name": "luminance:health_overlay",
             "intarget": "minecraft:main",
             "outtarget": "0"
         },

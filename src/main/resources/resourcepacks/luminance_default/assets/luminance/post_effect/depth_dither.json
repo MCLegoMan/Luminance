@@ -5,7 +5,7 @@
     ],
     "passes": [
         {
-            "name": "perspective:depth_dither",
+            "name": "luminance:depth_dither",
             "intarget": "minecraft:main",
             "outtarget": "0",
             "auxtargets": [

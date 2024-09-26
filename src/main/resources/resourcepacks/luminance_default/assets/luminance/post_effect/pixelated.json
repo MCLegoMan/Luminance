@@ -5,7 +5,7 @@
     ],
     "passes": [
         {
-            "name": "perspective:pixelated",
+            "name": "luminance:pixelated",
             "intarget": "minecraft:main",
             "outtarget": "0",
             "uniforms": [

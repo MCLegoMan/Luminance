@@ -5,7 +5,7 @@
   ],
   "passes": [
     {
-      "name": "perspective:tiltshift",
+      "name": "luminance:tiltshift",
       "intarget": "minecraft:main",
       "outtarget": "0"
     },

@@ -50,7 +50,7 @@
             ]
         },
         {
-            "name": "perspective:bloom_dither",
+            "name": "luminance:bloom_dither",
             "intarget": "minecraft:main",
             "outtarget": "swap",
             "auxtargets": [
