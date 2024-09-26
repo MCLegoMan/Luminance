@@ -55,6 +55,7 @@ public class Uniforms {
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "maxHurtTime"), Uniforms::getMaxHurtTime);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "currentAir"), Uniforms::getCurrentAir);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "maxAir"), Uniforms::getMaxAir);
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isAlive"), Uniforms::getIsAlive);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isSprinting"), Uniforms::getIsSprinting);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isSwimming"), Uniforms::getIsSwimming);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isSneaking"), Uniforms::getIsSneaking);
@@ -71,6 +72,7 @@ public class Uniforms {
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "alpha"), Uniforms::getAlpha);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "perspective"), Uniforms::getPerspective);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "selectedSlot"), Uniforms::getSelectedSlot);
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "score"), Uniforms::getScore);
 
 			// This is temporary until uniforms can be configurable.
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "timeSecond"), Uniforms::getTimeSecond);
@@ -144,6 +146,9 @@ public class Uniforms {
 	public static float getMaxAir(float tickDelta) {
 		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getMaxAir() : 10.0F;
 	}
+	public static float getIsAlive(float tickDelta) {
+		return ClientData.minecraft.player != null ? (ClientData.minecraft.player.isAlive() ? 1.0F : 0.0F) : 0.0F;
+	}
 	public static float getIsSprinting(float tickDelta) {
 		return ClientData.minecraft.player != null ? (ClientData.minecraft.player.isSprinting() ? 1.0F : 0.0F) : 0.0F;
 	}
@@ -214,6 +219,9 @@ public class Uniforms {
 	}
 	public static float getSelectedSlot(float tickDelta) {
 		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getInventory().selectedSlot : 0.0F;
+	}
+	public static float getScore(float tickDelta) {
+		return ClientData.minecraft.player != null ? ClientData.minecraft.player.getScore() : 0.0F;
 	}
 	// TODO: Make Time Uniform be configurable (or moreso, all uniforms).
 	private static float prevTimeSecondTickDelta = 0.0F;
