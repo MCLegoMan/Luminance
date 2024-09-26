@@ -23,7 +23,7 @@
             ]
         },
         {
-            "program": "minecraft:post/blur",
+            "program": "minecraft:post/box_blur",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -44,7 +44,7 @@
             ]
         },
         {
-            "program": "minecraft:post/blur",
+            "program": "minecraft:post/box_blur",
             "inputs": [
                 {
                     "sampler_name": "In",
