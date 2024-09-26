@@ -1,7 +1,7 @@
 {
     "targets": {
-        "largeblur": {},
-        "smallblur": {},
+        "large_blur": {},
+        "small_blur": {},
         "temp": {},
         "swap": {}
     },
@@ -36,7 +36,7 @@
                     "bilinear": true
                 }
             ],
-            "output": "largeblur",
+            "output": "large_blur",
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -78,7 +78,7 @@
                     "bilinear": true
                 }
             ],
-            "output": "smallblur",
+            "output": "small_blur",
             "uniforms": [
                 {
                     "name": "BlurDir",
@@ -99,7 +99,7 @@
                 },
                 {
                     "sampler_name": "Blur",
-                    "target": "largeblur"
+                    "target": "large_blur"
                 }
             ],
             "output": "temp",
@@ -127,7 +127,7 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "smallblur"
+                    "target": "small_blur"
                 },
                 {
                     "sampler_name": "Blur",
@@ -163,10 +163,10 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "smallblur"
+                    "target": "small_blur"
                 },
                 {
-                    "sampler_name": "BlurSampler",
+                    "sampler_name": "Blur",
                     "target": "swap"
                 }
             ],
@@ -199,7 +199,7 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "smallblur"
+                    "target": "small_blur"
                 },
                 {
                     "sampler_name": "Blur",
@@ -231,7 +231,7 @@
             "inputs": [
                 {
                     "sampler_name": "In",
-                    "target": "smallblur"
+                    "target": "small_blur"
                 },
                 {
                     "sampler_name": "Blur",
