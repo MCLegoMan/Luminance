@@ -1,89 +1,93 @@
 {
-  "targets": {
-    "downscale": {},
-    "notch": {},
-    "downscale_2": {},
-    "scan_pincushion": {},
-    "merge": {},
-    "swap": {}
-  },
-  "passes": [
-    {
-      "program": "minecraft:post/deconverge",
-      "inputs": [
-        {
-          "sampler_name": "In",
-          "target": "minecraft:main"
-        }
-      ],
-      "output": "downscale"
+    "targets": {
+        "downscale": {},
+        "notch": {},
+        "downscale_2": {},
+        "scan_pincushion": {},
+        "merge": {},
+        "swap": {}
     },
-    {
-      "program": "minecraft:post/downscale",
-      "inputs": [
+    "passes": [
         {
-          "sampler_name": "In",
-          "target": "downscale"
-        }
-      ],
-      "output": "notch"
-    },
-    {
-      "program": "minecraft:post/notch",
-      "inputs": [
-        {
-          "sampler_name": "In",
-          "target": "notch"
+            "program": "minecraft:post/deconverge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "downscale"
         },
         {
-          "sampler_name": "Dither",
-          "location": "dither",
-          "width": 4,
-          "height": 4,
-          "bilinear": false
-        }
-      ],
-      "output": "downscale_2"
-    },
-    {
-      "program": "minecraft:post/downscale",
-      "inputs": [
-        {
-          "sampler_name": "In",
-          "target": "downscale_2"
-        }
-      ],
-      "output": "scan_pincushion"
-    },
-    {
-      "program": "minecraft:post/scan_pincushion",
-      "inputs": [
-        {
-          "sampler_name": "In",
-          "target": "scan_pincushion"
-        }
-      ],
-      "output": "merge"
-    },
-    {
-      "program": "luminance:post/merge",
-      "intarget": "merge",
-      "inputs": [
-        {
-          "sampler_name": "In",
-          "target": "merge"
+            "program": "minecraft:post/downscale",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "downscale"
+                }
+            ],
+            "output": "notch"
         },
         {
-          "sampler_name": "Merge",
-          "target": "minecraft:main"
+            "program": "minecraft:post/notch",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "notch"
+                },
+                {
+                    "sampler_name": "Dither",
+                    "location": "dither",
+                    "width": 4,
+                    "height": 4,
+                    "bilinear": false
+                }
+            ],
+            "output": "downscale_2"
+        },
+        {
+            "program": "minecraft:post/downscale",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "downscale_2"
+                }
+            ],
+            "output": "scan_pincushion"
+        },
+        {
+            "program": "minecraft:post/scan_pincushion",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "scan_pincushion"
+                }
+            ],
+            "output": "merge"
+        },
+        {
+            "program": "luminance:post/merge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap"
+        },
+        {
+            "program": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "minecraft:main"
         }
-      ],
-      "output": "swap"
-    },
-    {
-      "program": "minecraft:post/blit",
-      "intarget": "swap",
-      "output": "minecraft:main"
-    }
-  ]
+    ]
 }

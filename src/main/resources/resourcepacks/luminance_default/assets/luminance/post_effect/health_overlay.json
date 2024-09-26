@@ -16,7 +16,6 @@
         },
         {
             "program": "luminance:post/merge",
-            "intarget": "merge",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -31,7 +30,12 @@
         },
         {
             "program": "minecraft:post/blit",
-            "intarget": "swap",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
             "output": "minecraft:main"
         }
     ]

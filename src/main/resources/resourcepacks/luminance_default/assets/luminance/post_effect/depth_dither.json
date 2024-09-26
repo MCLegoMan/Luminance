@@ -1,42 +1,54 @@
 {
-    "targets": [
-        "0",
-        "1"
-    ],
+    "targets": {
+        "0": {},
+        "1": {}
+    },
     "passes": [
         {
-            "name": "luminance:depth_dither",
-            "intarget": "minecraft:main",
-            "outtarget": "0",
-            "auxtargets": [
+            "program": "luminance:post/depth_dither",
+            "inputs": [
                 {
-                    "name": "DiffuseDepthSampler",
-                    "id": "minecraft:main:depth"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 },
                 {
-                    "name": "DitherSampler",
-                    "id": "dither",
+                    "sampler_name": "DiffuseDepth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Dither",
+                    "location": "dither",
                     "width": 4,
                     "height": 4,
                     "bilinear": false
                 }
-            ]
+            ],
+            "output": "0"
         },
         {
-            "name": "luminance:merge",
-            "intarget": "0",
-            "outtarget": "1",
-            "auxtargets": [
+            "program": "luminance:post/merge",
+            "inputs": [
                 {
-                    "name": "MergeSampler",
-                    "id": "minecraft:main"
+                    "sampler_name": "In",
+                    "target": "0"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "1"
         },
         {
-            "name": "minecraft:blit",
-            "intarget": "1",
-            "outtarget": "minecraft:main"
+            "program": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "1"
+                }
+            ],
+            "output": "minecraft:main"
         }
     ]
 }

@@ -1,35 +1,48 @@
 {
-  "targets": [
-    "0",
-    "1"
-  ],
-  "passes": [
-    {
-      "name": "minecraft:color_convolve",
-      "intarget": "minecraft:main",
-      "outtarget": "0",
-      "uniforms": [
-        {
-          "name": "Saturation",
-          "values": [ 0.0 ]
-        }
-      ]
+    "targets": {
+        "0": {},
+        "1": {}
     },
-    {
-      "name": "luminance:merge",
-      "intarget": "0",
-      "outtarget": "1",
-      "auxtargets": [
+    "passes": [
         {
-          "name": "MergeSampler",
-          "id": "minecraft:main"
+            "program": "minecraft:post/color_convolve",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "0",
+            "uniforms": [
+                {
+                    "name": "Saturation",
+                    "values": [ 0 ]
+                }
+            ]
+        },
+        {
+            "program": "luminance:post/merge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "0"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "1"
+        },
+        {
+            "program": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "1"
+                }
+            ],
+            "output": "minecraft:main"
         }
-      ]
-    },
-    {
-      "name": "minecraft:blit",
-      "intarget": "1",
-      "outtarget": "minecraft:main"
-    }
-  ]
+    ]
 }

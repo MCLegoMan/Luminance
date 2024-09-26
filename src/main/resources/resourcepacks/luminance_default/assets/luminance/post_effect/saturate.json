@@ -1,48 +1,48 @@
 {
-  "targets": {
-    "merge": {},
-    "swap": {}
-  },
-  "passes": [
-    {
-      "program": "minecraft:post/color_convolve",
-      "inputs": [
-        {
-          "sampler_name": "In",
-          "target": "minecraft:main"
-        }
-      ],
-      "output": "merge",
-      "uniforms": [
-        {
-          "name": "Saturation",
-          "values": [ 2.0 ]
-        }
-      ]
+    "targets": {
+        "merge": {},
+        "swap": {}
     },
-    {
-      "program": "luminance:post/merge",
-      "inputs": [
+    "passes": [
         {
-          "sampler_name": "In",
-          "target": "merge"
+            "program": "minecraft:post/color_convolve",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "merge",
+            "uniforms": [
+                {
+                    "name": "Saturation",
+                    "values": [ 2.0 ]
+                }
+            ]
         },
         {
-          "sampler_name": "Merge",
-          "target": "minecraft:main"
-        }
-      ],
-      "output": "swap"
-    },
-    {
-      "program": "minecraft:post/blit",
-      "inputs": [
+            "program": "luminance:post/merge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "merge"
+                },
+                {
+                    "sampler_name": "Merge",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "swap"
+        },
         {
-          "sampler_name": "In",
-          "target": "swap"
+            "program": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "minecraft:main"
         }
-      ],
-      "output": "minecraft:main"
-    }
-  ]
+    ]
 }
