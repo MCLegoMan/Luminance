@@ -56,6 +56,7 @@ public class Uniforms {
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "currentAir"), Uniforms::getCurrentAir);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "maxAir"), Uniforms::getMaxAir);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isAlive"), Uniforms::getIsAlive);
+			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isDead"), Uniforms::getIsDead);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isSprinting"), Uniforms::getIsSprinting);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isSwimming"), Uniforms::getIsSwimming);
 			Events.ShaderUniform.register(LuminanceIdentifier.of(Data.version.getID(), "isSneaking"), Uniforms::getIsSneaking);
@@ -149,6 +150,9 @@ public class Uniforms {
 	}
 	public static float getIsAlive(float tickDelta) {
 		return ClientData.minecraft.player != null ? (ClientData.minecraft.player.isAlive() ? 1.0F : 0.0F) : 0.0F;
+	}
+	public static float getIsDead(float tickDelta) {
+		return ClientData.minecraft.player != null ? (ClientData.minecraft.player.isDead() ? 1.0F : 0.0F) : 0.0F;
 	}
 	public static float getIsSprinting(float tickDelta) {
 		return ClientData.minecraft.player != null ? (ClientData.minecraft.player.isSprinting() ? 1.0F : 0.0F) : 0.0F;
