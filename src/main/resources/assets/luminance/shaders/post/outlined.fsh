@@ -52,7 +52,7 @@ vec4 outline( vec4 color, sampler2D DepthSampler ) {
 
     vec4 outputColor = vec4(mix(color.rgb, pow((pow(outlineColor, OutlinePow) * OutlineColorMultiplier) + Transparency, vec3(2.0)), amount), color.a);
     float depth4 = min(max(1.0 - (1.0 - depth) * ((luminance_viewDistance * 16) * 0.64), 0.0), 1.0);
-    return vec4(mix(color.rgb, mix(outputColor.rgb, color.rgb, _smoothstep(0.9, 0.91, depth4)), luminance_alpha_smooth), outputColor.a);
+    return vec4(mix(color.rgb, mix(outputColor.rgb, color.rgb, smoothstep(0.9, 0.91, depth4)), luminance_alpha_smooth), outputColor.a);
 }
 
 void try_insert( vec4 color, sampler2D DepthSampler ) {
