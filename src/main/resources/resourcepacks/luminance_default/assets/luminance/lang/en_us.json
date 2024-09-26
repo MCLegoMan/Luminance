@@ -1,0 +1,20 @@
+{
+	"shader.luminance.crt" : "crt",
+	"shader.luminance.gentoo" : "gentoo",
+	"shader.luminance.golden" : "golden",
+	"shader.luminance.grayscale" : "grayscale",
+	"shader.luminance.mirror" : "mirror",
+	"shader.luminance.outlined" : "outlined",
+	"shader.luminance.outlined2" : "darkened outline",
+	"shader.luminance.pixelated" : "pixelated",
+	"shader.luminance.tiltshift" : "tiltshift",
+	"shader.luminance.rainbow" : "rainbow",
+	"shader.luminance.saturated" : "saturated",
+	"shader.luminance.silhouette" : "silhouette",
+	"shader.luminance.silhouette2" : "inverted silhouette",
+	"shader.luminance.sixteen_colors": "sixteen colors",
+	"shader.luminance.bloom_dither": "light-based dither",
+	"shader.luminance.depth_dither": "depth-based dither",
+	"shader.luminance.eightbit": "8-bit",
+	"shader.luminance.health_overlay": "health overlay"
+}

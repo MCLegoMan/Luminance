@@ -133,7 +133,7 @@ public class ShaderDataloader extends JsonDataLoader implements IdentifiableReso
 
 		// Test Shader: remove/comment out when shader rendering is finished.
 		Events.ShaderRender.register(Identifier.of(Data.version.getID(), "test"), new ArrayList<>());
-		Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Shader.Data(Identifier.of(Data.version.getID(), "test"), new Shader(Shaders.get(Identifier.of("minecraft", "wobble")), () -> Shader.RenderType.WORLD, () -> Debug.debugShader))));
+		Events.ShaderRender.modify(Identifier.of(Data.version.getID(), "test"), List.of(new Shader.Data(Identifier.of(Data.version.getID(), "test"), new Shader(Shaders.get(Identifier.of("minecraft", "antialias")), () -> Shader.RenderType.WORLD, () -> Debug.debugShader))));
 	}
 	@Override
 	public Identifier getFabricId() {

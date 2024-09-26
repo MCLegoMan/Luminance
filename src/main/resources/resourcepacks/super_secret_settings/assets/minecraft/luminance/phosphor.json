@@ -7,8 +7,7 @@
       "entity_links": []
     },
     "souper_secret_settings": {
-      "disable_soup": false,
-      "entity_links": []
+      "disable_soup": false
     }
   },
   "enabled": true
