@@ -142,7 +142,9 @@ public class Shaders {
 				try {
 					RenderSystem.enableBlend();
 					RenderSystem.defaultBlendFunc();
+					RenderSystem.depthMask(false);
 					processor.render(builder, textureWidth, textureHeight, framebufferSet);
+					RenderSystem.depthMask(true);
 					RenderSystem.disableBlend();
 				} catch (Exception error) {
 					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render processor: {}", error.getLocalizedMessage()));
@@ -177,7 +179,9 @@ public class Shaders {
 				try {
 					RenderSystem.enableBlend();
 					RenderSystem.defaultBlendFunc();
+					RenderSystem.depthMask(false);
 					processor.render(framebuffer, objectAllocator);
+					RenderSystem.depthMask(true);
 					RenderSystem.disableBlend();
 				} catch (Exception error) {
 					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render processor: {}", error.getLocalizedMessage()));
