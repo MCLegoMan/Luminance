@@ -14,7 +14,7 @@ import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.ObjectAllocator;
-import net.minecraft.util.profiler.Profiler;
+import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,9 +36,9 @@ public abstract class WorldRendererMixin {
 			}
 		}));
 	}
-	@Inject(method = "renderMain", at = @At("RETURN"))
-	private void luminance$afterMain(FrameGraphBuilder frameGraphBuilder, Frustum frustum, Camera camera, Matrix4f positionMatrix, Matrix4f projectionMatrix, Fog fog, boolean renderBlockOutline, boolean hasEntitiesToRender, RenderTickCounter renderTickCounter, Profiler profiler, CallbackInfo ci) {
-		Events.AfterMainRender.registry.forEach(((id, runnable) -> {
+	@Inject(method = "renderWeather", at = @At("RETURN"))
+	private void luminance$afterWeather(FrameGraphBuilder frameGraphBuilder, LightmapTextureManager lightmapTextureManager, Vec3d pos, float tickDelta, Fog fog, CallbackInfo ci) {
+		Events.AfterWeatherRender.registry.forEach(((id, runnable) -> {
 			try {
 				runnable.run(frameGraphBuilder, ClientData.minecraft.getFramebuffer().textureWidth, ClientData.minecraft.getFramebuffer().textureHeight, this.framebufferSet);
 			} catch (Exception error) {

@@ -2,8 +2,8 @@
 	"vertex": "minecraft:post/sobel",
 	"fragment": "luminance:post/outlined",
 	"samplers": [
-		{ "name": "MainSampler" },
-		{ "name": "MainDepthSampler" },
+		{ "name": "InSampler" },
+		{ "name": "InDepthSampler" },
 		{ "name": "TranslucentSampler" },
 		{ "name": "TranslucentDepthSampler" },
 		{ "name": "ItemEntitySampler" },

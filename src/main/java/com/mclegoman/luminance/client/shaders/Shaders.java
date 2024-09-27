@@ -20,6 +20,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.gl.*;
 import net.minecraft.client.render.FrameGraphBuilder;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.ObjectAllocator;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
@@ -52,45 +53,49 @@ public class Shaders {
 				});
 			}
 		});
-		Events.AfterHandRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.GameRender() {
-			@Override
-			public void run(Framebuffer framebuffer, ObjectAllocator objectAllocator) {
-				Events.ShaderRender.registry.forEach((id, shaders) -> {
-					try {
-						if (shaders != null) shaders.forEach(shader -> {
-							try {
-								if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
-									if ((shader.shader().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.shader().getShaderData().getDisableGameRendertype() || shader.shader().getUseDepth())) && (!shader.shader().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
-										renderUsingAllocator(id, shader, framebuffer, objectAllocator);
-								}
-							} catch (Exception error) {
-								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}", id, error));
-							}
-						});
-					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}", id, error));
-					}
-				});
-			}
-		});
+//		Events.AfterHandRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.GameRender() {
+//			@Override
+//			public void run(Framebuffer framebuffer, ObjectAllocator objectAllocator) {
+//				Events.ShaderRender.registry.forEach((id, shaders) -> {
+//					try {
+//						if (shaders != null) shaders.forEach(shader -> {
+//							try {
+//								if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
+//									if ((shader.shader().getRenderType().call().equals(Shader.RenderType.WORLD) || (shader.shader().getShaderData().getDisableGameRendertype() || shader.shader().getUseDepth())) && (!shader.shader().getUseDepth() || CompatHelper.isIrisShadersEnabled()))
+//										renderUsingAllocator(id, shader, framebuffer, objectAllocator);
+//								}
+//							} catch (Exception error) {
+//								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}", id, error));
+//							}
+//						});
+//					} catch (Exception error) {
+//						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterHandRender shader with id: {}:{}", id, error));
+//					}
+//				});
+//			}
+//		});
 		// This renders the shader in the world if it has depth. We really should try to render the hand in-depth, but this works for now.
-		Events.AfterMainRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.WorldRender() {
+		Events.AfterWeatherRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.WorldRender() {
 			@Override
 			public void run(FrameGraphBuilder builder, int textureWidth, int textureHeight, PostEffectProcessor.FramebufferSet framebufferSet) {
 				Events.ShaderRender.registry.forEach((id, shaders) -> {
 					try {
 						if (shaders != null) shaders.forEach(shader -> {
 							try {
+//								if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
+//									if (shader.shader().getUseDepth() && !CompatHelper.isIrisShadersEnabled())
+//										renderUsingFramebufferSet(id, shader, builder, textureWidth, textureHeight, framebufferSet);
+//								}
 								if (shader != null && shader.shader() != null && shader.shader().getShaderData() != null) {
-									if (shader.shader().getUseDepth() && !CompatHelper.isIrisShadersEnabled())
+									if (shader.shader().getRenderType().call().equals(Shader.RenderType.WORLD) || shader.shader().getShaderData().getDisableGameRendertype() || shader.shader().getUseDepth())
 										renderUsingFramebufferSet(id, shader, builder, textureWidth, textureHeight, framebufferSet);
 								}
 							} catch (Exception error) {
-								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterMainRender shader with id: {}:{}", id, error));
+								Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWeatherRender shader with id: {}:{}", id, error));
 							}
 						});
 					} catch (Exception error) {
-						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterMainRender shader with id: {}:{}", id, error));
+						Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to render AfterWeatherRender shader with id: {}:{}", id, error));
 					}
 				});
 			}
