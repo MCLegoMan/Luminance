@@ -1,19 +1,21 @@
 {
-	"required": true,
-	"package": "com.mclegoman.luminance.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"plugin": "com.mclegoman.luminance.mixin.MixinPlugin",
-	"client": [
-		"client.hud.InGameHudMixin",
-		"client.shaders.GameRendererAccessor",
-		"client.shaders.GameRendererMixin",
-		"client.shaders.MouseMixin",
-		"client.shaders.PostEffectPassMixin",
-		"client.shaders.WorldRendererMixin",
-		"compat.modmenu.FabricModMixin",
-		"compat.modmenu.ModsScreenMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "com.mclegoman.luminance.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.mclegoman.luminance.mixin.MixinPlugin",
+  "client": [
+    "client.hud.InGameHudMixin",
+    "client.shaders.GameRendererAccessor",
+    "client.shaders.GameRendererMixin",
+    "client.shaders.MouseMixin",
+    "client.shaders.PostEffectPassAccessor",
+    "client.shaders.PostEffectPassMixin",
+    "client.shaders.PostEffectProcessorAccessor",
+    "client.shaders.WorldRendererMixin",
+    "compat.modmenu.FabricModMixin",
+    "compat.modmenu.ModsScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
