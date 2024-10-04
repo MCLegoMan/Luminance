@@ -17,5 +17,5 @@ public interface PostEffectPassAccessor {
     ShaderProgram getProgram();
 
     @Accessor("uniforms")
-    List<PostEffectPipeline.Uniform> getUniformOverrides();
+    List<PostEffectPipeline.Uniform> getUniforms();
 }

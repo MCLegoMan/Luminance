@@ -11,7 +11,7 @@
     "client.shaders.PostEffectPassAccessor",
     "client.shaders.PostEffectPassMixin",
     "client.shaders.PostEffectProcessorAccessor",
-    "client.shaders.ShaderProgramAccessor",
+    "client.shaders.ShaderProgramMixin",
     "client.shaders.WorldRendererMixin",
     "compat.modmenu.FabricModMixin",
     "compat.modmenu.ModsScreenMixin"
