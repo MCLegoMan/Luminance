@@ -1,6 +1,6 @@
 package com.mclegoman.luminance.mixin.client.shaders;
 
-import com.mclegoman.luminance.client.shaders.ShaderProgramInterface;
+import com.mclegoman.luminance.client.shaders.interfaces.ShaderProgramInterface;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.ShaderProgram;
 import org.jetbrains.annotations.Nullable;

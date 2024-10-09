@@ -8,7 +8,6 @@
     "client.shaders.GameRendererAccessor",
     "client.shaders.GameRendererMixin",
     "client.shaders.MouseMixin",
-    "client.shaders.PostEffectPassAccessor",
     "client.shaders.PostEffectPassMixin",
     "client.shaders.PostEffectPipelineMixin",
     "client.shaders.PostEffectProcessorAccessor",

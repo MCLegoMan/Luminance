@@ -1,4 +1,4 @@
-package com.mclegoman.luminance.client.shaders.uniforms;
+package com.mclegoman.luminance.client.shaders.overrides;
 
 import java.util.List;
 

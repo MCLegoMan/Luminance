@@ -2,7 +2,7 @@ package com.mclegoman.luminance.mixin.client.shaders;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mclegoman.luminance.client.shaders.PipelineUniformInterface;
+import com.mclegoman.luminance.client.shaders.interfaces.PipelineUniformInterface;
 import com.mojang.datafixers.kinds.App;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

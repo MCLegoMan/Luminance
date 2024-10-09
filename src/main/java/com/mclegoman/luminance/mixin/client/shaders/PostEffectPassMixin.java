@@ -8,11 +8,11 @@
 package com.mclegoman.luminance.mixin.client.shaders;
 
 import com.mclegoman.luminance.client.events.Events;
-import com.mclegoman.luminance.client.shaders.PipelineUniformInterface;
-import com.mclegoman.luminance.client.shaders.PostEffectPassInterface;
-import com.mclegoman.luminance.client.shaders.ShaderProgramInterface;
-import com.mclegoman.luminance.client.shaders.uniforms.LuminanceUniformOverride;
-import com.mclegoman.luminance.client.shaders.uniforms.UniformOverride;
+import com.mclegoman.luminance.client.shaders.interfaces.PipelineUniformInterface;
+import com.mclegoman.luminance.client.shaders.interfaces.PostEffectPassInterface;
+import com.mclegoman.luminance.client.shaders.interfaces.ShaderProgramInterface;
+import com.mclegoman.luminance.client.shaders.overrides.LuminanceUniformOverride;
+import com.mclegoman.luminance.client.shaders.overrides.UniformOverride;
 import net.minecraft.client.gl.*;
 import net.minecraft.client.render.FrameGraphBuilder;
 import net.minecraft.client.util.Handle;
@@ -32,9 +32,13 @@ import java.util.Map;
 
 @Mixin(priority = 100, value = PostEffectPass.class)
 public abstract class PostEffectPassMixin implements PostEffectPassInterface {
+	@Shadow @Final private String id;
+
 	@Shadow @Final private ShaderProgram program;
 
 	@Shadow @Final private List<PostEffectPipeline.Uniform> uniforms;
+
+	@Unique private final Map<String, UniformOverride> uniformOverrides = new HashMap<>();
 
 	@Inject(method = "render", at = @At("HEAD"))
 	private void luminance$beforeRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
@@ -44,11 +48,6 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 	private void luminance$afterRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		Events.AfterShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
-
-
-
-
-	@Unique private final Map<String, UniformOverride> uniformOverrides = new HashMap<>();
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void initialiseUniformOverrides(String id, ShaderProgram program, Identifier outputTargetId, List<PostEffectPipeline.Uniform> uniforms, CallbackInfo ci) {
@@ -81,6 +80,21 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 
 			glUniform.method_65016(values, values.size());
 		});
+	}
+
+	@Override
+	public String luminance$getID() {
+		return id;
+	}
+
+	@Override
+	public ShaderProgram luminance$getProgram() {
+		return program;
+	}
+
+	@Override
+	public List<PostEffectPipeline.Uniform> luminance$getUniforms() {
+		return uniforms;
 	}
 
 	@Override

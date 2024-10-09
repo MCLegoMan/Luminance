@@ -1,4 +1,4 @@
-package com.mclegoman.luminance.client.shaders;
+package com.mclegoman.luminance.client.shaders.interfaces;
 
 import java.util.List;
 import java.util.Optional;
