@@ -8,8 +8,10 @@
 package com.mclegoman.luminance.mixin.client.shaders;
 
 import com.mclegoman.luminance.client.events.Events;
+import com.mclegoman.luminance.client.shaders.PipelineUniformInterface;
 import com.mclegoman.luminance.client.shaders.PostEffectPassInterface;
 import com.mclegoman.luminance.client.shaders.ShaderProgramInterface;
+import com.mclegoman.luminance.client.shaders.uniforms.LuminanceUniformOverride;
 import com.mclegoman.luminance.client.shaders.uniforms.UniformOverride;
 import net.minecraft.client.gl.*;
 import net.minecraft.client.render.FrameGraphBuilder;
@@ -43,6 +45,18 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 		Events.AfterShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
 	}
 
+
+
+
+	@Unique private final Map<String, UniformOverride> uniformOverrides = new HashMap<>();
+
+	@Inject(method = "<init>", at = @At("TAIL"))
+	private void initialiseUniformOverrides(String id, ShaderProgram program, Identifier outputTargetId, List<PostEffectPipeline.Uniform> uniforms, CallbackInfo ci) {
+		for (PostEffectPipeline.Uniform uniform : uniforms) {
+			((PipelineUniformInterface)(Object)uniform).luminance$getOverride().ifPresent((override) -> uniformOverrides.put(uniform.name(), new LuminanceUniformOverride(override)));
+		}
+	}
+
 	@Inject(method = "method_62257", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;setClearColor(FFFF)V"))
 	private void setUniformOverrides(Handle handle, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		uniformOverrides.forEach((name, override) -> {
@@ -68,8 +82,6 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 			glUniform.method_65016(values, values.size());
 		});
 	}
-
-	@Unique private final Map<String, UniformOverride> uniformOverrides = new HashMap<>();
 
 	@Override
 	public Map<String, UniformOverride> luminance$getUniformOverrides() {

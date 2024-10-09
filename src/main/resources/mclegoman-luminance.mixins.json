@@ -10,6 +10,7 @@
     "client.shaders.MouseMixin",
     "client.shaders.PostEffectPassAccessor",
     "client.shaders.PostEffectPassMixin",
+    "client.shaders.PostEffectPipelineMixin",
     "client.shaders.PostEffectProcessorAccessor",
     "client.shaders.ShaderProgramMixin",
     "client.shaders.WorldRendererMixin",
