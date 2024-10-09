@@ -3,6 +3,7 @@ package com.mclegoman.luminance.mixin.client.shaders;
 import com.mclegoman.luminance.client.shaders.ShaderProgramInterface;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.ShaderProgram;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ShaderProgram.class)
-public class ShaderProgramMixin implements ShaderProgramInterface {
+public abstract class ShaderProgramMixin implements ShaderProgramInterface {
     @Final
     @Shadow
     private List<GlUniform> uniforms;
+
+    @Shadow @Nullable public abstract GlUniform getUniform(String name);
 
     @Unique
     private List<String> uniformNames;
@@ -28,5 +31,32 @@ public class ShaderProgramMixin implements ShaderProgramInterface {
             }
         }
         return uniformNames;
+    }
+
+    @Override
+    public List<Float> luminance$getCurrentUniformValues(String name) {
+        GlUniform uniform = getUniform(name);
+        if (uniform == null) {
+            return null;
+        }
+
+        List<Float> values = new ArrayList<>(uniform.getCount());
+        if (uniform.getDataType() <= 3) {
+            int[] arr = new int[uniform.getCount()];
+            uniform.getIntData().position(0);
+            uniform.getIntData().get(arr);
+            for (int i : arr) {
+                values.add((float)i);
+            }
+        } else {
+            float[] arr = new float[uniform.getCount()];
+            uniform.getFloatData().position(0);
+            uniform.getFloatData().get(arr);
+            for (float f : arr) {
+                values.add(f);
+            }
+        }
+
+        return values;
     }
 }
