@@ -51,11 +51,11 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 				return;
 			}
 
-			//the double looping of the same array here is to avoid needing to call luminance$getUniformValues unless its needed
+			//the double looping of the same array here is to avoid needing to call luminance$getCurrentUniformValues unless its needed
 			List<Float> values = override.getOverride();
             for (Float value : values) {
                 if (value == null) {
-                    List<Float> current = ((ShaderProgramInterface) program).luminance$getCurrentUniformValues(name);
+                    List<Float> current = ((ShaderProgramInterface)program).luminance$getCurrentUniformValues(name);
 					for (int i = 0; i < values.size(); i++) {
 						if (values.get(i) == null) {
 							values.set(i, current.get(i));
