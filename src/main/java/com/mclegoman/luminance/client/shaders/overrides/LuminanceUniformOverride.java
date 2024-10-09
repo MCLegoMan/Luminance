@@ -40,6 +40,10 @@ public class LuminanceUniformOverride implements UniformOverride {
     }
 
     public static OverrideSource sourceFromString(String string) {
+        if (string == null) {
+            return null;
+        }
+        //TODO: account for vanilla dynamic uniforms (time, insize(?), outsize(?) [those two probably arent needed])
         try {
             float value = Float.parseFloat(string);
             return new FixedValueSource(value);
