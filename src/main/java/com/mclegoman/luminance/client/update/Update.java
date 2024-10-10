@@ -5,7 +5,7 @@
     Licence: GNU LGPLv3
 */
 
-package com.mclegoman.luminance.client.util;
+package com.mclegoman.luminance.client.update;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
