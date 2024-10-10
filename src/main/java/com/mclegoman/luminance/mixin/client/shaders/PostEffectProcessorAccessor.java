@@ -1,3 +1,10 @@
+/*
+    Luminance
+    Contributor(s): Nettakrim
+    Github: https://github.com/MCLegoMan/Luminance
+    Licence: GNU LGPLv3
+*/
+
 package com.mclegoman.luminance.mixin.client.shaders;
 
 import net.minecraft.client.gl.PostEffectPass;
