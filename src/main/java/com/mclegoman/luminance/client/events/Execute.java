@@ -65,6 +65,8 @@ public class Execute {
 			//TODO: Detect if shader is using depth. (Shaders.depth)
 			MessageOverlay.setOverlay(Text.of("Luminance is not currently compatible with Fabulous Graphics."));
 		} else {
+			// This is fine being rendered here in fast/fancy, but when in fabulous clouds render over everything?
+			// Also if theres no shaders, theres no clouds?
 			Events.AfterWeatherRender.registry.forEach(((id, runnable) -> {
 				try {
 					runnable.run(frameGraphBuilder, ClientData.minecraft.getFramebuffer().textureWidth, ClientData.minecraft.getFramebuffer().textureHeight, framebufferSet);
