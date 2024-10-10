@@ -9,11 +9,14 @@ package com.mclegoman.luminance.client.events;
 
 import com.mclegoman.luminance.client.data.ClientData;
 import com.mclegoman.luminance.client.translation.Translation;
+import com.mclegoman.luminance.client.util.MessageOverlay;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
-import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.client.render.FrameGraphBuilder;
 import net.minecraft.client.util.ObjectAllocator;
+import net.minecraft.text.Text;
 
 public class Execute {
 	public static void beforeGameRender() {
@@ -55,14 +58,21 @@ public class Execute {
 			}
 		}));
 	}
-	public static void afterWeatherRender(FrameGraphBuilder frameGraphBuilder, PostEffectProcessor.FramebufferSet framebufferSet) {
-		Events.AfterWeatherRender.registry.forEach(((id, runnable) -> {
-			try {
-				runnable.run(frameGraphBuilder, ClientData.minecraft.getFramebuffer().textureWidth, ClientData.minecraft.getFramebuffer().textureHeight, framebufferSet);
-			} catch (Exception error) {
-				Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterWeatherRender event with id: {}:{}:", id, error));
-			}
-		}));
+	public static void afterWeatherRender(FrameGraphBuilder frameGraphBuilder, DefaultFramebufferSet framebufferSet) {
+		if (MinecraftClient.isFabulousGraphicsOrBetter()) {
+			//TODO: Render with fabulous graphics.
+			//TODO: Fix clouds not rendering when shaders aren't being rendered.
+			//TODO: Detect if shader is using depth. (Shaders.depth)
+			MessageOverlay.setOverlay(Text.of("Luminance is not currently compatible with Fabulous Graphics."));
+		} else {
+			Events.AfterWeatherRender.registry.forEach(((id, runnable) -> {
+				try {
+					runnable.run(frameGraphBuilder, ClientData.minecraft.getFramebuffer().textureWidth, ClientData.minecraft.getFramebuffer().textureHeight, framebufferSet);
+				} catch (Exception error) {
+					Data.version.sendToLog(LogType.ERROR, Translation.getString("Failed to execute AfterWeatherRender event with id: {}:{}:", id, error));
+				}
+			}));
+		}
 	}
 	public static void afterWorldRender(ObjectAllocator allocator) {
 		Events.AfterWorldRender.registry.forEach(((id, runnable) -> {

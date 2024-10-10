@@ -13,14 +13,16 @@ import com.mclegoman.luminance.client.events.Callables;
 import com.mclegoman.luminance.client.events.Events;
 import com.mclegoman.luminance.client.events.Runnables;
 import com.mclegoman.luminance.client.translation.Translation;
-import com.mclegoman.luminance.client.util.CompatHelper;
 import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.client.gl.*;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gl.Uniform;
+import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.client.render.FrameGraphBuilder;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.ObjectAllocator;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
@@ -77,7 +79,8 @@ public class Shaders {
 		// This renders the shader in the world if it has depth. We really should try to render the hand in-depth, but this works for now.
 		Events.AfterWeatherRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.WorldRender() {
 			@Override
-			public void run(FrameGraphBuilder builder, int textureWidth, int textureHeight, PostEffectProcessor.FramebufferSet framebufferSet) {
+			public void run(FrameGraphBuilder builder, int textureWidth, int textureHeight, DefaultFramebufferSet framebufferSet) {
+
 				Events.ShaderRender.registry.forEach((id, shaders) -> {
 					try {
 						if (shaders != null) shaders.forEach(shader -> {
