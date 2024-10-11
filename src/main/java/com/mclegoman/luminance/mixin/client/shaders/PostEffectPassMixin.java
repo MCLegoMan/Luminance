@@ -42,11 +42,11 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 
 	@Inject(method = "render", at = @At("HEAD"))
 	private void luminance$beforeRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
-		Events.BeforeShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
+		Events.BeforeShaderRender.registry.forEach(((id, runnable) -> runnable.run((PostEffectPass)(Object)this)));
 	}
 	@Inject(method = "render", at = @At("TAIL"))
 	private void luminance$afterRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
-		Events.AfterShaderRender.registry.forEach(((id, runnable) -> runnable.run(program)));
+		Events.AfterShaderRender.registry.forEach(((id, runnable) -> runnable.run((PostEffectPass)(Object)this)));
 	}
 
 	@Inject(method = "<init>", at = @At("TAIL"))

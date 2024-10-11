@@ -17,10 +17,7 @@ import com.mclegoman.luminance.common.data.Data;
 import com.mclegoman.luminance.common.util.LogType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.PostEffectProcessor;
-import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.gl.Uniform;
+import net.minecraft.client.gl.*;
 import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.client.render.FrameGraphBuilder;
 import net.minecraft.client.util.ObjectAllocator;
@@ -39,7 +36,8 @@ public class Shaders {
 		Uniforms.init();
 		Events.BeforeShaderRender.register(Identifier.of(Data.version.getID(), "main"), new Runnables.Shader() {
 			@Override
-			public void run(ShaderProgram program) {
+			public void run(PostEffectPass postEffectPass) {
+				ShaderProgram program = postEffectPass.getProgram();
 				Events.ShaderUniform.registry.forEach((id, uniform) -> {
 					try {
 						uniform.call(ClientData.minecraft.getRenderTickCounter().getTickDelta(true));
