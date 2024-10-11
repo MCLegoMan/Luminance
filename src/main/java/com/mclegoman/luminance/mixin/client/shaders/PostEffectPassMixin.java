@@ -40,12 +40,12 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 
 	@Unique private final Map<String, UniformOverride> uniformOverrides = new HashMap<>();
 
-	@Inject(method = "render", at = @At("HEAD"))
-	private void luminance$beforeRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
+	@Inject(method = "method_62257", at = @At("HEAD"))
+	private void luminance$beforeRender(Handle<Framebuffer> handle, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		Events.BeforeShaderRender.registry.forEach(((id, runnable) -> runnable.run((PostEffectPass)(Object)this)));
 	}
-	@Inject(method = "render", at = @At("TAIL"))
-	private void luminance$afterRender(FrameGraphBuilder frameGraphBuilder, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
+	@Inject(method = "method_62257", at = @At("TAIL"))
+	private void luminance$afterRender(Handle<Framebuffer> handle, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		Events.AfterShaderRender.registry.forEach(((id, runnable) -> runnable.run((PostEffectPass)(Object)this)));
 	}
 
@@ -57,7 +57,7 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 	}
 
 	@Inject(method = "method_62257", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;setClearColor(FFFF)V"))
-	private void setUniformOverrides(Handle handle, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
+	private void setUniformOverrides(Handle<Framebuffer> handle, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
 		uniformOverrides.forEach((name, override) -> {
 			GlUniform glUniform = program.getUniform(name);
 			if (glUniform == null) {
