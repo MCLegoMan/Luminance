@@ -14,7 +14,6 @@ import com.mclegoman.luminance.client.shaders.interfaces.ShaderProgramInterface;
 import com.mclegoman.luminance.client.shaders.overrides.LuminanceUniformOverride;
 import com.mclegoman.luminance.client.shaders.overrides.UniformOverride;
 import net.minecraft.client.gl.*;
-import net.minecraft.client.render.FrameGraphBuilder;
 import net.minecraft.client.util.Handle;
 import net.minecraft.util.Identifier;
 import org.joml.Matrix4f;
@@ -29,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Mixin(priority = 100, value = PostEffectPass.class)
 public abstract class PostEffectPassMixin implements PostEffectPassInterface {
@@ -38,7 +38,7 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 
 	@Shadow @Final private List<PostEffectPipeline.Uniform> uniforms;
 
-	@Unique private final Map<String, UniformOverride> uniformOverrides = new HashMap<>();
+	@Unique private final Map<String, UniformOverride> uniformOverrides = new HashMap<String, UniformOverride>();
 
 	@Inject(method = "method_62257", at = @At("HEAD"))
 	private void luminance$beforeRender(Handle<Framebuffer> handle, Map<Identifier, Handle<Framebuffer>> map, Matrix4f matrix4f, CallbackInfo ci) {
@@ -78,7 +78,7 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
                 }
             }
 
-			glUniform.method_65016(values, values.size());
+			glUniform.set(values, values.size());
 		});
 	}
 
@@ -98,7 +98,33 @@ public abstract class PostEffectPassMixin implements PostEffectPassInterface {
 	}
 
 	@Override
-	public Map<String, UniformOverride> luminance$getUniformOverrides() {
-		return uniformOverrides;
+	public UniformOverride luminance$getUniformOverride(String uniform) {
+		return uniformOverrides.get(uniform);
+	}
+
+	@Override
+	public UniformOverride luminance$addUniformOverride(String uniform, UniformOverride override) {
+		return uniformOverrides.put(uniform, override);
+	}
+
+	@Override
+	public UniformOverride luminance$removeUniformOverride(String uniform) {
+		// removing a uniformOverride for a uniform which is only defined in the shader program and not also the pass causes the value to be left as it was
+		// to fix this the uniform is just forcefully reset
+		resetUniform(uniform);
+
+		return uniformOverrides.remove(uniform);
+	}
+
+	@Unique
+	private void resetUniform(String uniformName) {
+		// NOTE: this sets it to the value in the shaderprogram, not the posteffectpass
+		// this should never cause an issue, since the posteffectpass uniforms are set halfway through method_62257, and used moments later, so the window of time where it can cause a desync is like 15 lines of code
+
+		GlUniform glUniform = program.getUniform(uniformName);
+		if (glUniform == null) return;
+
+		List<Float> values = Objects.requireNonNull(program.getUniformDefinition(uniformName)).values();
+		glUniform.set(values, values.size());
 	}
 }

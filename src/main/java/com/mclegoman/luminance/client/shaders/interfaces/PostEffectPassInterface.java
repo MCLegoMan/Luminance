@@ -21,5 +21,9 @@ public interface PostEffectPassInterface {
 
     List<PostEffectPipeline.Uniform> luminance$getUniforms();
 
-    Map<String, UniformOverride> luminance$getUniformOverrides();
+    UniformOverride luminance$getUniformOverride(String uniform);
+
+    UniformOverride luminance$addUniformOverride(String uniform, UniformOverride override);
+
+    UniformOverride luminance$removeUniformOverride(String uniform);
 }
